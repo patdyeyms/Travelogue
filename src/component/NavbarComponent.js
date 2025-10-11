@@ -1,24 +1,28 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
-import Logo from "../pages/Logo"; // import the new Logo component
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "../css/NavbarComponent.css";
 
 function NavbarComponent() {
-  const [scrolled, setScrolled] = useState(false);
-
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
+    const handleScroll = () => {
+      const navbar = document.querySelector(".navbar");
+      if (window.scrollY > 50) {
+        navbar.classList.add("scrolled");
+      } else {
+        navbar.classList.remove("scrolled");
+      }
+    };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
-    <nav className={`navbar navbar-expand-lg fixed-top ${scrolled ? "scrolled" : ""}`}>
+    <nav className="navbar navbar-expand-lg navbar-dark fixed-top">
       <div className="container-fluid px-4">
-        <Link className="navbar-brand d-flex align-items-center" to="/">
-          <Logo color={scrolled ? "#0b1f33" : "#ffffff"} />
+        <Link className="navbar-brand" to="/">
+          TRAVELOGUE
         </Link>
 
         <button
@@ -39,8 +43,9 @@ function NavbarComponent() {
 
           <div className="d-flex align-items-center">
             <button className="offer-btn">Offers</button>
-            <button className="login-btn ms-2">Login</button>
+              <button className="login-btn ms-2">Login</button>
           </div>
+
         </div>
       </div>
     </nav>
