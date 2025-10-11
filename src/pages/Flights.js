@@ -12,7 +12,7 @@ function Flights() {
     "Dubai, UAE",
     "Zurich, Switzerland",
     "Tokyo, Japan",
-    "Osaka, Japan",
+    "Seoul, Korea",
     "Singapore",
   ];
 

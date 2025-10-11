@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../css/Pages.css";
 import planeImg from "../assets/plane.png";
-import itineraryImg from "../assets/travel itinerary.png";
 
 function Landing() {
   const featureRef = useRef(null);
@@ -12,27 +11,25 @@ function Landing() {
   const [showSuggestions, setShowSuggestions] = useState(false);
 
   const destinations = [
-    "Manila, Philippines",
-    "Dubai, UAE",
-    "Zurich, Switzerland",
-    "Tokyo, Japan",
-    "Osaka, Japan",
-    "Singapore",
+    { name: "Manila, Philippines", img: "/images/manila.jpg" },
+    { name: "Dubai, UAE", img: "/images/dubai.jpeg" },
+    { name: "Zurich, Switzerland", img: "/images/zurich.jpg" },
+    { name: "Tokyo, Japan", img: "/images/tokyo.jpg" },
+    { name: "Seoul, Korea", img: "/images/seoul.jpg" },
+    { name: "Singapore", img: "/images/singapore.jpg" },
   ];
 
   useEffect(() => {
     const observer = new IntersectionObserver(
-      (entries) => {
+      (entries) =>
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             setIsVisible(true);
             observer.unobserve(entry.target);
           }
-        });
-      },
+        }),
       { threshold: 0.2 }
     );
-
     if (featureRef.current) observer.observe(featureRef.current);
     return () => observer.disconnect();
   }, []);
@@ -42,29 +39,21 @@ function Landing() {
     navigate(`/flights?to=${encodeURIComponent(destination)}`);
   };
 
-  const filteredDestinations = destinations.filter((city) =>
-    city.toLowerCase().includes(destination.toLowerCase())
+  const filteredDestinations = destinations.filter((d) =>
+    d.name.toLowerCase().includes(destination.toLowerCase())
   );
-
-  const handleSelect = (city) => {
-    setDestination(city);
-    setShowSuggestions(false);
-  };
 
   return (
     <div className="landing-page">
-      {/* === INTRO SECTION === */}
+      {/* INTRO */}
       <section className="intro-section">
         <video autoPlay loop muted playsInline className="background-video">
           <source src="/cinematic.mp4" type="video/mp4" />
-          Your browser does not support the video tag.
         </video>
         <div className="intro-overlay"></div>
-
         <div className="intro-content">
           <h1>Where do you want to go?</h1>
           <p>Search your dream destination and book your next flight effortlessly.</p>
-
           <div className="intro-search">
             <input
               type="text"
@@ -80,16 +69,11 @@ function Landing() {
             <button className="search-btn" onClick={handleSearch}>
               Search Flights →
             </button>
-
             {showSuggestions && destination && (
               <ul className="suggestions-list">
-                {filteredDestinations.map((city, index) => (
-                  <li
-                    key={index}
-                    onClick={() => handleSelect(city)}
-                    className="suggestion-item"
-                  >
-                    {city}
+                {filteredDestinations.map((d, i) => (
+                  <li key={i} onClick={() => setDestination(d.name)} className="suggestion-item">
+                    {d.name}
                   </li>
                 ))}
                 {filteredDestinations.length === 0 && (
@@ -101,39 +85,80 @@ function Landing() {
         </div>
       </section>
 
-      {/* === HERO SECTION === */}
+      {/* HERO */}
       <section className="hero-section">
         <img src={planeImg} alt="plane" className="plane-image" />
         <h2>Organize your trips the easy way with Travelogue!</h2>
       </section>
 
-      {/* === FEATURE SECTION === */}
-      <section
-        ref={featureRef}
-        className={`feature-section center-layout ${isVisible ? "fade-in" : ""}`}
-      >
-        <h1 className="feature-title">Travel itinerary planner</h1>
-        <img
-          src={itineraryImg}
-          alt="Travel Itinerary"
-          className="itinerary-image"
-        />
+      {/* FEATURE / OBJECTIVES */}
+      <section ref={featureRef} className={`feature-section ${isVisible ? "fade-in" : ""}`}>
+        <h1 className="feature-title">Travelogue: Your Travel Companion</h1>
+        <p className="objectives-desc">
+          Organize your trips effortlessly with flight schedules, hotel bookings, itineraries, and maps—all in one place.
+        </p>
+        <div className="objectives-grid">
+          <div className="objective-card">
+            <img src="/icons/flight.png" alt="flight" className="icon" />
+            <h3>Flight Planner</h3>
+            <p>Automatic flight schedules for stress-free travel.</p>
+          </div>
+          <div className="objective-card">
+            <img src="/icons/hotel.png" alt="hotel" className="icon" />
+            <h3>Hotel Booking</h3>
+            <p>Smart hotel booking with ratings and reviews.</p>
+          </div>
+          <div className="objective-card">
+            <img src="/icons/journal.png" alt="journal" className="icon" />
+            <h3>Itinerary Journal</h3>
+            <p>Keep track of every activity and plan.</p>
+          </div>
+          <div className="objective-card">
+            <img src="/icons/map.png" alt="map" className="icon" />
+            <h3>Interactive Maps</h3>
+            <p>Explore nearby attractions with integrated maps.</p>
+          </div>
+        </div>
+      </section>
 
-        <div className="feature-text left-text">
-          <h3>
-            No more struggling with Word docs, spreadsheets, and Google Maps to
-            plan a trip.
-          </h3>
-          <p>
-            With the Travelogue planning tool, you have one simple way to
-            organize your travel. Create a new trip or start with a ready-made
-            itinerary. Add activities and accommodation, then drag and drop your
-            daily schedule with ease.
-          </p>
-          <p>
-            Print, publish, and share your itinerary — and take it with you on
-            the road using the Travelogue viewer app. You’ll never be lost.
-          </p>
+      {/* ITINERARY */}
+      <section className="pro-section">
+        <h1>
+          Add Your Planned Trips in Your Journal <span>Itinerary</span>
+        </h1>
+        <p className="pro-desc">Organize all your adventures in one place</p>
+        <div className="pro-features">
+          <div className="pro-card">
+            Places to Visit<span>Keep track of all destinations you want to explore.</span>
+          </div>
+          <div className="pro-card">
+            Car Rentals<span>Record your car bookings and schedules.</span>
+          </div>
+          <div className="pro-card">
+            Tour Guides<span>Save details of guides and tours.</span>
+          </div>
+          <div className="pro-card">
+            Hiking Adventures<span>Track trails and hikes.</span>
+          </div>
+          <div className="pro-card">
+            Water Activities<span>Include scuba diving, snorkeling, and more.</span>
+          </div>
+          <div className="pro-card">
+            Additional Notes<span>Store any extra plans, attachments, or reminders.</span>
+          </div>
+        </div>
+      </section>
+
+      {/* EXPLORE */}
+      <section className="explore-section">
+        <h1>Explore hundreds of places to visit</h1>
+        <p>for every corner of the world</p>
+        <div className="explore-grid">
+          {destinations.map((d, i) => (
+            <div key={i} className="explore-card" style={{ backgroundImage: `url(${d.img})` }}>
+              <div className="explore-overlay">{d.name}</div>
+            </div>
+          ))}
         </div>
       </section>
     </div>
