@@ -19,6 +19,7 @@ p {
   margin: 0;
 }
 
+
 /* =======================
    HERO SECTION
 ======================= */
@@ -54,6 +55,7 @@ p {
   font-size: 1.1rem;
   color: #f0f0f0;
 }
+
 
 /* =======================
    SEARCH BOX
@@ -126,6 +128,7 @@ p {
   transform: translateY(-2px);
 }
 
+
 /* =======================
    RESULTS PAGE
 ======================= */
@@ -133,9 +136,9 @@ p {
   padding: 2rem 1rem;
   max-width: 1100px;
   margin: 0 auto;
-  margin-top: 80px; /* <-- Add this if navbar is ~80px tall */
-  position: relative; /* ensures button is positioned normally */
-  z-index: 1; /* keeps content above background but below navbar if needed */
+  margin-top: 80px; 
+  position: relative; 
+  z-index: 1; 
 }
 
 
@@ -150,6 +153,7 @@ p {
   margin-bottom: 1.5rem;
   color: #555;
 }
+
 
 /* Filters */
 .filters {
@@ -182,6 +186,7 @@ p {
 .filter-group input[type="checkbox"] {
   margin-right: 0.5rem;
 }
+
 
 /* Flights List */
 .results-list {
@@ -245,6 +250,7 @@ p {
   background: #ffa74c;
 }
 
+
 /* Back Button */
 .back-btn {
   background: #ff8f2c;
@@ -262,6 +268,7 @@ p {
   background: #ffa74c;
   transform: translateY(-2px);
 }
+
 
 /* =======================
    RESPONSIVE

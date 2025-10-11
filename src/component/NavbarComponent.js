@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import Logo from "../pages/Logo"; // import the new Logo component
+import { ReactComponent as Logo } from "../assets/logo.svg";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "../css/NavbarComponent.css";
@@ -18,7 +18,7 @@ function NavbarComponent() {
     <nav className={`navbar navbar-expand-lg fixed-top ${scrolled ? "scrolled" : ""}`}>
       <div className="container-fluid px-4">
         <Link className="navbar-brand d-flex align-items-center" to="/">
-          <Logo color={scrolled ? "#0b1f33" : "#ffffff"} />
+          <span className="logo-text">TRAVELOGUE</span>
         </Link>
 
         <button
