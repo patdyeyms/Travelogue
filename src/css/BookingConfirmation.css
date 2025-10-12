@@ -1,0 +1,86 @@
+.confirmation-page {
+  font-family: "Poppins", sans-serif;
+  text-align: center;
+  padding: 6rem 1rem 2rem 1rem;
+  background: #f9fafb;
+  min-height: 100vh;
+}
+
+.confirmation-page h1 {
+  font-size: 3rem;
+  color: #ff8f2c;
+  margin-bottom: 2rem;
+}
+
+.confirmation-container {
+  max-width: 600px;
+  margin: 0 auto 2rem auto;
+  background: #fff;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+  padding: 2rem 1.5rem;
+  text-align: left;
+  position: relative;
+}
+
+.confirmation-container h2 {
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.confirmation-container p {
+  color: #555;
+  margin-bottom: 0.5rem;
+}
+
+.see-details {
+  position: absolute;
+  bottom: 1rem;
+  left: 1.5rem;
+  background: none;
+  border: none;
+  color: #ff8f2c;
+  text-decoration: underline;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.confirmation-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 2rem;
+}
+
+.sign-up-btn, .continue-btn {
+  padding: 0.8rem 1.5rem;
+  border-radius: 12px;
+  border: none;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.sign-up-btn {
+  background: #fff;
+  border: 1.5px solid #ff8f2c;
+  color: #ff8f2c;
+}
+
+.sign-up-btn:hover {
+  background: #ff8f2c;
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+.continue-btn {
+  background: #ff8f2c;
+  color: #fff;
+}
+
+.continue-btn:hover {
+  background: #ffa74c;
+  transform: translateY(-2px);
+}

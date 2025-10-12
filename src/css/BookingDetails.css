@@ -1,0 +1,79 @@
+.booking-page {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 2rem 1.5rem;
+  padding-top: 140px; /* below navbar */
+  font-family: "Poppins", sans-serif;
+  background: #f9fafb;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+  position: relative;
+}
+
+.booking-page h1 {
+  text-align: center;
+  margin-bottom: 0.3rem;
+  font-size: 2rem;
+  color: #333;
+}
+
+.guest-details {
+  background: #fff;
+  padding: 1.2rem;
+  border-radius: 15px;
+  margin-bottom: 1.5rem;
+  border: 1px solid #eee;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.08);
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.guest-details h3 {
+  color: #ff8f2c;
+  margin-bottom: 0.8rem;
+}
+
+.guest-details p {
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+/* Back / Buttons */
+.back-btn {
+  background: #ff8f2c;
+  color: #fff;
+  border: none;
+  padding: 0.8rem 1rem;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(255,143,44,0.3);
+}
+
+.back-btn:hover {
+  background: #ffa74c;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(255,143,44,0.35);
+}
+
+/* See Details underline */
+.guest-details span {
+  font-weight: 600;
+  text-decoration: underline;
+  color: #ff8f2c;
+  cursor: pointer;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .booking-page {
+    padding: 1.5rem 1rem;
+    padding-top: 120px;
+  }
+
+  .back-btn {
+    font-size: 0.95rem;
+  }
+}
