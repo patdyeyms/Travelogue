@@ -6,6 +6,7 @@ import Hotels from "./pages/Hotels";
 import Itinerary from "./pages/Itinerary";
 import Landing from "./pages/Landing";
 import FlightResults from "./pages/FlightsResults";
+import FlightDetails from "./pages/FlightDetails";
 import "./css/Pages.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 
@@ -18,6 +19,7 @@ function App() {
           <Route path="/" element={<Landing />} />
           <Route path="/Flights" element={<Flights />} />
           <Route path="/Flights/Results" element={<FlightResults />} />
+          <Route path="/flight-details" element={<FlightDetails />} />
           <Route path="/Hotels" element={<Hotels />} />
           <Route path="/Itinerary" element={<Itinerary />} />
         </Routes>

@@ -49,6 +49,10 @@ function Flights() {
       alert("Please select both From and To cities.");
       return;
     }
+    if (!flightDetails.departure) {
+      alert("Please select a departure date.");
+      return;
+    }
     navigate("/flights/results", { state: { flightDetails } });
   };
 

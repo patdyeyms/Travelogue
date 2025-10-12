@@ -7,6 +7,8 @@ function Landing() {
   const featureRef = useRef(null);
   const [isVisible, setIsVisible] = useState(false);
   const navigate = useNavigate();
+
+  const [showDestinationInput, setShowDestinationInput] = useState(false);
   const [destination, setDestination] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
 
@@ -19,6 +21,7 @@ function Landing() {
     { name: "Singapore", img: "/images/singapore.jpg" },
   ];
 
+  // Intersection Observer for feature section animation
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) =>
@@ -34,9 +37,21 @@ function Landing() {
     return () => observer.disconnect();
   }, []);
 
+  // Hide suggestions when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (!event.target.closest(".intro-search")) {
+        setShowSuggestions(false);
+      }
+    };
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
+  }, []);
+
   const handleSearch = () => {
     if (!destination) return;
     navigate(`/flights?to=${encodeURIComponent(destination)}`);
+    setShowSuggestions(false); // hide suggestions after search
   };
 
   const filteredDestinations = destinations.filter((d) =>
@@ -52,36 +67,57 @@ function Landing() {
         </video>
         <div className="intro-overlay"></div>
         <div className="intro-content">
-          <h1>Where do you want to go?</h1>
-          <p>Search your dream destination and book your next flight effortlessly.</p>
-          <div className="intro-search">
-            <input
-              type="text"
-              placeholder="Search destination..."
-              value={destination}
-              onChange={(e) => {
-                setDestination(e.target.value);
-                setShowSuggestions(true);
-              }}
-              onFocus={() => setShowSuggestions(true)}
-              className="destination-input"
-            />
-            <button className="search-btn" onClick={handleSearch}>
-              Search Flights →
+          <h1>Welcome to Travelogue</h1>
+
+          {/* Get Started / Destination Input */}
+          {!showDestinationInput ? (
+            <button
+              className="search-btn"
+              onClick={() => setShowDestinationInput(true)}
+            >
+              Get Started →
             </button>
-            {showSuggestions && destination && (
-              <ul className="suggestions-list">
-                {filteredDestinations.map((d, i) => (
-                  <li key={i} onClick={() => setDestination(d.name)} className="suggestion-item">
-                    {d.name}
-                  </li>
-                ))}
-                {filteredDestinations.length === 0 && (
-                  <li className="no-suggestion">No matches found</li>
+          ) : (
+            <div className="intro-input-wrapper fade-slide-enter-active">
+              <p>Where do you want to go?</p>
+              <div className="intro-search">
+                <input
+                  type="text"
+                  placeholder="Search destination..."
+                  value={destination}
+                  onChange={(e) => {
+                    setDestination(e.target.value);
+                    setShowSuggestions(true);
+                  }}
+                  onFocus={() => setShowSuggestions(true)}
+                  className="destination-input"
+                />
+                <button className="search-btn" onClick={handleSearch}>
+                  Search Flights →
+                </button>
+
+                {showSuggestions && destination && (
+                  <ul className="suggestions-list">
+                    {filteredDestinations.map((d, i) => (
+                      <li
+                        key={i}
+                        onClick={() => {
+                          setDestination(d.name);
+                          setShowSuggestions(false); // hide suggestions
+                        }}
+                        className="suggestion-item"
+                      >
+                        {d.name}
+                      </li>
+                    ))}
+                    {filteredDestinations.length === 0 && (
+                      <li className="no-suggestion">No matches found</li>
+                    )}
+                  </ul>
                 )}
-              </ul>
-            )}
-          </div>
+              </div>
+            </div>
+          )}
         </div>
       </section>
 
@@ -92,10 +128,14 @@ function Landing() {
       </section>
 
       {/* FEATURE / OBJECTIVES */}
-      <section ref={featureRef} className={`feature-section ${isVisible ? "fade-in" : ""}`}>
+      <section
+        ref={featureRef}
+        className={`feature-section ${isVisible ? "fade-in" : ""}`}
+      >
         <h1 className="feature-title">Travelogue: Your Travel Companion</h1>
         <p className="objectives-desc">
-          Organize your trips effortlessly with flight schedules, hotel bookings, itineraries, and maps—all in one place.
+          Organize your trips effortlessly with flight schedules, hotel
+          bookings, itineraries, and maps—all in one place.
         </p>
         <div className="objectives-grid">
           <div className="objective-card">
@@ -129,22 +169,28 @@ function Landing() {
         <p className="pro-desc">Organize all your adventures in one place</p>
         <div className="pro-features">
           <div className="pro-card">
-            Places to Visit<span>Keep track of all destinations you want to explore.</span>
+            Places to Visit
+            <span>Keep track of all destinations you want to explore.</span>
           </div>
           <div className="pro-card">
-            Car Rentals<span>Record your car bookings and schedules.</span>
+            Car Rentals
+            <span>Record your car bookings and schedules.</span>
           </div>
           <div className="pro-card">
-            Tour Guides<span>Save details of guides and tours.</span>
+            Tour Guides
+            <span>Save details of guides and tours.</span>
           </div>
           <div className="pro-card">
-            Hiking Adventures<span>Track trails and hikes.</span>
+            Hiking Adventures
+            <span>Track trails and hikes.</span>
           </div>
           <div className="pro-card">
-            Water Activities<span>Include scuba diving, snorkeling, and more.</span>
+            Water Activities
+            <span>Include scuba diving, snorkeling, and more.</span>
           </div>
           <div className="pro-card">
-            Additional Notes<span>Store any extra plans, attachments, or reminders.</span>
+            Additional Notes
+            <span>Store any extra plans, attachments, or reminders.</span>
           </div>
         </div>
       </section>
@@ -155,7 +201,11 @@ function Landing() {
         <p>for every corner of the world</p>
         <div className="explore-grid">
           {destinations.map((d, i) => (
-            <div key={i} className="explore-card" style={{ backgroundImage: `url(${d.img})` }}>
+            <div
+              key={i}
+              className="explore-card"
+              style={{ backgroundImage: `url(${d.img})` }}
+            >
               <div className="explore-overlay">{d.name}</div>
             </div>
           ))}

@@ -1,4 +1,12 @@
 import React from "react";
+import "../css/Flights.css";
+import pal from "../assets/flights/pal.png";
+import cebu from "../assets/flights/cebupacific.png";
+import singapore from "../assets/flights/singapore.png";
+import swiss from "../assets/flights/swiss.png";
+import emirates from "../assets/flights/emirates.png";
+import airasia from "../assets/flights/airasia.png";
+import ana from "../assets/flights/ana.png";
 import { useLocation, useNavigate } from "react-router-dom";
 
 function FlightResults() {
@@ -6,7 +14,6 @@ function FlightResults() {
   const navigate = useNavigate();
   const { flightDetails } = location.state || {};
 
-  // Show message if no flightDetails
   if (!flightDetails) {
     return (
       <div className="results-section">
@@ -19,41 +26,50 @@ function FlightResults() {
     );
   }
 
-  const flights = [
-    {
-      airline: "Philippine Airlines",
-      departureTime: "7:45 am",
-      arrivalTime: "11:20 am",
-      from: flightDetails.from,
-      to: flightDetails.to,
-      stops: "Nonstop",
-      duration: "3h 35m",
-      price: "₱14,131",
-      cabin: "Economy",
-    },
-    {
-      airline: "Cebu Pacific",
-      departureTime: "1:50 pm",
-      arrivalTime: "5:10 pm",
-      from: flightDetails.from,
-      to: flightDetails.to,
-      stops: "1 stop",
-      duration: "6h 05m",
-      price: "₱17,295",
-      cabin: "Economy",
-    },
-    {
-      airline: "Singapore Airlines",
-      departureTime: "9:00 am",
-      arrivalTime: "1:15 pm",
-      from: flightDetails.from,
-      to: flightDetails.to,
-      stops: "Nonstop",
-      duration: "4h 15m",
-      price: "₱18,427",
-      cabin: "Economy",
-    },
-  ];
+  const airlineLogos = {
+    "Philippine Airlines": pal,
+    "Cebu Pacific": cebu,
+    "Singapore Airlines": singapore,
+    "Swiss International Air Lines": swiss,
+    "Emirates": emirates,
+    "AirAsia": airasia,
+    "ANA": ana,
+  };
+
+  const flightsData = {
+    "Tokyo, Japan": [
+      { airline: "ANA", departureTime: "7:00 am", arrivalTime: "11:30 am", stops: "Nonstop", duration: "4h 30m", price: "₱15,200", cabin: "Economy" },
+      { airline: "Philippine Airlines", departureTime: "9:45 am", arrivalTime: "2:20 pm", stops: "Nonstop", duration: "4h 35m", price: "₱14,500", cabin: "Economy" },
+      { airline: "Cebu Pacific", departureTime: "1:50 pm", arrivalTime: "6:10 pm", stops: "1 stop", duration: "6h 20m", price: "₱12,800", cabin: "Economy" },
+    ],
+    "Dubai, UAE": [
+      { airline: "Emirates", departureTime: "2:00 am", arrivalTime: "6:30 am", stops: "Nonstop", duration: "9h 30m", price: "₱25,300", cabin: "Economy" },
+      { airline: "Philippine Airlines", departureTime: "5:45 am", arrivalTime: "3:20 pm", stops: "1 stop", duration: "11h 35m", price: "₱21,100", cabin: "Economy" },
+      { airline: "Cebu Pacific", departureTime: "11:20 am", arrivalTime: "8:10 pm", stops: "Nonstop", duration: "8h 50m", price: "₱29,400", cabin: "Economy" },
+    ],
+    "Zurich, Switzerland": [
+      { airline: "Swiss International Air Lines", departureTime: "12:30 am", arrivalTime: "9:50 am", stops: "1 stop", duration: "15h 20m", price: "₱42,000", cabin: "Economy" },
+      { airline: "Philippine Airlines", departureTime: "3:15 am", arrivalTime: "2:40 pm", stops: "2 stops", duration: "17h 25m", price: "₱38,500", cabin: "Economy" },
+      { airline: "Singapore Airlines", departureTime: "6:00 am", arrivalTime: "3:50 pm", stops: "1 stop", duration: "13h 50m", price: "₱45,200", cabin: "Economy" },
+    ],
+    "Seoul, Korea": [
+      { airline: "Philippine Airlines", departureTime: "6:00 am", arrivalTime: "10:30 am", stops: "Nonstop", duration: "4h 30m", price: "₱15,200", cabin: "Economy" },
+      { airline: "Cebu Pacific", departureTime: "12:15 pm", arrivalTime: "4:45 pm", stops: "Nonstop", duration: "4h 30m", price: "₱13,500", cabin: "Economy" },
+      { airline: "AirAsia", departureTime: "9:00 am", arrivalTime: "1:30 pm", stops: "Nonstop", duration: "4h 30m", price: "₱14,800", cabin: "Economy" },
+    ],
+    "Singapore": [
+      { airline: "Singapore Airlines", departureTime: "7:30 am", arrivalTime: "11:15 am", stops: "Nonstop", duration: "4h 45m", price: "₱16,000", cabin: "Economy" },
+      { airline: "Philippine Airlines", departureTime: "1:00 pm", arrivalTime: "4:40 pm", stops: "Nonstop", duration: "3h 40m", price: "₱14,200", cabin: "Economy" },
+      { airline: "Cebu Pacific", departureTime: "9:00 am", arrivalTime: "12:50 pm", stops: "Nonstop", duration: "3h 50m", price: "₱12,900", cabin: "Economy" },
+    ],
+    "Manila, Philippines": [
+      { airline: "Philippine Airlines", departureTime: "6:00 am", arrivalTime: "7:30 am", stops: "Nonstop", duration: "1h 30m", price: "₱2,500", cabin: "Economy" },
+      { airline: "Cebu Pacific", departureTime: "8:15 am", arrivalTime: "9:45 am", stops: "Nonstop", duration: "1h 30m", price: "₱2,200", cabin: "Economy" },
+      { airline: "AirAsia", departureTime: "10:00 am", arrivalTime: "11:30 am", stops: "Nonstop", duration: "1h 30m", price: "₱2,700", cabin: "Economy" },
+    ],
+  };
+
+  const flights = flightsData[flightDetails.to] || [];
 
   return (
     <div className="results-section">
@@ -65,38 +81,39 @@ function FlightResults() {
         Flights from {flightDetails.from} to {flightDetails.to}
       </h1>
       <p>
-        {flightDetails.departure} {flightDetails.return && ` - ${flightDetails.return}`}
+        Departure: {flightDetails.departure}{" "}
+        {flightDetails.return && ` | Return: ${flightDetails.return}`}
       </p>
 
       <div className="results-list">
         {flights.map((flight, index) => (
           <div key={index} className="flight-card">
-            {/* Airline Logo placeholder */}
             <div className="flight-logo">
               <img
-                src={`https://via.placeholder.com/50?text=${flight.airline.split(" ")[0]}`}
+                src={airlineLogos[flight.airline]}
                 alt={flight.airline}
+                style={{ width: "50px", height: "auto" }} // reduce logo size
               />
             </div>
 
-            {/* Flight details */}
             <div className="flight-details">
               <h3>{flight.airline}</h3>
-              <p>
-                {flight.departureTime} – {flight.arrivalTime}
-              </p>
-              <p>
-                {flight.from} → {flight.to}
-              </p>
+              <p>{flight.departureTime} – {flight.arrivalTime}</p>
+              <p>{flightDetails.from} → {flightDetails.to}</p>
               <p>{flight.stops} • {flight.duration}</p>
               <p>Cabin: {flight.cabin}</p>
             </div>
 
-            {/* Price & Book */}
             <div className="flight-price-btn">
               <div className="flight-price">{flight.price}</div>
-              <button className="book-btn">Book Now</button>
+              <button
+                className="flight-book-btn"
+                onClick={() => navigate("/flight-details", { state: { flight, flightDetails } })}
+              >
+                Book Now
+              </button>
             </div>
+            
           </div>
         ))}
       </div>
