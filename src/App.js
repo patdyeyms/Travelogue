@@ -1,4 +1,5 @@
 import React from "react";
+import "leaflet/dist/leaflet.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ScrollToTop from "./ScrollToTop";
 import NavbarComponent from "./component/NavbarComponent";
@@ -16,6 +17,7 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 
 function App() {
   return (
+    
     <Router>
       <ScrollToTop />
 

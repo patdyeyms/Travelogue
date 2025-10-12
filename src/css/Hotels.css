@@ -1,7 +1,7 @@
 .hotels-page {
   font-family: "Poppins", sans-serif;
-  color: #333;
-  background-color: #f9fafb;
+  color: #0b3a3a;
+  background-color: #e6f6f6;
   min-height: 100vh;
   padding-bottom: 3rem;
 }
@@ -29,42 +29,44 @@ p {
 .hero-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.35);
+  background: rgba(40, 162, 162, 0.45); /* teal overlay */
 }
 
 .hotels-hero-content {
   position: relative;
   z-index: 2;
   text-align: center;
-  color: white;
+  color: #fff;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1rem;
+  padding: 0 20px;
 }
 
 .hotels-hero-content h1 {
   font-size: 3rem;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.3);
 }
 
 .hotels-hero-content p {
   font-size: 1.2rem;
-  color: #f0f0f0;
+  color: #e0f7f5;
 }
 
 /* Search Bar */
 .search-bar {
   width: 100%;
-  max-width: 600px; /* wider search bar */
+  max-width: 600px;
   margin-top: 1rem;
-  position: relative; /* needed for suggestions dropdown */
+  position: relative;
 }
 
 .search-bar input {
   width: 100%;
   padding: 0.8rem 1rem;
   border-radius: 12px;
-  border: 1.5px solid #ddd;
+  border: 1.5px solid #28a1a1; /* theme border */
   font-size: 1rem;
   outline: none;
   background-color: #fafafa;
@@ -72,9 +74,9 @@ p {
 }
 
 .search-bar input:focus {
-  border-color: #ff8f2c;
+  border-color: #1f7f7f;
   background-color: #fff;
-  box-shadow: 0 0 6px rgba(255, 143, 44, 0.25);
+  box-shadow: 0 0 6px rgba(40, 162, 162, 0.25);
 }
 
 /* Suggestions */
@@ -82,12 +84,12 @@ p {
   width: 100%;
   max-width: 600px;
   background: #fff;
-  border: 1px solid #ddd;
+  border: 1px solid #28a1a1;
   border-radius: 12px;
   margin-top: 0.3rem;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   position: absolute;
-  top: 100%; /* right below input */
+  top: 100%;
   left: 0;
   z-index: 10;
 }
@@ -95,17 +97,18 @@ p {
 .suggestion-item {
   padding: 0.6rem 1rem;
   cursor: pointer;
-  transition: background 0.2s ease;
+  transition: background 0.2s ease, color 0.2s ease;
 }
 
 .suggestion-item:hover,
 .suggestion-item.active {
-  background-color: #ffefd5;
+  background-color: #28a1a1;
+  color: #fff;
 }
 
 .highlight {
   font-weight: 700;
-  color: #ff8f2c;
+  color: #28a1a1;
 }
 
 .no-results {
@@ -118,7 +121,7 @@ p {
   text-align: center;
   font-size: 2rem;
   margin: 2rem 0 1rem 0;
-  color: #333;
+  color: #28a1a1;
 }
 
 /* Hotels Grid */
@@ -143,7 +146,7 @@ p {
 
 .hotel-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+  box-shadow: 0 8px 20px rgba(40, 162, 162, 0.2); /* teal shadow */
 }
 
 /* Hotel Image */
@@ -163,6 +166,7 @@ p {
 .hotel-card p {
   font-size: 0.95rem;
   margin: 0 1rem 0.5rem 1rem;
+  color: #0b3a3a;
 }
 
 .reviews {
@@ -177,7 +181,7 @@ p {
 
 /* Book Button */
 .book-btn {
-  background: #ff8f2c;
+  background: #28a1a1; /* theme button */
   color: #fff;
   border: none;
   padding: 0.7rem 1rem;
@@ -189,7 +193,7 @@ p {
 }
 
 .book-btn:hover {
-  background: #ffa74c;
+  background: #1f7f7f;
   transform: translateY(-2px);
 }
 

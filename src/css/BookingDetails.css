@@ -5,9 +5,7 @@
   margin-top: 120px;
   padding-top: 120px; /* enough space for navbar */
   font-family: "Poppins", sans-serif;
-  background: #f9fafb;
   border-radius: 16px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
   text-align: center;
   position: relative;
 }
@@ -16,13 +14,13 @@
   text-align: center;
   margin-bottom: 0.3rem;
   font-size: 2rem;
-  color: #333;
+  color: #28a1a1; /* teal heading */
 }
 
 .booking-page p {
   text-align: center;
   margin-bottom: 1.5rem;
-  color: #555;
+  color: #0b3a3a;
 }
 
 .form-group {
@@ -34,7 +32,7 @@
 .form-group label {
   margin-bottom: 0.5rem;
   font-weight: 600;
-  color: #333;
+  color: #0b3a3a;
 }
 
 .form-group input {
@@ -48,8 +46,8 @@
 }
 
 .form-group input:focus {
-  border-color: #ff8f2c;
-  box-shadow: 0 0 6px rgba(255, 143, 44, 0.25);
+  border-color: #28a1a1;
+  box-shadow: 0 0 6px rgba(40,162,162,0.25);
 }
 
 .guest-details {
@@ -63,7 +61,6 @@
 
 .guest-details h4 {
   margin-bottom: 0.5rem;
-  color: #ff8f2c;
 }
 
 .guest-details input {
@@ -76,12 +73,12 @@
 }
 
 .guest-details input:focus {
-  border-color: #ff8f2c;
-  box-shadow: 0 0 4px rgba(255, 143, 44, 0.2);
+  border-color: #28a1a1;
+  box-shadow: 0 0 4px rgba(40,162,162,0.2);
 }
 
 button[type="submit"] {
-  background: #ff8f2c;
+  background: #28a1a1;
   color: #fff;
   border: none;
   padding: 0.8rem 1rem;
@@ -91,21 +88,21 @@ button[type="submit"] {
   width: 100%;
   font-size: 1rem;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(255,143,44,0.3);
+  box-shadow: 0 4px 12px rgba(40,162,162,0.3);
 }
 
 button[type="submit"]:hover {
-  background: #ffa74c;
+  background: #1f7f7f;
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(255,143,44,0.35);
+  box-shadow: 0 6px 16px rgba(40,162,162,0.35);
 }
 
 /* Back Button */
 .back-btn {
   position: absolute;
-  top: 60px; /* moved slightly up from 100px */
-  left: 20px;
-  background: #ff8f2c;
+  top: 1rem;
+  left: 1rem;
+  background: #28a1a1;
   color: #fff;
   border: none;
   padding: 0.5rem 1rem;
@@ -113,27 +110,28 @@ button[type="submit"]:hover {
   font-weight: 600;
   cursor: pointer;
   z-index: 50;
+  transform: none;
 }
 
 .back-btn:hover {
-  background: #ffa74c;
+  background: #1f7f7f;
   transform: translateY(-1px);
 }
 
-/* Future Booking Checkbox (orange) */
+/* Future Booking Checkbox (teal) */
 .future-booking {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   margin-bottom: 1.5rem;
   font-weight: 600;
-  color: #333;
+  color: #0b3a3a;
 }
 
 .future-booking input[type="checkbox"] {
   width: 20px;
   height: 20px;
-  accent-color: #ff8f2c; /* orange check */
+  accent-color: #28a1a1;
   cursor: pointer;
 }
 

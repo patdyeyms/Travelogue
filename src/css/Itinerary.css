@@ -1,0 +1,202 @@
+/* Base layout */
+.itinerary-page {
+  display: flex;
+  height: calc(100vh - 60px); /* Adjust to navbar height */
+  width: 100%;
+  overflow: hidden;
+  font-family: "Inter", sans-serif;
+  background: #f7f7f8;
+  margin-top: 60px; /* Push below navbar */
+}
+
+/* Sidebar styling */
+.sidebar {
+  width: 260px;
+  background: #fff;
+  border-right: 1px solid #e5e5e5;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  overflow-y: auto;
+  height: calc(100vh - 60px);
+  position: sticky;
+  top: 60px; /* Keeps it aligned under navbar */
+}
+
+.sidebar-section {
+  margin-bottom: 10px;
+}
+
+.sidebar-title {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #444;
+  margin-bottom: 8px;
+  letter-spacing: 0.5px;
+}
+
+.sidebar-section ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-section li {
+  font-size: 14px;
+  color: #333;
+  padding: 6px 4px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.sidebar-section li:hover {
+  background: #f3f4f6;
+  color: #007bff;
+}
+
+.hide-sidebar-btn {
+  background: none;
+  border: none;
+  font-size: 14px;
+  color: #777;
+  cursor: pointer;
+  align-self: flex-start;
+  transition: color 0.2s ease;
+  margin-top: auto;
+}
+
+.hide-sidebar-btn:hover {
+  color: #000;
+}
+
+/* Main content area */
+.main-content {
+  flex: 1;
+  overflow-y: auto;
+  background: #fafafa;
+  padding-bottom: 40px;
+}
+
+/* Header banner section */
+.trip-header-banner {
+  position: relative;
+  width: 100%;
+  height: 220px;
+  overflow: hidden;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.trip-header-banner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.85);
+}
+
+.trip-header-card {
+  position: absolute;
+  bottom: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #fff;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  padding: 18px 28px;
+  text-align: center;
+  width: 380px;
+}
+
+.trip-header-card h1 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #111;
+  margin-bottom: 6px;
+}
+
+.trip-header-card p {
+  font-size: 14px;
+  color: #666;
+}
+
+/* Explore section */
+.explore-section {
+  margin-top: 80px;
+  padding: 30px 40px;
+}
+
+.explore-section h2 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: #222;
+}
+
+.explore-grid {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.explore-card {
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  flex: 1;
+  min-width: 250px;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.explore-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.explore-card img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+}
+
+.explore-card p {
+  padding: 10px 15px;
+  font-size: 15px;
+  color: #333;
+  font-weight: 500;
+}
+
+/* Map styling */
+.map-wrapper {
+  margin: 40px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e5e5e5;
+}
+
+.map-view {
+  height: 400px;
+  width: 100%;
+  border-radius: 12px;
+}
+
+/* Empty itinerary fallback */
+.itinerary-empty {
+  text-align: center;
+  padding: 100px 40px;
+}
+
+.itinerary-empty h2 {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.itinerary-empty p {
+  color: #777;
+  font-size: 15px;
+}

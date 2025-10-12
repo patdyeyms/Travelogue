@@ -1,86 +1,120 @@
-.confirmation-page {
-  font-family: "Poppins", sans-serif;
-  text-align: center;
-  padding: 6rem 1rem 2rem 1rem;
-  background: #f9fafb;
+/* Page background */
+.thankyou-section {
+  background: #f9fafb; /* light background */
   min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  font-family: "Poppins", sans-serif;
 }
 
-.confirmation-page h1 {
-  font-size: 3rem;
-  color: #ff8f2c;
-  margin-bottom: 2rem;
-}
-
-.confirmation-container {
-  max-width: 600px;
-  margin: 0 auto 2rem auto;
+/* Card layout */
+.thankyou-card {
   background: #fff;
-  border-radius: 15px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-  padding: 2rem 1.5rem;
-  text-align: left;
+  border-radius: 16px;
+  max-width: 600px;
+  width: 100%;
+  padding: 2rem;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
   position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
-.confirmation-container h2 {
-  color: #333;
-  margin-bottom: 0.5rem;
-}
-
-.confirmation-container p {
-  color: #555;
-  margin-bottom: 0.5rem;
-}
-
-.see-details {
+/* Close button */
+.close-btn {
   position: absolute;
-  bottom: 1rem;
-  left: 1.5rem;
-  background: none;
+  top: 15px;
+  right: 15px;
   border: none;
-  color: #ff8f2c;
-  text-decoration: underline;
+  background: none;
+  font-size: 1.5rem;
   cursor: pointer;
+  color: #28a1a1;
   font-weight: 600;
 }
 
-.confirmation-actions {
+.close-btn:hover {
+  color: #1b6262;
+}
+
+/* Header */
+h1 {
+  font-size: 2.5rem;
+  color: #0b3a3a; /* dark teal/green */
+  text-align: center;
+  margin: 0;
+}
+
+.small-muted {
+  font-size: 1rem;
+  color: #1f7f7f; /* muted teal */
+  text-align: center;
+}
+
+/* Summary card */
+.thankyou-card-in {
+  background: #f5fdfd; /* very light teal */
+  padding: 1.5rem;
+  border-radius: 12px;
+}
+
+.thank-summary p {
+  margin-bottom: 0.6rem;
+  color: #0b3a3a;
+  font-size: 1rem;
+}
+
+/* Buttons */
+.confirm-actions {
   display: flex;
   justify-content: center;
   gap: 1rem;
   flex-wrap: wrap;
-  margin-top: 2rem;
 }
 
-.sign-up-btn, .continue-btn {
+.action-btn {
   padding: 0.8rem 1.5rem;
-  border-radius: 12px;
+  border-radius: 50px;
   border: none;
   font-weight: 600;
   font-size: 1rem;
   cursor: pointer;
+  min-width: 180px;
   transition: all 0.3s ease;
 }
 
-.sign-up-btn {
-  background: #fff;
-  border: 1.5px solid #ff8f2c;
-  color: #ff8f2c;
-}
-
-.sign-up-btn:hover {
-  background: #ff8f2c;
-  color: #fff;
-  transform: translateY(-2px);
-}
-
-.continue-btn {
-  background: #ff8f2c;
+/* Primary: gradient or teal outline */
+.action-btn.primary {
+  background: linear-gradient(90deg, #28a1a1, #4ecfc3);
   color: #fff;
 }
 
-.continue-btn:hover {
-  background: #ffa74c;
+.action-btn.primary:hover {
+  background: linear-gradient(90deg, #1f7f7f, #38b1b1);
   transform: translateY(-2px);
+}
+
+.action-btn.secondary {
+  background: #28a1a1;
+  color: #fff;
+}
+
+.action-btn.secondary:hover {
+  background: #1f7f7f;
+  transform: translateY(-2px);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .thankyou-card {
+    padding: 1.5rem;
+  }
+
+  .action-btn {
+    font-size: 0.95rem;
+    min-width: 140px;
+  }
 }

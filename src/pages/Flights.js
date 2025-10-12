@@ -53,6 +53,8 @@ function Flights() {
       alert("Please select a departure date.");
       return;
     }
+    localStorage.setItem("selectedDestination", flightDetails.to);
+
     navigate("/flights/results", { state: { flightDetails } });
   };
 
