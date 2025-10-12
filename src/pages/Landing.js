@@ -21,7 +21,7 @@ function Landing() {
     { name: "Singapore", img: "/images/singapore.jpg" },
   ];
 
-  // Intersection Observer for feature section animation
+  // Feature section animation
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) =>
@@ -37,12 +37,10 @@ function Landing() {
     return () => observer.disconnect();
   }, []);
 
-  // Hide suggestions when clicking outside
+  // Hide suggestions outside click
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (!event.target.closest(".intro-search")) {
-        setShowSuggestions(false);
-      }
+    const handleClickOutside = (e) => {
+      if (!e.target.closest(".intro-search")) setShowSuggestions(false);
     };
     document.addEventListener("click", handleClickOutside);
     return () => document.removeEventListener("click", handleClickOutside);
@@ -51,7 +49,7 @@ function Landing() {
   const handleSearch = () => {
     if (!destination) return;
     navigate(`/flights?to=${encodeURIComponent(destination)}`);
-    setShowSuggestions(false); // hide suggestions after search
+    setShowSuggestions(false);
   };
 
   const filteredDestinations = destinations.filter((d) =>
@@ -65,14 +63,11 @@ function Landing() {
         <video autoPlay loop muted playsInline className="background-video">
           <source src="/cinematic.mp4" type="video/mp4" />
         </video>
-        <div className="intro-overlay"></div>
         <div className="intro-content">
           <h1>Welcome to Travelogue</h1>
-
-          {/* Get Started / Destination Input */}
           {!showDestinationInput ? (
             <button
-              className="search-btn"
+              className="get-started-btn"
               onClick={() => setShowDestinationInput(true)}
             >
               Get Started →
@@ -103,7 +98,7 @@ function Landing() {
                         key={i}
                         onClick={() => {
                           setDestination(d.name);
-                          setShowSuggestions(false); // hide suggestions
+                          setShowSuggestions(false);
                         }}
                         className="suggestion-item"
                       >
@@ -127,7 +122,7 @@ function Landing() {
         <h2>Organize your trips the easy way with Travelogue!</h2>
       </section>
 
-      {/* FEATURE / OBJECTIVES */}
+      {/* FEATURES */}
       <section
         ref={featureRef}
         className={`feature-section ${isVisible ? "fade-in" : ""}`}
@@ -161,36 +156,37 @@ function Landing() {
         </div>
       </section>
 
-      {/* ITINERARY */}
+      {/* ITINERARY SECTION (FIXED STYLE) */}
       <section className="pro-section">
         <h1>
           Add Your Planned Trips in Your Journal <span>Itinerary</span>
         </h1>
         <p className="pro-desc">Organize all your adventures in one place</p>
+
         <div className="pro-features">
           <div className="pro-card">
-            Places to Visit
-            <span>Keep track of all destinations you want to explore.</span>
+            <h3>Places to Visit</h3>
+            <p>Keep track of all destinations you want to explore.</p>
           </div>
           <div className="pro-card">
-            Car Rentals
-            <span>Record your car bookings and schedules.</span>
+            <h3>Car Rentals</h3>
+            <p>Record your car bookings and schedules.</p>
           </div>
           <div className="pro-card">
-            Tour Guides
-            <span>Save details of guides and tours.</span>
+            <h3>Tour Guides</h3>
+            <p>Save details of guides and tours.</p>
           </div>
           <div className="pro-card">
-            Hiking Adventures
-            <span>Track trails and hikes.</span>
+            <h3>Hiking Adventures</h3>
+            <p>Track trails and hikes.</p>
           </div>
           <div className="pro-card">
-            Water Activities
-            <span>Include scuba diving, snorkeling, and more.</span>
+            <h3>Water Activities</h3>
+            <p>Include scuba diving, snorkeling, and more.</p>
           </div>
           <div className="pro-card">
-            Additional Notes
-            <span>Store any extra plans, attachments, or reminders.</span>
+            <h3>Additional Notes</h3>
+            <p>Store any extra plans, attachments, or reminders.</p>
           </div>
         </div>
       </section>

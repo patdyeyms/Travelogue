@@ -238,7 +238,7 @@ p {
 
 /* Back Button */
 .back-btn {
-  background: #28a1a1;
+  background: linear-gradient(135deg, #28a1a1, #5cd6d6);
   color: white;
   border: none;
   padding: 0.6rem 1rem;

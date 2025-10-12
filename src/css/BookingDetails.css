@@ -1,159 +1,118 @@
-.booking-page {
-  max-width: 600px;
-  margin: 2rem auto;
-  padding: 2rem 1.5rem 3rem 1.5rem;
-  margin-top: 120px;
-  padding-top: 120px; /* enough space for navbar */
+.booking-details-page {
+  background: #e1f5fe;
+  min-height: 100vh;
+  padding-top: 140px; /* space for navbar */
+  display: flex;
+  justify-content: center;
   font-family: "Poppins", sans-serif;
-  border-radius: 16px;
-  text-align: center;
   position: relative;
 }
 
-.booking-page h1 {
+.booking-container {
+  background: #ffffff;
+  padding: 2rem 2.5rem;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 600px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  text-align: left;
+}
+
+.booking-container h1 {
   text-align: center;
-  margin-bottom: 0.3rem;
-  font-size: 2rem;
-  color: #28a1a1; /* teal heading */
-}
-
-.booking-page p {
-  text-align: center;
+  color: #0288d1;
   margin-bottom: 1.5rem;
-  color: #0b3a3a;
 }
 
-.form-group {
+.form-group,
+.form-group-inline {
   margin-bottom: 1.5rem;
-  display: flex;
-  flex-direction: column;
 }
 
-.form-group label {
-  margin-bottom: 0.5rem;
+.form-group label,
+.form-group-inline label {
+  display: block;
+  color: #01579b;
   font-weight: 600;
-  color: #0b3a3a;
+  margin-bottom: 0.5rem;
 }
 
-.form-group input {
-  padding: 0.6rem 1rem;
-  border-radius: 12px;
-  border: 1.5px solid #ddd;
-  font-size: 1rem;
-  outline: none;
-  transition: all 0.3s ease;
-  background-color: #fff;
+.form-group input,
+.form-group-inline input {
+  width: 100%;
+  padding: 10px;
+  border: 1.5px solid #b3e5fc;
+  border-radius: 10px;
+  font-size: 14px;
 }
 
-.form-group input:focus {
-  border-color: #28a1a1;
-  box-shadow: 0 0 6px rgba(40,162,162,0.25);
+.form-group-inline {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
 }
 
-.guest-details {
-  background: #fff;
+.child-section {
+  background: #e1f5fe;
   padding: 1rem;
   border-radius: 12px;
   margin-bottom: 1.5rem;
-  border: 1px solid #eee;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
 }
 
-.guest-details h4 {
-  margin-bottom: 0.5rem;
+.child-section h3 {
+  color: #0277bd;
+  margin-bottom: 1rem;
 }
 
-.guest-details input {
-  margin-bottom: 0.7rem;
-  width: 100%;
-  padding: 0.5rem 0.8rem;
-  border-radius: 10px;
-  border: 1.2px solid #ddd;
-  transition: all 0.3s ease;
+.child-inputs {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
 }
 
-.guest-details input:focus {
-  border-color: #28a1a1;
-  box-shadow: 0 0 4px rgba(40,162,162,0.2);
+.child-inputs input {
+  flex: 1;
 }
 
-button[type="submit"] {
-  background: #28a1a1;
-  color: #fff;
-  border: none;
-  padding: 0.8rem 1rem;
-  border-radius: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  width: 100%;
-  font-size: 1rem;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(40,162,162,0.3);
-}
-
-button[type="submit"]:hover {
-  background: #1f7f7f;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(40,162,162,0.35);
-}
-
-/* Back Button */
-.back-btn {
-  position: absolute;
-  top: 1rem;
-  left: 1rem;
-  background: #28a1a1;
-  color: #fff;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 10px;
-  font-weight: 600;
-  cursor: pointer;
-  z-index: 50;
-  transform: none;
-}
-
-.back-btn:hover {
-  background: #1f7f7f;
-  transform: translateY(-1px);
-}
-
-/* Future Booking Checkbox (teal) */
-.future-booking {
+.form-checkbox {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   margin-bottom: 1.5rem;
-  font-weight: 600;
-  color: #0b3a3a;
+  color: #01579b;
 }
 
-.future-booking input[type="checkbox"] {
-  width: 20px;
-  height: 20px;
-  accent-color: #28a1a1;
+.submit-btn {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  background: #0288d1;
+  color: white;
+  border-radius: 10px;
+  font-size: 16px;
   cursor: pointer;
+  transition: 0.3s;
 }
 
-.future-booking span {
-  font-size: 0.95rem;
+.submit-btn:hover {
+  background: #0277bd;
 }
 
-/* Responsive */
-@media (max-width: 600px) {
-  .booking-page {
-    padding: 1.5rem 1rem;
-    padding-top: 120px;
-  }
+/* Back button */
+.back-btn {
+  position: absolute;
+  top: 90px;
+  left: 40px;
+  background: #0288d1;
+  color: white;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.3s;
+}
 
-  .guest-details input,
-  .form-group input,
-  button[type="submit"] {
-    font-size: 0.95rem;
-  }
-
-  .back-btn {
-    top: 90px;
-    left: 15px;
-  }
+.back-btn:hover {
+  background: #0277bd;
 }

@@ -1,11 +1,15 @@
+/* ===============================
+   HOTELS PAGE STYLES (ENHANCED)
+=============================== */
 .hotels-page {
   font-family: "Poppins", sans-serif;
   color: #0b3a3a;
   background-color: #e6f6f6;
   min-height: 100vh;
-  padding-bottom: 3rem;
+  padding-bottom: 4rem;
 }
 
+/* Headings Reset */
 h1, h2, h3, h4, h5 {
   margin: 0;
   padding: 0;
@@ -16,7 +20,9 @@ p {
   margin: 0;
 }
 
-/* Hero Section */
+/* ===============================
+   HERO SECTION
+=============================== */
 .hotels-hero {
   position: relative;
   height: 80vh;
@@ -29,7 +35,7 @@ p {
 .hero-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(40, 162, 162, 0.45); /* teal overlay */
+  background: rgba(40, 162, 162, 0.45);
 }
 
 .hotels-hero-content {
@@ -40,13 +46,13 @@ p {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
+  gap: 1.2rem;
   padding: 0 20px;
 }
 
 .hotels-hero-content h1 {
-  font-size: 3rem;
-  text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+  font-size: 3.2rem;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
 
 .hotels-hero-content p {
@@ -54,19 +60,21 @@ p {
   color: #e0f7f5;
 }
 
-/* Search Bar */
+/* ===============================
+   SEARCH BAR
+=============================== */
 .search-bar {
   width: 100%;
   max-width: 600px;
-  margin-top: 1rem;
+  margin-top: 1.2rem;
   position: relative;
 }
 
 .search-bar input {
   width: 100%;
-  padding: 0.8rem 1rem;
+  padding: 0.9rem 1.2rem;
   border-radius: 12px;
-  border: 1.5px solid #28a1a1; /* theme border */
+  border: 1.5px solid #28a1a1;
   font-size: 1rem;
   outline: none;
   background-color: #fafafa;
@@ -79,7 +87,9 @@ p {
   box-shadow: 0 0 6px rgba(40, 162, 162, 0.25);
 }
 
-/* Suggestions */
+/* ===============================
+   SUGGESTIONS LIST
+=============================== */
 .suggestions {
   width: 100%;
   max-width: 600px;
@@ -87,7 +97,7 @@ p {
   border: 1px solid #28a1a1;
   border-radius: 12px;
   margin-top: 0.3rem;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   position: absolute;
   top: 100%;
   left: 0;
@@ -113,94 +123,112 @@ p {
 
 .no-results {
   padding: 0.6rem 1rem;
-  color: #888;
+  color: #fdfdfd;
 }
 
-/* Country title */
+/* ===============================
+   COUNTRY TITLE
+=============================== */
 .country-title {
   text-align: center;
-  font-size: 2rem;
-  margin: 2rem 0 1rem 0;
+  font-size: 2.2rem;
+  margin: 3rem 0 2rem 0;
   color: #28a1a1;
 }
 
-/* Hotels Grid */
+/* ===============================
+   HOTELS GRID
+=============================== */
 .hotels-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.5rem;
-  max-width: 1100px;
-  margin: 0 auto 3rem auto;
-  padding: 0 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2.5rem; /* ⬅️ wider spacing between cards */
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
 }
 
+/* ===============================
+   HOTEL CARD
+=============================== */
 .hotel-card {
   background: #fff;
-  border-radius: 15px;
+  border-radius: 18px;
   overflow: hidden;
-  border: 1px solid #eee;
+  border: 1px solid #e0e0e0;
   display: flex;
   flex-direction: column;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  justify-content: space-between;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
 }
 
 .hotel-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(40, 162, 162, 0.2); /* teal shadow */
+  transform: translateY(-6px);
+  box-shadow: 0 10px 25px rgba(40, 162, 162, 0.25);
 }
 
-/* Hotel Image */
 .hotel-card img {
   width: 100%;
-  aspect-ratio: 1 / 1;
+  aspect-ratio: 4 / 3;
   object-fit: cover;
 }
 
-/* Hotel Info */
+/* ===============================
+   HOTEL INFO
+=============================== */
 .hotel-card h3 {
-  font-size: 1.2rem;
+  font-size: 1.25rem;
   font-weight: 600;
-  margin: 0.8rem 1rem 0.2rem 1rem;
+  margin: 1rem 1.2rem 0.4rem 1.2rem;
+  color: #0b3a3a;
 }
 
 .hotel-card p {
   font-size: 0.95rem;
-  margin: 0 1rem 0.5rem 1rem;
+  margin: 0 1.2rem 0.8rem 1.2rem;
   color: #0b3a3a;
+  line-height: 1.5;
 }
 
 .reviews {
-  padding: 0 1rem 0.5rem 1rem;
+  padding: 0 1.2rem 0.8rem 1.2rem;
 }
 
 .reviews p {
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   color: #555;
   margin-bottom: 0.3rem;
 }
 
-/* Book Button */
+/* ===============================
+   BOOK BUTTON
+=============================== */
 .book-btn {
-  background: #28a1a1; /* theme button */
+  background: linear-gradient(135deg, #28a1a1, #5cd6d6);
   color: #fff;
   border: none;
-  padding: 0.7rem 1rem;
-  margin: 0.5rem 1rem 1rem 1rem;
+  padding: 0.8rem 1.2rem;
+  margin: 0.8rem 1.2rem 1.5rem 1.2rem;
   border-radius: 10px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
+  text-align: center;
 }
 
 .book-btn:hover {
-  background: #1f7f7f;
-  transform: translateY(-2px);
+  background: linear-gradient(135deg, #1f7f7f, #36c2c2);
+  transform: translateY(-3px);
 }
 
-/* Responsive */
+/* ===============================
+   RESPONSIVE TWEAKS
+=============================== */
 @media (max-width: 900px) {
   .hotels-grid {
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 2rem;
   }
 }
 
@@ -211,5 +239,12 @@ p {
 
   .hotels-grid {
     grid-template-columns: 1fr;
+    gap: 1.5rem;
+    padding: 0 1rem;
+  }
+
+  .country-title {
+    font-size: 1.8rem;
+    margin: 2rem 0 1.5rem 0;
   }
 }
