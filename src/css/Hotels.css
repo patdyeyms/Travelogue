@@ -24,7 +24,7 @@ p {
 ======================= */
 .hotels-hero {
   position: relative;
-  height: 60vh;
+  height: 80vh;
   background: url("../assets/hotels-hero.jpg") center/cover no-repeat;
   display: flex;
   justify-content: center;

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "../css/Flights.css";
 import pal from "../assets/flights/pal.png";
@@ -13,28 +13,56 @@ function FlightDetails() {
   const location = useLocation();
   const navigate = useNavigate();
   const { flight, flightDetails } = location.state || {};
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    passport: ""
+  });
+  const [saving, setSaving] = useState(false);
 
   const airlineLogos = {
     "Philippine Airlines": pal,
     "Cebu Pacific": cebu,
     "Singapore Airlines": singapore,
     "Swiss International Air Lines": swiss,
-    "Emirates": emirates,
-    "AirAsia": airasia,
-    "ANA": ana,
+    Emirates: emirates,
+    AirAsia: airasia,
+    ANA: ana,
   };
 
   if (!flight || !flightDetails) {
     return (
       <div className="results-section">
         <button className="back-btn" onClick={() => navigate(-1)}>
-          ← Back to Flights
+          ← Back
         </button>
         <h1>No flight selected</h1>
         <p>Please go back and choose a flight to view details.</p>
       </div>
     );
   }
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((p) => ({ ...p, [name]: value }));
+  };
+
+  const handleConfirm = (e) => {
+    e.preventDefault();
+    // simple validation
+    if (!formData.firstName || !formData.lastName || !formData.email || !formData.phone) {
+      alert("Please fill in all required fields.");
+      return;
+    }
+
+    // simulate saving then navigate to confirmation
+    setSaving(true);
+    setTimeout(() => {
+      navigate("/flight-confirmation", { state: { flight, flightDetails, formData } });
+    }, 900);
+  };
 
   return (
     <div className="results-section">
@@ -71,6 +99,41 @@ function FlightDetails() {
           </p>
         </div>
       </div>
+
+      {/* Booking Form */}
+      <form className="booking-form" onSubmit={handleConfirm}>
+        <h3>Passenger Information</h3>
+        <div className="booking-grid">
+          <div className="input-group">
+            <label>First Name</label>
+            <input name="firstName" value={formData.firstName} onChange={handleChange} required />
+          </div>
+
+          <div className="input-group">
+            <label>Last Name</label>
+            <input name="lastName" value={formData.lastName} onChange={handleChange} required />
+          </div>
+
+          <div className="input-group">
+            <label>Email</label>
+            <input type="email" name="email" value={formData.email} onChange={handleChange} required />
+          </div>
+
+          <div className="input-group">
+            <label>Phone</label>
+            <input name="phone" value={formData.phone} onChange={handleChange} required />
+          </div>
+
+          <div className="input-group">
+            <label>Passport (optional)</label>
+            <input name="passport" value={formData.passport} onChange={handleChange} />
+          </div>
+        </div>
+
+        <button type="submit" className="confirm-btn" disabled={saving}>
+          {saving ? "Saving..." : "Confirm Flight"}
+        </button>
+      </form>
     </div>
   );
 }
