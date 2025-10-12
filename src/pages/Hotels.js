@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "../css/Hotels.css";
 
 const hotels = [
@@ -6,6 +7,7 @@ const hotels = [
   {
     id: 1,
     country: "Philippines",
+    city: "Manila",
     name: "Okada Manila",
     stars: 5,
     reviews: [
@@ -17,6 +19,7 @@ const hotels = [
   {
     id: 2,
     country: "Philippines",
+    city: "Manila",
     name: "Kingsford Hotel Manila Bay",
     stars: 4,
     reviews: [
@@ -29,6 +32,7 @@ const hotels = [
   {
     id: 3,
     country: "Switzerland",
+    city: "Zurich",
     name: "Hyatt Place Zurich Airport The Circle",
     stars: 4,
     reviews: [
@@ -40,6 +44,7 @@ const hotels = [
   {
     id: 4,
     country: "Switzerland",
+    city: "Zurich",
     name: "Capsule Hotel - Alpine Garden Zurich Airport",
     stars: 4.5,
     reviews: [
@@ -52,6 +57,7 @@ const hotels = [
   {
     id: 5,
     country: "Japan",
+    city: "Tokyo",
     name: "Hotel Villa Fontaine Grand Haneda Airport",
     stars: 4,
     reviews: [
@@ -63,6 +69,7 @@ const hotels = [
   {
     id: 6,
     country: "Japan",
+    city: "Tokyo",
     name: "LANDABOUT TOKYO",
     stars: 3,
     reviews: [
@@ -75,6 +82,7 @@ const hotels = [
   {
     id: 7,
     country: "South Korea",
+    city: "Seoul",
     name: "Roynet Hotel Seoul Mapo",
     stars: 4,
     reviews: [
@@ -86,6 +94,7 @@ const hotels = [
   {
     id: 8,
     country: "South Korea",
+    city: "Seoul",
     name: "GLAD MAPO",
     stars: 4,
     reviews: [
@@ -98,6 +107,7 @@ const hotels = [
   {
     id: 9,
     country: "UAE",
+    city: "Dubai",
     name: "Rove Downtown",
     stars: 3,
     reviews: [
@@ -109,6 +119,7 @@ const hotels = [
   {
     id: 10,
     country: "UAE",
+    city: "Dubai",
     name: "Sonder by Marriott Bonvoy Business Bay Apartments",
     stars: 4,
     reviews: [
@@ -121,6 +132,7 @@ const hotels = [
   {
     id: 11,
     country: "Singapore",
+    city: "Singapore",
     name: "Marina Bay Sands",
     stars: 5,
     reviews: [
@@ -132,6 +144,7 @@ const hotels = [
   {
     id: 12,
     country: "Singapore",
+    city: "Singapore",
     name: "Orchard Rendezvous Hotel by Far East Hospitality",
     stars: 4,
     reviews: [
@@ -144,18 +157,31 @@ const hotels = [
 
 function Hotels() {
   const [search, setSearch] = useState("");
-
-  const countries = [...new Set(hotels.map((hotel) => hotel.country))];
+  const navigate = useNavigate();
 
   const filteredHotels = search
     ? hotels.filter(
-        (hotel) => hotel.country.toLowerCase() === search.toLowerCase()
+        (hotel) =>
+          hotel.country.toLowerCase().includes(search.toLowerCase()) ||
+          hotel.city.toLowerCase().includes(search.toLowerCase())
       )
     : hotels;
 
-  const displayCountries = search
-    ? [...new Set(filteredHotels.map((hotel) => hotel.country))]
-    : countries;
+  const suggestions = search
+    ? [...new Set(
+        hotels
+          .map((h) => `${h.city}, ${h.country}`)
+          .filter((loc) =>
+            loc.toLowerCase().includes(search.toLowerCase())
+          )
+      )]
+    : [];
+
+  const displayCountries = [...new Set(filteredHotels.map(h => h.country))];
+
+  const handleBook = (hotel) => {
+    navigate("/booking-details", { state: { hotel } });
+  };
 
   return (
     <div className="hotels-page">
@@ -165,14 +191,29 @@ function Hotels() {
           <h1>Find Your Hotel</h1>
           <p>Discover the best stays around the world</p>
 
-          {/* Search Bar */}
           <div className="search-bar">
             <input
               type="text"
-              placeholder="Enter a country (e.g., Japan)"
+              placeholder="Enter a country or city (e.g., Japan, Manila)"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
+            {search && suggestions.length > 0 && (
+              <div className="suggestions">
+                {suggestions.map((loc, idx) => (
+                  <div
+                    key={idx}
+                    className="suggestion-item"
+                    onClick={() => setSearch(loc)}
+                  >
+                    {loc}
+                  </div>
+                ))}
+              </div>
+            )}
+            {search && suggestions.length === 0 && (
+              <div className="no-results">No results found</div>
+            )}
           </div>
         </div>
       </div>
@@ -183,20 +224,20 @@ function Hotels() {
           <h2 className="country-title">{country}</h2>
           <div className="hotels-grid">
             {filteredHotels
-              .filter((hotel) => hotel.country === country)
-              .map((hotel) => (
+              .filter(h => h.country === country)
+              .map(hotel => (
                 <div className="hotel-card" key={hotel.id}>
                   <img src={hotel.image} alt={hotel.name} />
                   <h3>{hotel.name}</h3>
                   <p>⭐ {hotel.stars} stars</p>
                   <div className="reviews">
-                    {hotel.reviews.map((review, index) => (
-                      <p key={index}>
-                        <strong>{review.user}:</strong> {review.comment}
-                      </p>
+                    {hotel.reviews.map((review, idx) => (
+                      <p key={idx}><strong>{review.user}:</strong> {review.comment}</p>
                     ))}
                   </div>
-                  <button className="book-btn">Book</button>
+                  <button className="book-btn" onClick={() => handleBook(hotel)}>
+                    Book
+                  </button>
                 </div>
               ))}
           </div>

@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import NavbarComponent from "./component/NavbarComponent";
 import Flights from "./pages/Flights";
 import Hotels from "./pages/Hotels";
+import BookingDetails from "./pages/BookingDetails";
+import BookingConfirmation from "./pages/BookingConfirmation";
 import Itinerary from "./pages/Itinerary";
 import Landing from "./pages/Landing";
 import FlightResults from "./pages/FlightsResults";
@@ -21,6 +23,8 @@ function App() {
           <Route path="/Flights/Results" element={<FlightResults />} />
           <Route path="/flight-details" element={<FlightDetails />} />
           <Route path="/Hotels" element={<Hotels />} />
+          <Route path="/booking-details" element={<BookingDetails />} />
+          <Route path="/booking-confirmation" element={<BookingConfirmation />} />
           <Route path="/Itinerary" element={<Itinerary />} />
         </Routes>
       </div>
