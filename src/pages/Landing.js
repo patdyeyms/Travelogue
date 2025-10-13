@@ -48,9 +48,10 @@ function Landing() {
 
   const handleSearch = () => {
     if (!destination) return;
+    localStorage.setItem("selectedDestination", destination);
     navigate(`/flights?to=${encodeURIComponent(destination)}`);
-    setShowSuggestions(false);
   };
+
 
   const filteredDestinations = destinations.filter((d) =>
     d.name.toLowerCase().includes(destination.toLowerCase())

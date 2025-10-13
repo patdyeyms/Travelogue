@@ -5,7 +5,9 @@ import "../css/BookingDetails.css";
 function BookingDetails() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { hotel } = location.state || {}; // ✅ get the real selected hotel
+  const { hotel } = location.state || {}; // Selected hotel from Hotels page
+
+  const today = new Date().toISOString().split("T")[0]; // Today’s date for default min
 
   const [formData, setFormData] = useState({
     checkIn: "",
@@ -19,14 +21,14 @@ function BookingDetails() {
   const [childDetails, setChildDetails] = useState([]);
   const [flightData, setFlightData] = useState(null);
 
-  // 🕒 Auto-fill from recent flight booking (if available)
+  // Load linked flight from localStorage
   useEffect(() => {
     const savedFlight = localStorage.getItem("bookedFlight");
     if (savedFlight) {
       const flight = JSON.parse(savedFlight);
       setFlightData(flight);
 
-      // Pre-fill check-in/check-out based on flight
+      // Set default check-in/check-out to flight dates
       setFormData((prev) => ({
         ...prev,
         checkIn: flight.departureDate || "",
@@ -35,7 +37,7 @@ function BookingDetails() {
     }
   }, []);
 
-  // Update adults/children form inputs dynamically
+  // Dynamically generate traveler input fields
   useEffect(() => {
     setAdultDetails(Array.from({ length: formData.adults }, () => ({ name: "", age: "" })));
     setChildDetails(Array.from({ length: formData.children }, () => ({ name: "", age: "" })));
@@ -64,7 +66,7 @@ function BookingDetails() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Restrict booking dates within flight range unless “Future Booking” checked
+    // Validate dates against flight if futureBooking is NOT checked
     if (flightData && !formData.futureBooking) {
       const dep = new Date(flightData.departureDate);
       const ret = new Date(flightData.returnDate);
@@ -79,7 +81,7 @@ function BookingDetails() {
       }
     }
 
-    // ✅ Build final booking object (uses your real selected hotel)
+    // Build final booking data
     const bookingData = {
       ...formData,
       adultDetails,
@@ -87,7 +89,7 @@ function BookingDetails() {
       hotel,
     };
 
-    // Save hotel booking to localStorage for itinerary
+    // Save booking to localStorage
     localStorage.setItem("bookedHotel", JSON.stringify(bookingData));
 
     // Navigate to confirmation page
@@ -131,8 +133,8 @@ function BookingDetails() {
             name="checkIn"
             value={formData.checkIn}
             onChange={handleChange}
-            min={!formData.futureBooking && flightData?.departureDate}
-            max={!formData.futureBooking && flightData?.returnDate}
+            min={!formData.futureBooking && flightData?.departureDate ? flightData.departureDate : today}
+            max={!formData.futureBooking && flightData?.returnDate ? flightData.returnDate : ""}
             required
           />
         </div>
@@ -144,8 +146,12 @@ function BookingDetails() {
             name="checkOut"
             value={formData.checkOut}
             onChange={handleChange}
-            min={!formData.futureBooking && flightData?.departureDate}
-            max={!formData.futureBooking && flightData?.returnDate}
+            min={
+              !formData.futureBooking
+                ? formData.checkIn || flightData?.departureDate || today
+                : today
+            }
+            max={!formData.futureBooking && flightData?.returnDate ? flightData.returnDate : ""}
             required
           />
         </div>

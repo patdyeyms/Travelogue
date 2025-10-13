@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "../css/Flights.css";
-
 import airasia from "../assets/flights/airasia.png";
 import ana from "../assets/flights/ana.png";
 import cebupacific from "../assets/flights/cebupacific.png";

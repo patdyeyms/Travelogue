@@ -435,6 +435,7 @@ p {
   min-height: 100vh;
   background: #e0f7fa;
   padding: 3rem 1rem;
+  margin-top: 40px;
   font-family: "Poppins", sans-serif;
 }
 

@@ -9,12 +9,15 @@ function HotelConfirmation() {
 
   const [showDetails, setShowDetails] = useState(false);
 
-  // ✅ Save to itinerary immediately (simulate travel journal entry)
   useEffect(() => {
-    if (bookingData) {
-      localStorage.setItem("bookedHotel", JSON.stringify(bookingData));
+  if (bookingData) {
+    const flightDetails = JSON.parse(localStorage.getItem("flightDetails") || "{}");
+    const hotelToSave = { ...bookingData.hotel, bookedForTrip: flightDetails.to };
+    localStorage.setItem("selectedHotel", JSON.stringify(hotelToSave));
     }
   }, [bookingData]);
+
+
 
   if (!bookingData || !bookingData.hotel) {
     return (

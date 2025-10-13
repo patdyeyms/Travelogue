@@ -61,8 +61,19 @@ function Hotels() {
   const displayCountries = [...new Set(filteredHotels.map(h => h.country))];
 
   const handleBook = (hotel) => {
-    navigate("/booking-details", { state: { hotel } });
-  };
+  const flightDetails = JSON.parse(localStorage.getItem("flightDetails") || "{}");
+  if (!flightDetails.to) {
+    alert("Please select a flight first to associate this hotel with a trip.");
+    return;
+  }
+
+  const hotelToSave = { ...hotel, bookedForTrip: flightDetails.to };
+  localStorage.setItem("selectedHotel", JSON.stringify(hotelToSave));
+
+  navigate("/booking-details", { state: { hotel: hotelToSave } });
+};
+
+
 
   const handleSelectSuggestion = (value) => {
     const [city] = value.split(",").map(v => v.trim());

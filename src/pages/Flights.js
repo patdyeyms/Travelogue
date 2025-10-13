@@ -6,7 +6,6 @@ function Flights() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Destinations list
   const destinations = [
     "Manila, Philippines",
     "Dubai, UAE",
@@ -16,7 +15,6 @@ function Flights() {
     "Singapore",
   ];
 
-  // Blank initial state
   const [flightDetails, setFlightDetails] = useState({
     from: "",
     to: "",
@@ -24,24 +22,23 @@ function Flights() {
     return: "",
   });
 
-  // Prefill "to" from query parameter if present
   useEffect(() => {
+    // Always start blank unless redirected from Landing
     const query = new URLSearchParams(location.search);
     const toParam = query.get("to");
 
     if (toParam && destinations.includes(toParam)) {
-      setFlightDetails(prev => ({ ...prev, to: toParam }));
+      setFlightDetails((prev) => ({ ...prev, to: toParam }));
     }
+
+    // Clear any previously saved data
+    localStorage.removeItem("flightDetails");
+    localStorage.removeItem("selectedDestination");
   }, [location.search]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFlightDetails(prev => ({ ...prev, [name]: value }));
-
-    // Clear return date if before departure
-    if (name === "departure" && flightDetails.return && value > flightDetails.return) {
-      setFlightDetails(prev => ({ ...prev, return: "" }));
-    }
+    setFlightDetails((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSearch = () => {
@@ -53,6 +50,9 @@ function Flights() {
       alert("Please select a departure date.");
       return;
     }
+
+    // Save to localStorage only on new search
+    localStorage.setItem("flightDetails", JSON.stringify(flightDetails));
     localStorage.setItem("selectedDestination", flightDetails.to);
 
     navigate("/flights/results", { state: { flightDetails } });
@@ -62,7 +62,6 @@ function Flights() {
 
   return (
     <div className="flights-page">
-      {/* HERO */}
       <section className="flights-hero">
         <div className="hero-overlay"></div>
         <div className="flights-hero-content">
@@ -73,15 +72,16 @@ function Flights() {
         </div>
       </section>
 
-      {/* SEARCH BOX */}
       <div className="search-container">
         <div className="flight-search-box">
           <div className="input-group">
             <label>From</label>
             <select name="from" value={flightDetails.from} onChange={handleChange}>
               <option value="">Select city</option>
-              {destinations.map((city, index) => (
-                <option key={index} value={city}>{city}</option>
+              {destinations.map((city, i) => (
+                <option key={i} value={city}>
+                  {city}
+                </option>
               ))}
             </select>
           </div>
@@ -90,8 +90,10 @@ function Flights() {
             <label>To</label>
             <select name="to" value={flightDetails.to} onChange={handleChange}>
               <option value="">Select city</option>
-              {destinations.map((city, index) => (
-                <option key={index} value={city}>{city}</option>
+              {destinations.map((city, i) => (
+                <option key={i} value={city}>
+                  {city}
+                </option>
               ))}
             </select>
           </div>
