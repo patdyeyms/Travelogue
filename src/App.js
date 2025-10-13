@@ -6,7 +6,7 @@ import NavbarComponent from "./component/NavbarComponent";
 import Flights from "./pages/Flights";
 import Hotels from "./pages/Hotels";
 import BookingDetails from "./pages/BookingDetails";
-import BookingConfirmation from "./pages/BookingConfirmation";
+import HotelConfirmation from "./pages/HotelConfirmation";
 import Itinerary from "./pages/Itinerary";
 import Landing from "./pages/Landing";
 import FlightResults from "./pages/FlightsResults";
@@ -31,7 +31,7 @@ function App() {
           <Route path="/flight-confirmation" element={<FlightConfirmation />} />
           <Route path="/Hotels" element={<Hotels />} />
           <Route path="/booking-details" element={<BookingDetails />} />
-          <Route path="/booking-confirmation" element={<BookingConfirmation />} />
+          <Route path="/hotel-confirmation" element={<HotelConfirmation />} />
           <Route path="/Itinerary" element={<Itinerary />} />
         </Routes>
       </div>

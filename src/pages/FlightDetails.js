@@ -1,13 +1,30 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "../css/Flights.css";
-import pal from "../assets/flights/pal.png";
-import cebu from "../assets/flights/cebupacific.png";
-import singapore from "../assets/flights/singapore.png";
-import swiss from "../assets/flights/swiss.png";
-import emirates from "../assets/flights/emirates.png";
+
 import airasia from "../assets/flights/airasia.png";
 import ana from "../assets/flights/ana.png";
+import cebupacific from "../assets/flights/cebupacific.png";
+import emirates from "../assets/flights/emirates.png";
+import pal from "../assets/flights/pal.png";
+import singapore from "../assets/flights/singapore.png";
+import swiss from "../assets/flights/swiss.png";
+
+// Normalize airline name for consistent lookup
+const getAirlineLogo = (name) => {
+  if (!name) return "";
+  const key = name.toLowerCase().replace(/\s/g, "");
+  const logos = {
+    airasia: airasia,
+    allnipponairways: ana,
+    cebupacific: cebupacific,
+    emirates: emirates,
+    philippineairlines: pal,
+    singaporeairlines: singapore,
+    swissinternationalairlines: swiss,
+  };
+  return logos[key] || "";
+};
 
 function FlightDetails() {
   const location = useLocation();
@@ -22,22 +39,10 @@ function FlightDetails() {
   });
   const [saving, setSaving] = useState(false);
 
-  const airlineLogos = {
-    "Philippine Airlines": pal,
-    "Cebu Pacific": cebu,
-    "Singapore Airlines": singapore,
-    "Swiss International Air Lines": swiss,
-    Emirates: emirates,
-    AirAsia: airasia,
-    ANA: ana,
-  };
-
   if (!flight || !flightDetails) {
     return (
       <div className="results-section">
-        <button className="back-btn" onClick={() => navigate(-1)}>
-          ← Back
-        </button>
+        <button className="back-btn" onClick={() => navigate(-1)}>← Back</button>
         <h1>No flight selected</h1>
         <p>Please go back and choose a flight to view details.</p>
       </div>
@@ -51,13 +56,10 @@ function FlightDetails() {
 
   const handleConfirm = (e) => {
     e.preventDefault();
-    // simple validation
     if (!formData.firstName || !formData.lastName || !formData.email || !formData.phone) {
       alert("Please fill in all required fields.");
       return;
     }
-
-    // simulate saving then navigate to confirmation
     setSaving(true);
     setTimeout(() => {
       navigate("/flight-confirmation", { state: { flight, flightDetails, formData } });
@@ -66,14 +68,12 @@ function FlightDetails() {
 
   return (
     <div className="results-section">
-      <button className="back-btn" onClick={() => navigate(-1)}>
-        ← Back to Results
-      </button>
+      <button className="back-btn" onClick={() => navigate(-1)}>← Back to Results</button>
 
       <div className="flight-details-card">
         <div className="flight-details-header">
           <img
-            src={airlineLogos[flight.airline]}
+            src={getAirlineLogo(flight.airline)}
             alt={flight.airline}
             style={{ width: "70px", height: "auto" }}
           />
@@ -81,26 +81,14 @@ function FlightDetails() {
         </div>
 
         <div className="flight-details-info">
-          <p>
-            <strong>{flight.departureTime}</strong> –{" "}
-            <strong>{flight.arrivalTime}</strong>
-          </p>
-          <p>
-            {flightDetails.from} → {flightDetails.to}
-          </p>
-          <p>
-            {flight.stops} • {flight.duration}
-          </p>
-          <p>
-            <strong>Cabin:</strong> {flight.cabin}
-          </p>
-          <p>
-            <strong>Price:</strong> {flight.price}
-          </p>
+          <p><strong>{flight.departureTime}</strong> – <strong>{flight.arrivalTime}</strong></p>
+          <p>{flightDetails.from} → {flightDetails.to}</p>
+          <p>{flight.stops} • {flight.duration}</p>
+          <p><strong>Cabin:</strong> {flight.cabin}</p>
+          <p><strong>Price:</strong> ₱ {flight.price.toString().replace(/₱/g, "")}</p>
         </div>
       </div>
 
-      {/* Booking Form */}
       <form className="booking-form" onSubmit={handleConfirm}>
         <h3>Passenger Information</h3>
         <div className="booking-grid">

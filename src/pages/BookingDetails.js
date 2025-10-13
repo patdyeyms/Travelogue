@@ -1,192 +1,237 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import "../css/BookingDetails.css";
-import { useNavigate } from "react-router-dom";
 
-export default function BookingDetails() {
+function BookingDetails() {
+  const location = useLocation();
   const navigate = useNavigate();
+  const { hotel } = location.state || {}; // ✅ get the real selected hotel
 
   const [formData, setFormData] = useState({
-    fullName: "",
-    email: "",
-    phone: "",
-    adults: 1,
-    children: 0,
     checkIn: "",
     checkOut: "",
+    adults: 1,
+    children: 0,
     futureBooking: false,
   });
 
+  const [adultDetails, setAdultDetails] = useState([]);
   const [childDetails, setChildDetails] = useState([]);
+  const [flightData, setFlightData] = useState(null);
+
+  // 🕒 Auto-fill from recent flight booking (if available)
+  useEffect(() => {
+    const savedFlight = localStorage.getItem("bookedFlight");
+    if (savedFlight) {
+      const flight = JSON.parse(savedFlight);
+      setFlightData(flight);
+
+      // Pre-fill check-in/check-out based on flight
+      setFormData((prev) => ({
+        ...prev,
+        checkIn: flight.departureDate || "",
+        checkOut: flight.returnDate || "",
+      }));
+    }
+  }, []);
+
+  // Update adults/children form inputs dynamically
+  useEffect(() => {
+    setAdultDetails(Array.from({ length: formData.adults }, () => ({ name: "", age: "" })));
+    setChildDetails(Array.from({ length: formData.children }, () => ({ name: "", age: "" })));
+  }, [formData.adults, formData.children]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    const newValue = type === "checkbox" ? checked : value;
-
     setFormData({
       ...formData,
-      [name]: newValue,
+      [name]: type === "checkbox" ? checked : value,
     });
+  };
 
-    if (name === "children") {
-      const count = parseInt(value) || 0;
-      setChildDetails(
-        Array(count)
-          .fill()
-          .map((_, i) => ({
-            name: childDetails[i]?.name || "",
-            age: childDetails[i]?.age || "",
-          }))
-      );
-    }
+  const handleAdultChange = (index, field, value) => {
+    const updated = [...adultDetails];
+    updated[index][field] = value;
+    setAdultDetails(updated);
   };
 
   const handleChildChange = (index, field, value) => {
-    const updatedChildren = [...childDetails];
-    updatedChildren[index][field] = value;
-    setChildDetails(updatedChildren);
+    const updated = [...childDetails];
+    updated[index][field] = value;
+    setChildDetails(updated);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Booking submitted:", { formData, childDetails });
-    alert("Booking details saved successfully!");
+
+    // Restrict booking dates within flight range unless “Future Booking” checked
+    if (flightData && !formData.futureBooking) {
+      const dep = new Date(flightData.departureDate);
+      const ret = new Date(flightData.returnDate);
+      const checkIn = new Date(formData.checkIn);
+      const checkOut = new Date(formData.checkOut);
+
+      if (checkIn < dep || checkOut > ret) {
+        alert(
+          "Your hotel dates must be within your flight travel dates, or check 'Future Booking' to bypass."
+        );
+        return;
+      }
+    }
+
+    // ✅ Build final booking object (uses your real selected hotel)
+    const bookingData = {
+      ...formData,
+      adultDetails,
+      childDetails,
+      hotel,
+    };
+
+    // Save hotel booking to localStorage for itinerary
+    localStorage.setItem("bookedHotel", JSON.stringify(bookingData));
+
+    // Navigate to confirmation page
+    navigate("/hotel-confirmation", { state: { bookingData } });
   };
 
   return (
-    <div className="booking-details-page">
-      <button className="back-btn" onClick={() => navigate(-1)}>
-        ← Back
-      </button>
+    <div className="booking-details-container">
+      <h1>Hotel Booking Details</h1>
 
-      <div className="booking-container">
-        <h1>Booking Details</h1>
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label>Full Name</label>
-            <input
-              type="text"
-              name="fullName"
-              value={formData.fullName}
-              onChange={handleChange}
-              placeholder="Enter your full name"
-              required
-            />
+      {hotel ? (
+        <div className="selected-hotel">
+          <img src={hotel.image} alt={hotel.name} />
+          <div>
+            <h2>{hotel.name}</h2>
+            <p>{hotel.city}, {hotel.country}</p>
+            <p>⭐ {hotel.stars} stars</p>
           </div>
+        </div>
+      ) : (
+        <p className="no-hotel">No hotel selected.</p>
+      )}
 
-          <div className="form-group">
-            <label>Email</label>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              placeholder="Enter your email"
-              required
-            />
-          </div>
+      {flightData && (
+        <div className="flight-info-box">
+          <h3>Linked Flight</h3>
+          <p>
+            ✈️ {flightData.origin} → {flightData.destination}
+          </p>
+          <p>
+            {flightData.departureDate} → {flightData.returnDate}
+          </p>
+        </div>
+      )}
 
-          <div className="form-group">
-            <label>Phone Number</label>
-            <input
-              type="tel"
-              name="phone"
-              value={formData.phone}
-              onChange={handleChange}
-              placeholder="Enter your phone number"
-              required
-            />
-          </div>
+      <form onSubmit={handleSubmit} className="booking-form">
+        <div className="form-group">
+          <label>Check-in Date:</label>
+          <input
+            type="date"
+            name="checkIn"
+            value={formData.checkIn}
+            onChange={handleChange}
+            min={!formData.futureBooking && flightData?.departureDate}
+            max={!formData.futureBooking && flightData?.returnDate}
+            required
+          />
+        </div>
 
-          <div className="form-group-inline">
-            <div>
-              <label>Adults</label>
+        <div className="form-group">
+          <label>Check-out Date:</label>
+          <input
+            type="date"
+            name="checkOut"
+            value={formData.checkOut}
+            onChange={handleChange}
+            min={!formData.futureBooking && flightData?.departureDate}
+            max={!formData.futureBooking && flightData?.returnDate}
+            required
+          />
+        </div>
+
+        <div className="form-group">
+          <label>Adults:</label>
+          <input
+            type="number"
+            name="adults"
+            value={formData.adults}
+            min="1"
+            max="10"
+            onChange={handleChange}
+          />
+        </div>
+
+        <div className="form-group">
+          <label>Children:</label>
+          <input
+            type="number"
+            name="children"
+            value={formData.children}
+            min="0"
+            max="10"
+            onChange={handleChange}
+          />
+        </div>
+
+        <div className="form-group checkbox-group">
+          <input
+            type="checkbox"
+            name="futureBooking"
+            checked={formData.futureBooking}
+            onChange={handleChange}
+          />
+          <label>Book for future trip (ignore flight restriction)</label>
+        </div>
+
+        <h3>Traveler Details</h3>
+        <div className="traveler-section">
+          {adultDetails.map((_, i) => (
+            <div key={i} className="traveler-input">
+              <label>Adult {i + 1}</label>
+              <input
+                type="text"
+                placeholder="Name"
+                value={adultDetails[i].name}
+                onChange={(e) => handleAdultChange(i, "name", e.target.value)}
+                required
+              />
               <input
                 type="number"
-                name="adults"
-                value={formData.adults}
-                onChange={handleChange}
-                min="1"
-              />
-            </div>
-
-            <div>
-              <label>Children</label>
-              <input
-                type="number"
-                name="children"
-                value={formData.children}
-                onChange={handleChange}
-                min="0"
-              />
-            </div>
-          </div>
-
-          {childDetails.length > 0 && (
-            <div className="child-section">
-              <h3>Child Details</h3>
-              {childDetails.map((child, index) => (
-                <div key={index} className="child-inputs">
-                  <input
-                    type="text"
-                    placeholder={`Child ${index + 1} Name`}
-                    value={child.name}
-                    onChange={(e) =>
-                      handleChildChange(index, "name", e.target.value)
-                    }
-                    required
-                  />
-                  <input
-                    type="number"
-                    placeholder="Age"
-                    value={child.age}
-                    onChange={(e) =>
-                      handleChildChange(index, "age", e.target.value)
-                    }
-                    required
-                  />
-                </div>
-              ))}
-            </div>
-          )}
-
-          <div className="form-group-inline">
-            <div>
-              <label>Check-in Date</label>
-              <input
-                type="date"
-                name="checkIn"
-                value={formData.checkIn}
-                onChange={handleChange}
+                placeholder="Age"
+                value={adultDetails[i].age}
+                onChange={(e) => handleAdultChange(i, "age", e.target.value)}
                 required
               />
             </div>
-            <div>
-              <label>Check-out Date</label>
+          ))}
+          {childDetails.map((_, i) => (
+            <div key={i} className="traveler-input">
+              <label>Child {i + 1}</label>
               <input
-                type="date"
-                name="checkOut"
-                value={formData.checkOut}
-                onChange={handleChange}
+                type="text"
+                placeholder="Name"
+                value={childDetails[i].name}
+                onChange={(e) => handleChildChange(i, "name", e.target.value)}
+                required
+              />
+              <input
+                type="number"
+                placeholder="Age"
+                value={childDetails[i].age}
+                onChange={(e) => handleChildChange(i, "age", e.target.value)}
                 required
               />
             </div>
-          </div>
+          ))}
+        </div>
 
-          <div className="form-checkbox">
-            <input
-              type="checkbox"
-              name="futureBooking"
-              checked={formData.futureBooking}
-              onChange={handleChange}
-            />
-            <label>Book for a future date</label>
-          </div>
-
-          <button type="submit" className="submit-btn">
-            Confirm Booking
-          </button>
-        </form>
-      </div>
+        <button type="submit" className="confirm-btn">
+          Confirm Booking
+        </button>
+      </form>
     </div>
   );
 }
+
+export default BookingDetails;
