@@ -5,11 +5,10 @@
   align-items: center;
   justify-content: center;
   font-family: "Poppins", sans-serif;
-  padding: 120px 1rem 3rem; /* top padding to avoid navbar overlap */
+  padding: 120px 1rem 3rem; 
   color: #fff;
 }
 
-/* Main Offers Container */
 .offers-container {
   text-align: center;
   color: #28525e;
@@ -80,7 +79,6 @@
   background: linear-gradient(135deg, #007fa8, #00a388);
 }
 
-/* Locked (not logged in) Section */
 .offers-locked {
   text-align: center;
   background: rgba(255, 255, 255, 0.95);
@@ -103,7 +101,6 @@
   color: #4a6c7d;
 }
 
-/* Login button inside locked message */
 .offers-login-btn {
   background: linear-gradient(135deg, #0091c2, #00b09b);
   border: none;

@@ -444,7 +444,7 @@ p {
 
 .flight-summary-details.open {
   padding: 1rem;
-  max-height: 1000px; /* full height */
+  max-height: 1000px;
   opacity: 1;
   transform: translateY(0);
   overflow-y: auto;

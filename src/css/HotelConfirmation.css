@@ -1,5 +1,4 @@
-/* === HOTEL CONFIRMATION PAGE === */
-
+/* HOTEL CONFIRMATION PAGE */
 .thankyou-section {
   display: flex;
   justify-content: center;
@@ -107,7 +106,6 @@
   color: #555;
 }
 
-/* Hidden details */
 .hotel-summary-details {
   display: none;
   text-align: left;

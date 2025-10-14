@@ -11,7 +11,6 @@ function Login() {
     e.preventDefault();
 
     if (email && password) {
-      // Save login status
       localStorage.setItem("isLoggedIn", "true");
       localStorage.setItem("userEmail", email);
       navigate("/Offers");

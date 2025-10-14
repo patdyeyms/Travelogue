@@ -5,7 +5,7 @@
   justify-content: center;
   background: linear-gradient(135deg, #28525e, #00b09b);
   font-family: "Poppins", sans-serif;
-  padding-top: 100px; /* prevent navbar overlap */
+  padding-top: 100px; 
 }
 
 .login-card {

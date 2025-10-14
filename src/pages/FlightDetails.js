@@ -60,7 +60,6 @@ function FlightDetails() {
     }
     setSaving(true);
 
-    // Pass all flight details in normalized format
     const fullFlightData = {
       ...flight,
       departureTime: flight.departureTime || flightDetails.departure || "N/A",

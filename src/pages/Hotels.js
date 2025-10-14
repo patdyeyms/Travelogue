@@ -21,22 +21,20 @@ function Hotels() {
   const [search, setSearch] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [activeIndex, setActiveIndex] = useState(-1);
-  const [selectedCity, setSelectedCity] = useState(""); // for filtering
+  const [selectedCity, setSelectedCity] = useState(""); 
   const navigate = useNavigate();
   const searchRef = useRef(null);
 
-  // Autofill from Flights (extract city for filtering)
   useEffect(() => {
     const savedDestination = localStorage.getItem("selectedDestination");
     if (savedDestination && savedDestination.trim() !== "") {
       const city = savedDestination.split(",")[0].trim();
-      setSearch(`${city}, ${savedDestination.split(",")[1]?.trim() || ""}`); // show full in input
-      setSelectedCity(city.toLowerCase()); // use city only for filtering
+      setSearch(`${city}, ${savedDestination.split(",")[1]?.trim() || ""}`); 
+      setSelectedCity(city.toLowerCase()); 
       localStorage.removeItem("selectedDestination");
     }
   }, []);
 
-  // Hide suggestions when clicking outside
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (searchRef.current && !searchRef.current.contains(e.target)) {
@@ -47,12 +45,10 @@ function Hotels() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Filter hotels by selected city or typed input
   const filteredHotels = selectedCity
     ? hotels.filter(h => h.city.toLowerCase().includes(selectedCity))
     : hotels;
 
-  // Suggestions: full "City, Country"
   const query = search.trim().toLowerCase();
   const suggestions = query
     ? [...new Set(hotels.map(h => `${h.city}, ${h.country}`).filter(loc => loc.toLowerCase().includes(query)))]
@@ -77,8 +73,8 @@ function Hotels() {
 
   const handleSelectSuggestion = (value) => {
     const [city] = value.split(",").map(v => v.trim());
-    setSearch(value); // show full "City, Country"
-    setSelectedCity(city.toLowerCase()); // filter by city
+    setSearch(value);
+    setSelectedCity(city.toLowerCase());
     setShowSuggestions(false);
     setActiveIndex(-1);
   };

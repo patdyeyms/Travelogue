@@ -7,7 +7,7 @@
   z-index: 1000;
 }
 
-/* When scrolled down */
+/* When scrolled */
 .navbar.scrolled, .custom-navbar.scrolled {
   background: rgba(240, 248, 255, 0.95) !important;
   backdrop-filter: blur(12px);
@@ -64,12 +64,11 @@
   margin-right: 6px;
   cursor: pointer;
   font-size: 0.9rem;
-  position: relative; /* Needed for underline animation */
-  text-decoration: none; /* Remove any default underline */
+  position: relative; 
+  text-decoration: none; 
   transition: color 0.3s ease, transform 0.3s ease;
 }
 
-/* Underline effect (hidden by default) */
 .offer-btn::after {
   content: "";
   position: absolute;
@@ -81,18 +80,15 @@
   transition: width 0.3s ease;
 }
 
-/* Show underline on hover */
 .offer-btn:hover::after {
   width: 100%;
 }
 
-/* Hover color and motion */
 .offer-btn:hover {
   color: #b8e0ff;
   transform: translateY(-2px);
 }
 
-/* Scrolled state colors */
 .navbar.scrolled .offer-btn {
   color: #0b1f33;
 }

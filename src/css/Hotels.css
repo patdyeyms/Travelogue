@@ -9,7 +9,6 @@
   padding-bottom: 4rem;
 }
 
-/* Headings Reset */
 h1, h2, h3, h4, h5 {
   margin: 0;
   padding: 0;
@@ -145,7 +144,7 @@ p {
 .hotels-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2.5rem; /* ⬅️ wider spacing between cards */
+  gap: 2.5rem;
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 2rem;

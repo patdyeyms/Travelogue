@@ -3,8 +3,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
-
-// Destination images
 import seoulImage from "../assets/itinerary/seoul.jpg";
 import tokyoImage from "../assets/itinerary/tokyo.png";
 import singaporeImage from "../assets/itinerary/singaporebg.png";
@@ -12,10 +10,8 @@ import manilaImage from "../assets/itinerary/manila.jpg";
 import dubaiImage from "../assets/itinerary/dubai.jpg";
 import zurichImage from "../assets/itinerary/zurich.jpeg";
 import defaultImage from "../assets/itinerary/default.jpg";
-
 import "../css/Itinerary.css";
 
-// Fix Leaflet default icons
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl:

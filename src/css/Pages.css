@@ -30,7 +30,7 @@
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
 
-/* LOGO IMAGE */
+/* Logo Image */
 .navbar-logo {
   height: 60px;
   width: auto;
@@ -353,7 +353,7 @@
 }
 
 /* ===============================
-   ITINERARY SECTION (CUTE SMALL CARDS)
+   ITINERARY SECTION
 =============================== */
 .pro-section {
   background: linear-gradient(135deg, #40a1a1, #25a0a6, #0e7b99);
@@ -383,7 +383,6 @@
   color: #eafff7;
 }
 
-/* Horizontal layout */
 .pro-features {
   display: flex;
   justify-content: center;
@@ -400,8 +399,8 @@
 }
 
 .pro-card {
-  flex: 0 0 210px; /* smaller width */
-  height: 130px; /* square shape */
+  flex: 0 0 210px; 
+  height: 130px; 
   background: rgba(255, 255, 255, 0.18);
   backdrop-filter: blur(10px);
   border-radius: 18px;
@@ -434,7 +433,7 @@
   opacity: 0.95;
 }
 
-/* Responsive tweaks */
+/* Responsive */
 @media (max-width: 768px) {
   .pro-section {
     padding: 70px 20px 80px;

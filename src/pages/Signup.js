@@ -12,7 +12,6 @@ function Signup() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // temporary success
     navigate("/Login");
   };
 

@@ -96,22 +96,21 @@
   outline: none;
 }
 
-/* Make only the checkbox group inline */
 .checkbox-group {
   display: flex;
-  align-items: center; /* vertically centers checkbox and label */
-  gap: 0.5rem; /* spacing between checkbox and label */
-  flex-direction: row; /* ensure horizontal alignment */
+  align-items: center;
+  gap: 0.5rem;
+  flex-direction: row; 
 }
 
 .checkbox-group input[type="checkbox"] {
-  margin: 0; /* remove any default margin */
+  margin: 0; 
 }
 
 .checkbox-group label {
   font-weight: 500;
   color: #444;
-  margin: 0; /* remove default margin */
+  margin: 0; 
 }
 
 
@@ -161,7 +160,7 @@
   transform: translateY(-2px);
 }
 
-/* Responsive Styles */
+/* Responsive */
 @media (max-width: 768px) {
   .booking-details-container {
     margin: 5rem 1rem 2rem;

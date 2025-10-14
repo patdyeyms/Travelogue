@@ -21,7 +21,6 @@ function Landing() {
     { name: "Singapore", img: "/images/singapore.jpg" },
   ];
 
-  // Feature section animation
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) =>
@@ -37,7 +36,6 @@ function Landing() {
     return () => observer.disconnect();
   }, []);
 
-  // Hide suggestions outside click
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (!e.target.closest(".intro-search")) setShowSuggestions(false);
@@ -157,7 +155,7 @@ function Landing() {
         </div>
       </section>
 
-      {/* ITINERARY SECTION (FIXED STYLE) */}
+      {/* ITINERARY SECTION */}
       <section className="pro-section">
         <h1>
           Add Your Planned Trips in Your Journal <span>Itinerary</span>
