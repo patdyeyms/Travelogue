@@ -26,7 +26,6 @@ Features
 • Hotel Booking: Filter hotels by city or country, view ratings and reviews, book hotels linked to flight trips.
 
 • Itinerary Page: Visualize trip details with:
-
     - Interactive map view with attractions.
 
     - List of places to visit.
@@ -40,7 +39,6 @@ Features
 
 Technologies Used
 • Frontend:
-
     - React (Functional Components & Hooks)
 
     - React Router (useNavigate, useLocation)
@@ -64,7 +62,6 @@ Assets:
 
 Components Overview
 1. Landing.jsx
-
     • Main entry page.
 
     • Video background and destination search with autocomplete.
@@ -108,13 +105,11 @@ Installation & Setup
     git clone https://github.com/yourusername/travelogue.git
     cd travelogue
 
-
 2. Install dependencies:
     npm install
 
 3. Start the development server:
     npm start
-
 
 4. Access the app:
     Open http://localhost:3000 in your browser.
