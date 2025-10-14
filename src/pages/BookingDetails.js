@@ -36,7 +36,7 @@ function BookingDetails() {
     }
   }, []);
 
-  // traveler input fields
+  // user input fields
   useEffect(() => {
     setAdultDetails(Array.from({ length: formData.adults }, () => ({ name: "", age: "" })));
     setChildDetails(Array.from({ length: formData.children }, () => ({ name: "", age: "" })));
