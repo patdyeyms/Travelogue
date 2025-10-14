@@ -23,15 +23,11 @@ function Flights() {
   });
 
   useEffect(() => {
-    // Always start blank unless redirected from Landing
     const query = new URLSearchParams(location.search);
     const toParam = query.get("to");
-
     if (toParam && destinations.includes(toParam)) {
       setFlightDetails((prev) => ({ ...prev, to: toParam }));
     }
-
-    // Clear any previously saved data
     localStorage.removeItem("flightDetails");
     localStorage.removeItem("selectedDestination");
   }, [location.search]);
@@ -50,11 +46,8 @@ function Flights() {
       alert("Please select a departure date.");
       return;
     }
-
-    // Save to localStorage only on new search
     localStorage.setItem("flightDetails", JSON.stringify(flightDetails));
     localStorage.setItem("selectedDestination", flightDetails.to);
-
     navigate("/flights/results", { state: { flightDetails } });
   };
 
@@ -67,7 +60,7 @@ function Flights() {
         <div className="flights-hero-content">
           <h1>Book Your Next Adventure</h1>
           <p>
-            Fly to <strong>Japan, Dubai, Switzerland, Singapore,</strong> or anywhere in the Philippines.
+            Fly to <strong>Japan, Dubai, Switzerland, Singapore</strong>, or anywhere in the Philippines.
           </p>
         </div>
       </section>
@@ -78,11 +71,7 @@ function Flights() {
             <label>From</label>
             <select name="from" value={flightDetails.from} onChange={handleChange}>
               <option value="">Select city</option>
-              {destinations.map((city, i) => (
-                <option key={i} value={city}>
-                  {city}
-                </option>
-              ))}
+              {destinations.map((city, i) => <option key={i} value={city}>{city}</option>)}
             </select>
           </div>
 
@@ -90,39 +79,21 @@ function Flights() {
             <label>To</label>
             <select name="to" value={flightDetails.to} onChange={handleChange}>
               <option value="">Select city</option>
-              {destinations.map((city, i) => (
-                <option key={i} value={city}>
-                  {city}
-                </option>
-              ))}
+              {destinations.map((city, i) => <option key={i} value={city}>{city}</option>)}
             </select>
           </div>
 
           <div className="input-group">
             <label>Departure</label>
-            <input
-              type="date"
-              name="departure"
-              value={flightDetails.departure}
-              min={today}
-              onChange={handleChange}
-            />
+            <input type="date" name="departure" value={flightDetails.departure} min={today} onChange={handleChange} />
           </div>
 
           <div className="input-group">
             <label>Return</label>
-            <input
-              type="date"
-              name="return"
-              value={flightDetails.return}
-              min={flightDetails.departure || today}
-              onChange={handleChange}
-            />
+            <input type="date" name="return" value={flightDetails.return} min={flightDetails.departure || today} onChange={handleChange} />
           </div>
 
-          <button className="search-btn" onClick={handleSearch}>
-            Search Flights
-          </button>
+          <button className="search-btn" onClick={handleSearch}>Search Flights</button>
         </div>
       </div>
     </div>

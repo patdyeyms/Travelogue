@@ -1,64 +1,81 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
+import { Navbar, Container, Nav, Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "bootstrap-icons/font/bootstrap-icons.css";
 import "../css/NavbarComponent.css";
 
 function NavbarComponent() {
   const [scrolled, setScrolled] = useState(false);
+  const [open, setOpen] = useState(false);
+  const collapseRef = useRef(null);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
-    };
+    const handleScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener("scroll", handleScroll);
+
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Close mobile panel when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        open &&
+        collapseRef.current &&
+        !collapseRef.current.contains(event.target) &&
+        !event.target.classList.contains("navbar-toggler")
+      ) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [open]);
+
   return (
-    <nav className={`navbar navbar-expand-lg fixed-top ${scrolled ? "scrolled" : ""}`}>
-      <div className="container-fluid px-4">
-        {/* ✅ LOGO IMAGE instead of text */}
-        <Link className="navbar-brand d-flex align-items-center" to="/">
+    <Navbar
+      expand="lg"
+      fixed="top"
+      className={`custom-navbar ${scrolled ? "scrolled" : ""}`}
+      expanded={open}
+    >
+      <Container>
+        <Navbar.Brand as={Link} to="/" className="d-flex align-items-center">
           <img
-            src={scrolled ? process.env.PUBLIC_URL + "/dark-blue.png" : process.env.PUBLIC_URL + "/white.png"}
+            src={
+              scrolled
+                ? process.env.PUBLIC_URL + "/dark-blue.png"
+                : process.env.PUBLIC_URL + "/white.png"
+            }
             alt="Travelogue Logo"
             className="navbar-logo"
           />
-        </Link>
-
-        <button
-          className="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNav"
-        >
-          <span className="navbar-toggler-icon"></span>
-        </button>
-
-        <div
-          className="collapse navbar-collapse justify-content-between"
-          id="navbarNav"
-        >
-          <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-            <li className="nav-item">
-              <Link className="nav-link" to="/Flights">Flights</Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/Hotels">Hotels</Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/Itinerary">Itinerary</Link>
-            </li>
-          </ul>
-
+        </Navbar.Brand>
+        <Navbar.Toggle
+          aria-controls="basic-navbar-nav"
+          onClick={() => setOpen(!open)}
+        />
+        <Navbar.Collapse id="basic-navbar-nav" ref={collapseRef}>
+          <Nav className="me-auto align-items-lg-center">
+            <Nav.Link as={Link} to="/Flights">
+              Flights
+            </Nav.Link>
+            <Nav.Link as={Link} to="/Hotels">
+              Hotels
+            </Nav.Link>
+            <Nav.Link as={Link} to="/Itinerary">
+              Itinerary
+            </Nav.Link>
+          </Nav>
           <div className="d-flex align-items-center">
-            <button className="offer-btn">Offers</button>
-            <button className="login-btn ms-2">Login</button>
+            <Button variant="link" className="offer-btn">
+              Offers
+            </Button>
+            <Button className="login-btn">Login</Button>
           </div>
-        </div>
-      </div>
-    </nav>
+        </Navbar.Collapse>
+      </Container>
+    </Navbar>
   );
 }
 

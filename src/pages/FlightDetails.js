@@ -9,7 +9,6 @@ import pal from "../assets/flights/pal.png";
 import singapore from "../assets/flights/singapore.png";
 import swiss from "../assets/flights/swiss.png";
 
-// Normalize airline name for consistent lookup
 const getAirlineLogo = (name) => {
   if (!name) return "";
   const key = name.toLowerCase().replace(/\s/g, "");
@@ -60,8 +59,20 @@ function FlightDetails() {
       return;
     }
     setSaving(true);
+
+    // Pass all flight details in normalized format
+    const fullFlightData = {
+      ...flight,
+      departureTime: flight.departureTime || flightDetails.departure || "N/A",
+      arrivalTime: flight.arrivalTime || flightDetails.arrival || "N/A",
+      flightNumber: flight.flightNumber || "N/A",
+      class: flight.cabin || "N/A"
+    };
+
     setTimeout(() => {
-      navigate("/flight-confirmation", { state: { flight, flightDetails, formData } });
+      navigate("/flight-confirmation", { 
+        state: { flight: fullFlightData, flightDetails, formData } 
+      });
     }, 900);
   };
 
@@ -80,11 +91,11 @@ function FlightDetails() {
         </div>
 
         <div className="flight-details-info">
-          <p><strong>{flight.departureTime}</strong> – <strong>{flight.arrivalTime}</strong></p>
+          <p><strong>{flight.departureTime}</strong> – <strong>{flight.arrivalTime || "N/A"}</strong></p>
           <p>{flightDetails.from} → {flightDetails.to}</p>
           <p>{flight.stops} • {flight.duration}</p>
           <p><strong>Cabin:</strong> {flight.cabin}</p>
-          <p><strong>Price:</strong> ₱ {flight.price.toString().replace(/₱/g, "")}</p>
+          <p><strong>Price:</strong> ₱ {flight.price.toLocaleString()}</p>
         </div>
       </div>
 

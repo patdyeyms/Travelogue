@@ -1,70 +1,149 @@
-# Getting Started with Create React App
+Travelogue Web Application
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Travelogue is a full-featured travel planning web application built with React. It allows users to search for flights, book hotels, create detailed itineraries, and explore destinations interactively using maps and guides.
 
-## Available Scripts
+Table of Contents
+• Features
 
-In the project directory, you can run:
+• Technologies Used
 
-### `npm start`
+• Project Structure
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+• Components Overview
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+• Installation & Setup
 
-### `npm test`
+• Usage
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+• Future Improvements
 
-### `npm run build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Features
+• Landing Page: Welcome screen with video background, destination search, and key features showcase.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+• Flight Planner: Select origin and destination, set departure and return dates. Stores selected flights in localStorage.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+• Hotel Booking: Filter hotels by city or country, view ratings and reviews, book hotels linked to flight trips.
 
-### `npm run eject`
+• Itinerary Page: Visualize trip details with:
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+    - Interactive map view with attractions.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+    - List of places to visit.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+    - Lodging info (selected hotel).
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+    - Sidebar for trip notes, reservations, and attachments.
 
-## Learn More
+• Responsive UI with sidebar toggle, suggestion lists, and search filtering.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Technologies Used
+• Frontend:
 
-### Code Splitting
+    - React (Functional Components & Hooks)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+    - React Router (useNavigate, useLocation)
 
-### Analyzing the Bundle Size
+    - Leaflet for interactive maps
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+    - CSS modules for styling
 
-### Making a Progressive Web App
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+State Management:
+• React useState and useEffect
 
-### Advanced Configuration
+• localStorage for persisting flight and hotel selections
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
 
-### Deployment
+Assets:
+• Images for hotels and destinations
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+• Video background on landing page
 
-### `npm run build` fails to minify
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Components Overview
+1. Landing.jsx
+
+    • Main entry page.
+
+    • Video background and destination search with autocomplete.
+
+    • Feature highlights: flight planner, hotel booking, itinerary journal, interactive maps.
+
+2. Flights.jsx
+    • Flight search with From, To, Departure, and Return inputs.
+
+    • Saves selected flight data to localStorage.
+
+    • Redirects to flight results page.
+
+3. Hotels.jsx
+    • Displays hotel cards filtered by city or country.
+    
+    • Includes ratings, reviews, and "Book" button.
+
+    • Linked to selected flight for contextual bookings.
+
+4. BookingDetails.jsx
+    • Collects traveler information.
+
+    • Validates check-in/check-out dates based on flight unless "Future Booking" is enabled.
+
+    • Stores booking in localStorage and navigates to confirmation page.
+
+5. Itinerary.jsx
+    • Generates trip itinerary based on flight and hotel data.
+
+    • Displays interactive map with attractions using Leaflet.
+
+    • Sidebar for exploring attractions, restaurants, and reservations.
+
+    • Handles reset of trip data and conditional display if no flight is selected.
+
+
+Installation & Setup
+
+1. Clone the repository:
+    git clone https://github.com/yourusername/travelogue.git
+    cd travelogue
+
+
+2. Install dependencies:
+    npm install
+
+3. Start the development server:
+    npm start
+
+
+4. Access the app:
+    Open http://localhost:3000 in your browser.
+
+
+Usage
+• Landing Page: Choose a destination or click "Get Started".
+
+• Flights: Select origin, destination, and dates → search flights.
+
+• Hotels: Filter and select hotels for the chosen destination.
+
+• Booking Details: Input traveler information → confirm booking.
+
+• Itinerary: View trip overview, explore attractions, and interact with maps.
+
+• All flight and hotel selections persist in localStorage for session continuity.
+
+
+Future Improvements
+• Add authentication and user profiles.
+
+• Connect to real-time flight and hotel APIs for dynamic search.
+
+• Implement payment processing for bookings.
+
+• Improve mobile responsiveness and accessibility.
+
+• Add notifications and reminders for trip events.
+
+
+Travelogue: Plan your trips, book flights and hotels, and organize itineraries—all in one intuitive web application.

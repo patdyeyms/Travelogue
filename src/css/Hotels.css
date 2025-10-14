@@ -27,7 +27,7 @@ p {
   position: relative;
   height: 80vh;
   background: 
-    linear-gradient(rgba(40, 161, 161, 0.28), rgba(40, 161, 161, 0.45)), /* green-teal overlay */
+    linear-gradient(rgba(40, 161, 161, 0.28), rgba(40, 161, 161, 0.45)), 
     url("../assets/hotels-hero.jpg") center/cover no-repeat;
   display: flex;
   justify-content: center;

@@ -1,6 +1,7 @@
 import React from "react";
 import "leaflet/dist/leaflet.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import 'bootstrap/dist/js/bootstrap.bundle.min';
 import ScrollToTop from "./ScrollToTop";
 import NavbarComponent from "./component/NavbarComponent";
 import Flights from "./pages/Flights";

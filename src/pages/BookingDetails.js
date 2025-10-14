@@ -7,7 +7,7 @@ function BookingDetails() {
   const navigate = useNavigate();
   const { hotel } = location.state || {}; // Selected hotel from Hotels page
 
-  const today = new Date().toISOString().split("T")[0]; // Today’s date for default min
+  const today = new Date().toISOString().split("T")[0]; 
 
   const [formData, setFormData] = useState({
     checkIn: "",
@@ -21,14 +21,13 @@ function BookingDetails() {
   const [childDetails, setChildDetails] = useState([]);
   const [flightData, setFlightData] = useState(null);
 
-  // Load linked flight from localStorage
+  // linked flight from localStorage
   useEffect(() => {
     const savedFlight = localStorage.getItem("bookedFlight");
     if (savedFlight) {
       const flight = JSON.parse(savedFlight);
       setFlightData(flight);
 
-      // Set default check-in/check-out to flight dates
       setFormData((prev) => ({
         ...prev,
         checkIn: flight.departureDate || "",
@@ -37,7 +36,7 @@ function BookingDetails() {
     }
   }, []);
 
-  // Dynamically generate traveler input fields
+  // traveler input fields
   useEffect(() => {
     setAdultDetails(Array.from({ length: formData.adults }, () => ({ name: "", age: "" })));
     setChildDetails(Array.from({ length: formData.children }, () => ({ name: "", age: "" })));
@@ -81,7 +80,6 @@ function BookingDetails() {
       }
     }
 
-    // Build final booking data
     const bookingData = {
       ...formData,
       adultDetails,
@@ -89,10 +87,10 @@ function BookingDetails() {
       hotel,
     };
 
-    // Save booking to localStorage
+    // localStorage
     localStorage.setItem("bookedHotel", JSON.stringify(bookingData));
 
-    // Navigate to confirmation page
+    // confirmation page
     navigate("/hotel-confirmation", { state: { bookingData } });
   };
 
@@ -146,11 +144,7 @@ function BookingDetails() {
             name="checkOut"
             value={formData.checkOut}
             onChange={handleChange}
-            min={
-              !formData.futureBooking
-                ? formData.checkIn || flightData?.departureDate || today
-                : today
-            }
+            min={!formData.futureBooking ? formData.checkIn || flightData?.departureDate || today : today}
             max={!formData.futureBooking && flightData?.returnDate ? flightData.returnDate : ""}
             required
           />
