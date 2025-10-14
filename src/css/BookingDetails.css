@@ -96,16 +96,24 @@
   outline: none;
 }
 
+/* Make only the checkbox group inline */
 .checkbox-group {
   display: flex;
-  align-items: center;
-  gap: 0.5rem;
+  align-items: center; /* vertically centers checkbox and label */
+  gap: 0.5rem; /* spacing between checkbox and label */
+  flex-direction: row; /* ensure horizontal alignment */
+}
+
+.checkbox-group input[type="checkbox"] {
+  margin: 0; /* remove any default margin */
 }
 
 .checkbox-group label {
   font-weight: 500;
   color: #444;
+  margin: 0; /* remove default margin */
 }
+
 
 .traveler-section {
   display: flex;
