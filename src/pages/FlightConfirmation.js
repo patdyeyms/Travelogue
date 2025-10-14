@@ -19,7 +19,7 @@ const getAirlineLogo = (name) => {
     emirates,
     philippineairlines: pal,
     singaporeairlines: singapore,
-    swissinternationalairlines: swiss
+    swissinternationalairlines: swiss,
   };
   return logos[key] || "";
 };
@@ -30,16 +30,15 @@ function FlightConfirmation() {
   const { flight, flightDetails, formData } = location.state || {};
   const [showDetails, setShowDetails] = useState(false);
 
-  useEffect(() => {
-    console.log("Flight state:", location.state);
-  }, [location.state]);
-
   if (!flight || !flightDetails || !formData) {
     return (
       <div className="results-section">
         <h1>No booking data</h1>
         <p>Please go back and book a flight first.</p>
-        <button className="action-btn secondary" onClick={() => navigate("/flights")}>
+        <button
+          className="action-btn secondary"
+          onClick={() => navigate("/flights")}
+        >
           Return to Flights
         </button>
       </div>
@@ -47,6 +46,34 @@ function FlightConfirmation() {
   }
 
   const displayPrice = flight?.price?.toLocaleString() || "N/A";
+
+  const handleGoToItinerary = () => {
+    const itineraryData = {
+      type: "Flight",
+      airline: flight.airline,
+      flightNumber: flight.flightNumber,
+      from: flightDetails.from,
+      to: flightDetails.to,
+      departure: flightDetails.departure,
+      returnDate: flightDetails.return || "N/A",
+      price: flight.price,
+      class: flight.class,
+      passenger: `${formData.firstName} ${formData.lastName}`,
+      email: formData.email,
+      phone: formData.phone,
+    };
+
+    // ✅ Save to localStorage only when "Go to Itinerary" is clicked
+    const existingItinerary =
+      JSON.parse(localStorage.getItem("itinerary")) || [];
+    localStorage.setItem(
+      "itinerary",
+      JSON.stringify([...existingItinerary, itineraryData])
+    );
+
+    // Then navigate to Itinerary page
+    navigate("/itinerary");
+  };
 
   return (
     <div className="thankyou-section">
@@ -72,35 +99,75 @@ function FlightConfirmation() {
                   className="airline-img"
                 />
                 <div className="flight-summary-info">
-                  <span className="airline-name">{flight?.airline || "N/A"}</span>
+                  <span className="airline-name">
+                    {flight?.airline || "N/A"}
+                  </span>
                   <span className="route">
-                    {flightDetails?.from || "N/A"} → {flightDetails?.to || "N/A"}{" "}
-                    <br></br>Departure: {flightDetails?.departure || "N/A"} 
-                    <br></br>{flightDetails?.return ? `Return: ${flightDetails.return}` : ""}
+                    {flightDetails?.from || "N/A"} →{" "}
+                    {flightDetails?.to || "N/A"} <br />
+                    Departure: {flightDetails?.departure || "N/A"}
+                    <br />
+                    {flightDetails?.return
+                      ? `Return: ${flightDetails.return}`
+                      : ""}
                   </span>
                 </div>
               </div>
               <div className="flight-summary-right">
                 <span className="peso-symbol">₱</span>
                 {displayPrice}
-                <span className={`flight-summary-arrow ${showDetails ? "open" : ""}`}>▼</span>
+                <span
+                  className={`flight-summary-arrow ${
+                    showDetails ? "open" : ""
+                  }`}
+                >
+                  ▼
+                </span>
               </div>
             </div>
 
-            <div className={`flight-summary-details ${showDetails ? "open" : ""}`}>
-              <p><strong>Flight Number:</strong> {flight?.flightNumber || "N/A"}</p>
-              <p><strong>Departure:</strong> {flight?.departureTime || flightDetails?.departure || "N/A"}</p>
-              <p><strong>Arrival:</strong> {flight?.arrivalTime || "N/A"}</p>
-              <p><strong>Class:</strong> {flight?.class || "N/A"}</p>
-              <p><strong>Passenger:</strong> {formData?.firstName || "N/A"} {formData?.lastName || ""}</p>
-              <p><strong>Email:</strong> {formData?.email || "N/A"}</p>
-              <p><strong>Phone:</strong> {formData?.phone || "N/A"}</p>
+            <div
+              className={`flight-summary-details ${
+                showDetails ? "open" : ""
+              }`}
+            >
+              <p>
+                <strong>Flight Number:</strong>{" "}
+                {flight?.flightNumber || "N/A"}
+              </p>
+              <p>
+                <strong>Departure:</strong>{" "}
+                {flight?.departureTime || flightDetails?.departure || "N/A"}
+              </p>
+              <p>
+                <strong>Arrival:</strong> {flight?.arrivalTime || "N/A"}
+              </p>
+              <p>
+                <strong>Class:</strong> {flight?.class || "N/A"}
+              </p>
+              <p>
+                <strong>Passenger:</strong>{" "}
+                {formData?.firstName || "N/A"} {formData?.lastName || ""}
+              </p>
+              <p>
+                <strong>Email:</strong> {formData?.email || "N/A"}
+              </p>
+              <p>
+                <strong>Phone:</strong> {formData?.phone || "N/A"}
+              </p>
             </div>
           </div>
 
           <div className="confirm-actions">
-            <button className="action-btn secondary" onClick={() => navigate(-1)}>Back</button>
-            <button className="action-btn primary" onClick={() => navigate("/itinerary")}>Go to Itinerary</button>
+            <button className="action-btn secondary" onClick={() => navigate(-1)}>
+              Back
+            </button>
+            <button
+              className="action-btn primary"
+              onClick={handleGoToItinerary}
+            >
+              Go to Itinerary
+            </button>
           </div>
         </div>
       </div>

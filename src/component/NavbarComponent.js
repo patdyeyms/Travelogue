@@ -12,11 +12,9 @@ function NavbarComponent() {
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener("scroll", handleScroll);
-
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Close mobile panel when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -51,10 +49,12 @@ function NavbarComponent() {
             className="navbar-logo"
           />
         </Navbar.Brand>
+
         <Navbar.Toggle
           aria-controls="basic-navbar-nav"
           onClick={() => setOpen(!open)}
         />
+
         <Navbar.Collapse id="basic-navbar-nav" ref={collapseRef}>
           <Nav className="me-auto align-items-lg-center">
             <Nav.Link as={Link} to="/Flights">
@@ -67,11 +67,17 @@ function NavbarComponent() {
               Itinerary
             </Nav.Link>
           </Nav>
+
           <div className="d-flex align-items-center">
-            <Button variant="link" className="offer-btn">
+            {/* Offers link with underline hover */}
+            <Nav.Link as={Link} to="/Offers" className="offer-btn">
               Offers
-            </Button>
-            <Button className="login-btn">Login</Button>
+            </Nav.Link>
+
+            {/* ✅ Login button now links to /Login */}
+            <Link to="/Login">
+              <Button className="login-btn">Login</Button>
+            </Link>
           </div>
         </Navbar.Collapse>
       </Container>
