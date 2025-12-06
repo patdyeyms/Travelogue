@@ -118,7 +118,7 @@ function Flights() {
           </div>
 
           <div className="input-group">
-            <label>Return (optional)</label>
+            <label>Return</label>
             <input
               type="date"
               name="return"

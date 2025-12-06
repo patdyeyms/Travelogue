@@ -46,10 +46,18 @@ function Landing() {
 
   const handleSearch = () => {
     if (!destination) return;
-    localStorage.setItem("selectedDestination", destination);
-    navigate(`/flights?to=${encodeURIComponent(destination)}`);
-  };
 
+    // Save a full flightDetails object with empty departure/return
+    const flightData = {
+      from: "", // user can select later
+      to: destination,
+      departure: "",
+      return: "",
+    };
+
+    localStorage.setItem("flightDetails", JSON.stringify(flightData));
+    navigate("/flights");
+  };
 
   const filteredDestinations = destinations.filter((d) =>
     d.name.toLowerCase().includes(destination.toLowerCase())
@@ -57,7 +65,6 @@ function Landing() {
 
   return (
     <div className="landing-page">
-      {/* INTRO */}
       <section className="intro-section">
         <video autoPlay loop muted playsInline className="background-video">
           <source src="/cinematic.mp4" type="video/mp4" />

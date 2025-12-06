@@ -16,6 +16,7 @@ function FlightDetails() {
   const [saving, setSaving] = useState(false);
   const [detailsOpen, setDetailsOpen] = useState(false);
 
+  // Handle missing flight data
   if (!flight || !flightDetails) {
     return (
       <div className="results-section">
@@ -34,8 +35,12 @@ function FlightDetails() {
   const handleConfirm = (e) => {
     e.preventDefault();
     const required = ["firstName", "lastName", "email", "phone"];
-    for (const field of required)
-      if (!formData[field]) return alert("Please fill in all required fields.");
+    for (const field of required) {
+      if (!formData[field]) {
+        alert("Please fill in all required fields.");
+        return;
+      }
+    }
     setSaving(true);
 
     const fullFlightData = {
@@ -62,16 +67,16 @@ function FlightDetails() {
       <div className="flight-details-card">
         <div className="flight-details-header">
           <img
-            src={getAirlineLogo(flight.airline)}
-            alt={flight.airline}
-            className="airline-img"
-          />
+          src={getAirlineLogo(flight.airlineCode)}
+          alt={flight.airline}
+          className="airline-img"
+        />
           <h2>{flight.airline}</h2>
         </div>
 
         <div className="flight-details-info">
           <p>
-            <strong>{flight.departureTime}</strong> –{" "}
+            <strong>{flight.departureTime || "N/A"}</strong> –{" "}
             <strong>{flight.arrivalTime || "N/A"}</strong>
           </p>
           <p>
@@ -99,6 +104,7 @@ function FlightDetails() {
             </div>
             <div
               className={`flight-summary-arrow ${detailsOpen ? "open" : ""}`}
+              aria-label={detailsOpen ? "Collapse details" : "Expand details"}
             >
               ▼
             </div>
@@ -108,7 +114,7 @@ function FlightDetails() {
           >
             <p>
               <strong>Departure:</strong> {flightDetails.from} at{" "}
-              {flight.departureTime}
+              {flight.departureTime || "N/A"}
             </p>
             <p>
               <strong>Arrival:</strong> {flightDetails.to} at{" "}
@@ -120,6 +126,9 @@ function FlightDetails() {
             <p>
               <strong>Duration:</strong> {flight.duration || "N/A"}
             </p>
+            <p>
+              <strong>Cabin:</strong> {flight.cabin || "Economy"}
+            </p>
           </div>
         </div>
       </div>
@@ -130,14 +139,16 @@ function FlightDetails() {
           {["firstName", "lastName", "email", "phone", "passport"].map(
             (field) => (
               <div key={field} className="input-group">
-                <label>
+                <label htmlFor={field}>
                   {field.charAt(0).toUpperCase() + field.slice(1)}
                 </label>
                 <input
+                  id={field}
                   name={field}
                   value={formData[field]}
                   onChange={handleChange}
                   required={field !== "passport"}
+                  placeholder={field !== "passport" ? "Required" : "Optional"}
                 />
               </div>
             )
