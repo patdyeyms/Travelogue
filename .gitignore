@@ -28,3 +28,4 @@ yarn-error.log*
 # Ignore large media files
 public/cinematic.mp4
 
+frontend/public/cinematic.mp4

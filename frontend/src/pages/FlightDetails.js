@@ -14,9 +14,7 @@ function FlightDetails() {
     passport: "",
   });
   const [saving, setSaving] = useState(false);
-  const [detailsOpen, setDetailsOpen] = useState(false);
 
-  // Handle missing flight data
   if (!flight || !flightDetails) {
     return (
       <div className="results-section">
@@ -28,6 +26,14 @@ function FlightDetails() {
       </div>
     );
   }
+
+  const firstLeg = flight.flights?.[0] || {};
+  const lastLeg = flight.flights?.[flight.flights.length - 1] || {};
+
+  const totalDuration = flight.flights?.reduce(
+    (sum, leg) => sum + (leg.duration || 0),
+    0
+  );
 
   const handleChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -43,10 +49,19 @@ function FlightDetails() {
     }
     setSaving(true);
 
+    const totalDuration = flight.flights?.reduce(
+      (sum, leg) => sum + (leg.duration || 0),
+      0
+    );
+
     const fullFlightData = {
       ...flight,
-      departureTime: flight.departureTime || flightDetails.departure,
-      arrivalTime: flight.arrivalTime || flightDetails.return || "N/A",
+      departureTime: firstLeg.departure_airport?.time || flightDetails.departure,
+      arrivalTime: lastLeg.arrival_airport?.time || flightDetails.return || "N/A",
+      stops: flight.flights?.length > 1 ? flight.flights.length - 1 : 0,
+      duration: totalDuration || "N/A",
+      cabin: firstLeg.travel_class || "Economy",
+      airlineCode: firstLeg.airline_code || flight.airlineCode || "",
     };
 
     setTimeout(
@@ -58,81 +73,108 @@ function FlightDetails() {
     );
   };
 
+  const formatDuration = (minutes) => {
+    if (!minutes) return "N/A";
+    const hrs = Math.floor(minutes / 60);
+    const mins = minutes % 60;
+    return `${hrs}h ${mins}m`;
+  };
+
   return (
     <div className="results-section">
       <button className="back-btn" onClick={() => navigate(-1)}>
         ← Back to Results
       </button>
 
+      {/* Flight Summary Card */}
       <div className="flight-details-card">
         <div className="flight-details-header">
           <img
-          src={getAirlineLogo(flight.airlineCode)}
-          alt={flight.airline}
-          className="airline-img"
-        />
-          <h2>{flight.airline}</h2>
+            src={getAirlineLogo(firstLeg.airline_code || flight.airlineCode)}
+            alt={flight.airline || firstLeg.airline}
+            className="airline-img"
+          />
+          <h2>{flight.airline || firstLeg.airline}</h2>
         </div>
 
         <div className="flight-details-info">
           <p>
-            <strong>{flight.departureTime || "N/A"}</strong> –{" "}
-            <strong>{flight.arrivalTime || "N/A"}</strong>
+            <strong>{firstLeg.departure_airport?.time || "N/A"}</strong> –{" "}
+            <strong>{lastLeg.arrival_airport?.time || "N/A"}</strong>
           </p>
           <p>
             {flightDetails.from} → {flightDetails.to}
           </p>
           <p>
-            <strong>Stops:</strong> {flight.stops || "N/A"} •{" "}
-            {flight.duration || "N/A"}
+            <strong>Stops:</strong> {flight.flights?.length - 1 || 0} •{" "}
+            {formatDuration(totalDuration)}
           </p>
           <p>
-            <strong>Cabin:</strong> {flight.cabin || "Economy"}
+            <strong>Cabin:</strong> {firstLeg.travel_class || "Economy"}
           </p>
           <p>
             <strong>Price:</strong> ₱ {Number(flight.price || 0).toLocaleString()}
           </p>
         </div>
 
-        <div
-          className="flight-summary-card"
-          onClick={() => setDetailsOpen(!detailsOpen)}
-        >
-          <div className="flight-summary-top">
-            <div className="flight-summary-left">
-              <span>Flight Details</span>
+        <br/>
+
+        {/* Flight Legs Details - Expanded */}
+        <div className="flight-summary-card">
+          {flight.flights?.map((leg, idx) => (
+            <div key={idx} className="flight-leg">
+              <h4>
+                {leg.airline} • {leg.flight_number} ({leg.travel_class})
+              </h4>
+              <p>
+                {leg.departure_airport?.name} ({leg.departure_airport?.id}) at{" "}
+                {leg.departure_airport?.time} → {leg.arrival_airport?.name} (
+                {leg.arrival_airport?.id}) at {leg.arrival_airport?.time}
+              </p>
+              <p>Duration: {formatDuration(leg.duration)}</p>
+              <p>Airplane: {leg.airplane || "N/A"}</p>
+              {leg.legroom && <p>Legroom: {leg.legroom}</p>}
+              {leg.extensions?.length > 0 && (
+                <div>
+                  <strong>Extensions:</strong>
+                  <ul>
+                    {leg.extensions.map((ext, i) => (
+                      <li key={i}>{ext}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              <hr />
             </div>
-            <div
-              className={`flight-summary-arrow ${detailsOpen ? "open" : ""}`}
-              aria-label={detailsOpen ? "Collapse details" : "Expand details"}
-            >
-              ▼
-            </div>
-          </div>
-          <div
-            className={`flight-summary-details ${detailsOpen ? "open scrollable" : ""}`}
-          >
+          ))}
+
+          {/* Layovers */}
+          {flight.layovers?.length > 0 && (
             <p>
-              <strong>Departure:</strong> {flightDetails.from} at{" "}
-              {flight.departureTime || "N/A"}
+              <strong>Layovers:</strong>{" "}
+              {flight.layovers.map((layover, idx) => (
+                <span key={idx}>
+                  {layover.name} ({formatDuration(layover.duration)})
+                  {layover.overnight ? " • Overnight" : ""}
+                  {idx < flight.layovers.length - 1 ? ", " : ""}
+                </span>
+              ))}
             </p>
+          )}
+
+          {/* Carbon Emissions */}
+          {flight.carbon_emissions && (
             <p>
-              <strong>Arrival:</strong> {flightDetails.to} at{" "}
-              {flight.arrivalTime || "N/A"}
+              <strong>Carbon Emissions:</strong>{" "}
+              {(flight.carbon_emissions.this_flight / 1000).toFixed(2)} kg (
+              {flight.carbon_emissions.difference_percent > 0 ? "+" : ""}
+              {flight.carbon_emissions.difference_percent}% vs typical)
             </p>
-            <p>
-              <strong>Stops:</strong> {flight.stops || "N/A"}
-            </p>
-            <p>
-              <strong>Duration:</strong> {flight.duration || "N/A"}
-            </p>
-            <p>
-              <strong>Cabin:</strong> {flight.cabin || "Economy"}
-            </p>
-          </div>
+          )}
         </div>
       </div>
 
+      {/* Passenger Booking Form */}
       <form className="booking-form extended" onSubmit={handleConfirm}>
         <h3>Passenger Information</h3>
         <div className="booking-grid">

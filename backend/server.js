@@ -21,11 +21,16 @@ app.get("/api/flights", async (req, res) => {
         arrival_id,
         outbound_date,
         return_date,
-        adults: 1,
-        travel_class: 1,
+        travel_class: req.query.travel_class,
+        adults: req.query.adults,
+        children: req.query.children,
+        infants_in_seat: req.query.infants_in_seat,
+        airlines: req.query.airlines || undefined,
+        nonstop: req.query.nonstop ? "true" : undefined,
         currency: "PHP",
-        api_key: process.env.SERPAPI_KEY, // store your key in .env
+        api_key: process.env.SERPAPI_KEY,
       },
+
     });
 
     res.json(response.data);

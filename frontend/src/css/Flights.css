@@ -639,3 +639,63 @@ p {
     text-align: center;
   }
 }
+
+/* =======================
+   TRIP TYPE TOGGLE
+======================= */
+.trip-toggle {
+  display: flex;
+  grid-column: 1 / -1;
+  justify-content: center;
+  background: #f0fafa;
+  padding: 0.6rem;
+  border-radius: 12px;
+  gap: 0.5rem;
+}
+
+.trip-toggle button {
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  border: 1px solid #cce8e8;
+  background: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.trip-toggle button:hover {
+  background: #e8f7f7;
+}
+
+.trip-toggle button.active {
+  background: #28a1a1;
+  color: white;
+  border-color: #1f7f7f;
+  box-shadow: 0 4px 12px rgba(40, 161, 161, 0.3);
+}
+
+.passengers-group {
+  display: flex;
+  gap: 1rem;
+  grid-column: span 2;
+}
+
+.passengers-group .input-group {
+  flex: 1;
+}
+
+.input-group.checkbox {
+  display: flex;
+  align-items: center;
+  margin-top: 0.3rem;
+}
+
+.input-group.checkbox label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 600;
+}
+
+
+
