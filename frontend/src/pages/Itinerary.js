@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
@@ -12,6 +12,7 @@ import zurichImage from "../assets/itinerary/zurich.jpeg";
 import defaultImage from "../assets/itinerary/default.jpg";
 import "../css/Itinerary.css";
 
+// Leaflet default icon fix
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl:
@@ -22,75 +23,74 @@ L.Icon.Default.mergeOptions({
     "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
 });
 
+// Destinations moved outside component for stable reference
+const destinations = {
+  "Seoul, Korea": {
+    coords: [37.5665, 126.978],
+    image: seoulImage,
+    attractions: [
+      { name: "Gyeongbokgung Palace", desc: "Historic royal palace.", coords: [37.5796, 126.977] },
+      { name: "Myeongdong Shopping Street", desc: "Popular shopping area.", coords: [37.5636, 126.982] },
+      { name: "N Seoul Tower", desc: "Observation tower with city view.", coords: [37.5512, 126.9882] },
+    ],
+  },
+  "Tokyo, Japan": {
+    coords: [35.6895, 139.6917],
+    image: tokyoImage,
+    attractions: [
+      { name: "Tokyo Tower", desc: "Iconic red observation tower.", coords: [35.6586, 139.7454] },
+      { name: "Shibuya Crossing", desc: "Famous busy intersection.", coords: [35.6595, 139.7005] },
+      { name: "Senso-ji Temple", desc: "Ancient Buddhist temple.", coords: [35.7148, 139.7967] },
+    ],
+  },
+  Singapore: {
+    coords: [1.3521, 103.8198],
+    image: singaporeImage,
+    attractions: [
+      { name: "Marina Bay Sands", desc: "Iconic hotel and observation deck.", coords: [1.2834, 103.8607] },
+      { name: "Gardens by the Bay", desc: "Futuristic gardens with supertrees.", coords: [1.2816, 103.8636] },
+      { name: "Sentosa Island", desc: "Beaches and entertainment.", coords: [1.2494, 103.8303] },
+    ],
+  },
+  "Manila, Philippines": {
+    coords: [14.5995, 120.9842],
+    image: manilaImage,
+    attractions: [
+      { name: "Intramuros", desc: "Historic walled city of Manila.", coords: [14.5896, 120.9747] },
+      { name: "Rizal Park", desc: "National park and monument.", coords: [14.5826, 120.9797] },
+      { name: "National Museum of Fine Arts", desc: "Art and cultural museum.", coords: [14.5869, 120.9814] },
+    ],
+  },
+  "Dubai, UAE": {
+    coords: [25.276987, 55.296249],
+    image: dubaiImage,
+    attractions: [
+      { name: "Burj Khalifa", desc: "Tallest building in the world.", coords: [25.1972, 55.2744] },
+      { name: "The Dubai Mall", desc: "One of the world's largest malls.", coords: [25.1985, 55.2797] },
+      { name: "Palm Jumeirah", desc: "Man-made island shaped like a palm.", coords: [25.112, 55.1396] },
+    ],
+  },
+  "Zurich, Switzerland": {
+    coords: [47.3769, 8.5417],
+    image: zurichImage,
+    attractions: [
+      { name: "Lake Zurich", desc: "Scenic lake surrounded by mountains.", coords: [47.3333, 8.55] },
+      { name: "Old Town (Altstadt)", desc: "Historic center with medieval charm.", coords: [47.3726, 8.5433] },
+      { name: "Uetliberg Mountain", desc: "Viewpoint overlooking Zurich.", coords: [47.3493, 8.4914] },
+    ],
+  },
+};
+
 function Itinerary() {
   const location = useLocation();
-  const navigate = useNavigate();
 
   const { flightDetails: passedFlightDetails, resetItinerary } = location.state || {};
   const storedFlightDetails = JSON.parse(localStorage.getItem("flightDetails") || "null");
   const flightDetails = passedFlightDetails || storedFlightDetails;
 
   const [trip, setTrip] = useState(null);
-  const [days, setDays] = useState([]);
   const [isSidebarHidden, setIsSidebarHidden] = useState(false);
   const [selectedHotel, setSelectedHotel] = useState(null);
-
-  const destinations = {
-    "Seoul, Korea": {
-      coords: [37.5665, 126.978],
-      image: seoulImage,
-      attractions: [
-        { name: "Gyeongbokgung Palace", desc: "Historic royal palace.", coords: [37.5796, 126.977] },
-        { name: "Myeongdong Shopping Street", desc: "Popular shopping area.", coords: [37.5636, 126.982] },
-        { name: "N Seoul Tower", desc: "Observation tower with city view.", coords: [37.5512, 126.9882] },
-      ],
-    },
-    "Tokyo, Japan": {
-      coords: [35.6895, 139.6917],
-      image: tokyoImage,
-      attractions: [
-        { name: "Tokyo Tower", desc: "Iconic red observation tower.", coords: [35.6586, 139.7454] },
-        { name: "Shibuya Crossing", desc: "Famous busy intersection.", coords: [35.6595, 139.7005] },
-        { name: "Senso-ji Temple", desc: "Ancient Buddhist temple.", coords: [35.7148, 139.7967] },
-      ],
-    },
-    Singapore: {
-      coords: [1.3521, 103.8198],
-      image: singaporeImage,
-      attractions: [
-        { name: "Marina Bay Sands", desc: "Iconic hotel and observation deck.", coords: [1.2834, 103.8607] },
-        { name: "Gardens by the Bay", desc: "Futuristic gardens with supertrees.", coords: [1.2816, 103.8636] },
-        { name: "Sentosa Island", desc: "Beaches and entertainment.", coords: [1.2494, 103.8303] },
-      ],
-    },
-    "Manila, Philippines": {
-      coords: [14.5995, 120.9842],
-      image: manilaImage,
-      attractions: [
-        { name: "Intramuros", desc: "Historic walled city of Manila.", coords: [14.5896, 120.9747] },
-        { name: "Rizal Park", desc: "National park and monument.", coords: [14.5826, 120.9797] },
-        { name: "National Museum of Fine Arts", desc: "Art and cultural museum.", coords: [14.5869, 120.9814] },
-      ],
-    },
-    "Dubai, UAE": {
-      coords: [25.276987, 55.296249],
-      image: dubaiImage,
-      attractions: [
-        { name: "Burj Khalifa", desc: "Tallest building in the world.", coords: [25.1972, 55.2744] },
-        { name: "The Dubai Mall", desc: "One of the world's largest malls.", coords: [25.1985, 55.2797] },
-        { name: "Palm Jumeirah", desc: "Man-made island shaped like a palm.", coords: [25.112, 55.1396] },
-      ],
-    },
-    "Zurich, Switzerland": {
-      coords: [47.3769, 8.5417],
-      image: zurichImage,
-      attractions: [
-        { name: "Lake Zurich", desc: "Scenic lake surrounded by mountains.", coords: [47.3333, 8.55] },
-        { name: "Old Town (Altstadt)", desc: "Historic center with medieval charm.", coords: [47.3726, 8.5433] },
-        { name: "Uetliberg Mountain", desc: "Viewpoint overlooking Zurich.", coords: [47.3493, 8.4914] },
-      ],
-    },
-  };
 
   useEffect(() => {
     // Reset trip
@@ -102,7 +102,6 @@ function Itinerary() {
       return;
     }
 
-    // If no flight selected yet
     if (!flightDetails || !flightDetails.to) {
       setTrip(null);
       setSelectedHotel(null);
@@ -116,25 +115,7 @@ function Itinerary() {
     const dest = destinations[flightDetails.to];
     if (dest) setTrip(dest);
 
-    // Generate days
-    if (flightDetails.departure && flightDetails.return) {
-      const start = new Date(flightDetails.departure);
-      const end = new Date(flightDetails.return);
-      const tempDays = [];
-      for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
-        tempDays.push({
-          date: new Date(d),
-          title: d.toLocaleDateString("en-US", {
-            weekday: "short",
-            month: "numeric",
-            day: "numeric",
-          }),
-        });
-      }
-      setDays(tempDays);
-    }
-
-    // Only load hotel if explicitly selected for this trip
+    // Load hotel if explicitly selected
     const savedHotel = JSON.parse(localStorage.getItem("selectedHotel") || "null");
     if (savedHotel && savedHotel.bookedForTrip === flightDetails.to) {
       setSelectedHotel(savedHotel);
@@ -246,7 +227,7 @@ function Itinerary() {
               }}
             >
               <img
-                src={selectedHotel.image}
+                src={selectedHotel.image || defaultImage}
                 alt={selectedHotel.name}
                 style={{
                   width: "160px",
@@ -290,15 +271,15 @@ function Itinerary() {
           <h2>Explore</h2>
           <div className="explore-grid">
             <div className="explore-card">
-              <img src={trip.image} alt="Attractions" />
+              <img src={trip.image || defaultImage} alt="Attractions" />
               <p>Best attractions in {flightDetails?.to?.split(",")[0]}</p>
             </div>
             <div className="explore-card">
-              <img src={trip.image} alt="Restaurants" />
+              <img src={trip.image || defaultImage} alt="Restaurants" />
               <p>Best restaurants in {flightDetails?.to?.split(",")[0]}</p>
             </div>
             <div className="explore-card">
-              <img src={trip.image} alt="Hotels" />
+              <img src={trip.image || defaultImage} alt="Hotels" />
               <p>Search hotels with transparent pricing</p>
             </div>
           </div>

@@ -13,10 +13,14 @@ app.use(express.json());
 app.get("/api/flights", async (req, res) => {
   const { departure_id, arrival_id, outbound_date, return_date } = req.query;
 
+  // Determine type
+  const type = return_date ? 1 : 2; // 1 = Round-trip, 2 = One-way
+
   try {
     const response = await axios.get("https://serpapi.com/search.json", {
       params: {
         engine: "google_flights",
+        type,
         departure_id,
         arrival_id,
         outbound_date,
@@ -30,7 +34,6 @@ app.get("/api/flights", async (req, res) => {
         currency: "PHP",
         api_key: process.env.SERPAPI_KEY,
       },
-
     });
 
     res.json(response.data);
