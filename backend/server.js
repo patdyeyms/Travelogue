@@ -43,4 +43,27 @@ app.get("/api/flights", async (req, res) => {
   }
 });
 
+app.get("/api/hotels", async (req, res) => {
+  const { q } = req.query; // city name
+
+  if (!q) {
+    return res.status(400).json({ error: "Query 'q' is required" });
+  }
+
+  try {
+    const response = await axios.get("https://serpapi.com/search.json", {
+      params: {
+        engine: "tripadvisor",
+        q,
+        api_key: process.env.SERPAPI_KEY,
+      },
+    });
+
+    res.json(response.data);
+  } catch (err) {
+    console.error("TripAdvisor API Error:", err.message);
+    res.status(500).json({ error: "Failed to fetch hotels" });
+  }
+});
+
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
