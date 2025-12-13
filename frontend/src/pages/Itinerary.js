@@ -28,15 +28,19 @@ const sidebarOptions = [
 
 function Itinerary() {
   const location = useLocation();
-  const { flightDetails: passedFlightDetails } = location.state || {};
+  const { flightDetails: passedFlightDetails, hotel: passedHotel } = location.state || {};
   const storedFlightDetails = JSON.parse(localStorage.getItem("flightDetails") || "null");
+  const storedHotel = JSON.parse(localStorage.getItem("selectedHotel") || "null");
+
   const flightDetails = passedFlightDetails || storedFlightDetails;
 
   const [trip, setTrip] = useState(null);
   const [isSidebarHidden, setIsSidebarHidden] = useState(false);
   const [sidebarSelection, setSidebarSelection] = useState(sidebarOptions[0]);
   const [selectedSidebarPlace, setSelectedSidebarPlace] = useState(null);
-  const [places, setPlaces] = useState([]); // fetched restaurants/hotels
+  const [places, setPlaces] = useState([]);
+  const [bookedHotel, setBookedHotel] = useState(passedHotel || storedHotel || null); // keep the booked hotel
+  const [sidebarHotel, setSidebarHotel] = useState(null); // hotel from sidebar selection
 
   const memoTrip = useMemo(() => (flightDetails?.to ? destinations[flightDetails.to] : null), [flightDetails?.to]);
 
@@ -46,17 +50,17 @@ function Itinerary() {
     if (trip !== memoTrip) setTrip(memoTrip);
   }, [flightDetails, memoTrip, trip]);
 
-  // Fetch restaurants/hotels when sidebarSelection changes
+  // Fetch places whenever sidebarSelection or trip changes
   useEffect(() => {
     if (!trip) return;
 
     const fetchPlaces = async () => {
       let query =
-      sidebarSelection.type === "restaurants"
-      ? "restaurant"
-      : sidebarSelection.type === "hotels"
-      ? "hotel"
-      : "tourist attraction";
+        sidebarSelection.type === "restaurants"
+          ? "restaurant"
+          : sidebarSelection.type === "hotels"
+          ? "hotel"
+          : "tourist attraction";
 
       try {
         const response = await axios.get("http://localhost:5000/api/search-places", {
@@ -74,7 +78,8 @@ function Itinerary() {
     };
 
     fetchPlaces();
-    setSelectedSidebarPlace(null); // reset active place when changing category
+    setSelectedSidebarPlace(null);
+    if (sidebarSelection.type !== "hotels") setSidebarHotel(null);
   }, [sidebarSelection, trip]);
 
   if (!trip) return (
@@ -90,7 +95,6 @@ function Itinerary() {
     </div>
   );
 
-  // Determine sidebar places for display
   const sidebarPlaces = places.map(p => ({
     name: p.name || p.title,
     coords: [p.gps_coordinates.latitude, p.gps_coordinates.longitude],
@@ -98,7 +102,6 @@ function Itinerary() {
     address: p.address,
     order_online: p.order_online,
   }));
-
 
   return (
     <div className={`itinerary-page ${isSidebarHidden ? "sidebar-hidden" : ""}`}>
@@ -124,7 +127,18 @@ function Itinerary() {
             {sidebarPlaces.map((place, i) => (
               <li
                 key={i}
-                onClick={() => setSelectedSidebarPlace(place)}
+                onClick={() => {
+                  setSelectedSidebarPlace(place);
+                  if (sidebarSelection.type === "hotels") {
+                    setSidebarHotel({
+                      name: place.name,
+                      image: place.image,
+                      stars: place.rating,
+                      city: flightDetails?.to?.split(",")[0],
+                      country: flightDetails?.to?.split(",")[1]?.trim(),
+                    });
+                  }
+                }}
                 style={{ cursor: "pointer" }}
               >
                 {place.name}
@@ -146,6 +160,42 @@ function Itinerary() {
             <p>{flightDetails?.departure} - {flightDetails?.return}</p>
           </div>
         </div>
+
+        {/* Lodging Section */}
+        {(bookedHotel || sidebarHotel) && (
+          <section className="lodging-section" style={{ padding: "40px" }}>
+            <h2 style={{ fontSize: "20px", fontWeight: "700", marginBottom: "16px" }}>Lodging</h2>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                background: "#fff",
+                borderRadius: "12px",
+                boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
+                padding: "20px",
+                gap: "20px",
+              }}
+            >
+              <img
+                src={(bookedHotel || sidebarHotel).image || defaultImage}
+                alt={(bookedHotel || sidebarHotel).name}
+                style={{
+                  width: "160px",
+                  height: "120px",
+                  objectFit: "cover",
+                  borderRadius: "10px",
+                }}
+              />
+              <div>
+                <h3 style={{ marginBottom: "6px", fontSize: "18px" }}>{(bookedHotel || sidebarHotel).name}</h3>
+                <p style={{ marginBottom: "4px" }}>
+                  ⭐ {(bookedHotel || sidebarHotel).stars} stars • {(bookedHotel || sidebarHotel).city}, {(bookedHotel || sidebarHotel).country}
+                </p>
+                <p style={{ color: "#555", fontSize: "14px" }}>Selected for this trip</p>
+              </div>
+            </div>
+          </section>
+        )}
 
         <section className="map-wrapper">
           <TripMap

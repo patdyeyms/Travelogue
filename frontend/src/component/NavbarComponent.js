@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Navbar, Container, Nav, Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../css/NavbarComponent.css";
@@ -8,6 +8,7 @@ function NavbarComponent() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const collapseRef = useRef(null);
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
@@ -29,6 +30,11 @@ function NavbarComponent() {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [open]);
+
+  // Close navbar whenever route changes
+  useEffect(() => {
+    setOpen(false);
+  }, [location.pathname]);
 
   return (
     <Navbar
@@ -57,25 +63,23 @@ function NavbarComponent() {
 
         <Navbar.Collapse id="basic-navbar-nav" ref={collapseRef}>
           <Nav className="me-auto align-items-lg-center">
-            <Nav.Link as={Link} to="/Flights">
+            <Nav.Link as={Link} to="/Flights" onClick={() => setOpen(false)}>
               Flights
             </Nav.Link>
-            <Nav.Link as={Link} to="/Hotels">
+            <Nav.Link as={Link} to="/Hotels" onClick={() => setOpen(false)}>
               Hotels
             </Nav.Link>
-            <Nav.Link as={Link} to="/Itinerary">
+            <Nav.Link as={Link} to="/Itinerary" onClick={() => setOpen(false)}>
               Itinerary
             </Nav.Link>
           </Nav>
 
           <div className="d-flex align-items-center">
-            {/* Offers link with underline hover */}
-            <Nav.Link as={Link} to="/Offers" className="offer-btn">
+            <Nav.Link as={Link} to="/Offers" className="offer-btn" onClick={() => setOpen(false)}>
               Offers
             </Nav.Link>
 
-            {/* ✅ Login button now links to /Login */}
-            <Link to="/Login">
+            <Link to="/Login" onClick={() => setOpen(false)}>
               <Button className="login-btn">Login</Button>
             </Link>
           </div>

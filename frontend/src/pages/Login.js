@@ -7,15 +7,27 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-
-    if (email && password) {
-      localStorage.setItem("isLoggedIn", "true");
-      localStorage.setItem("userEmail", email);
-      navigate("/Offers");
+    try {
+      const res = await fetch("http://localhost/travelogue-api/login.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        localStorage.setItem("user", JSON.stringify(data.user));
+        navigate("/Itinerary");
+      } else {
+        alert(data.message);
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Error connecting to server");
     }
   };
+
 
   return (
     <div className="login-page">

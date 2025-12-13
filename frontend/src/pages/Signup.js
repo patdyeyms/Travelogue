@@ -10,10 +10,27 @@ function Signup() {
     password: "",
   });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    navigate("/Login");
+    try {
+      const res = await fetch("http://localhost/travelogue-api/signup.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      const data = await res.json();
+      if (data.success) {
+        alert("Signup successful! Please login.");
+        navigate("/Login");
+      } else {
+        alert(data.message);
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Error connecting to server");
+    }
   };
+
 
   return (
     <div className="login-page">
