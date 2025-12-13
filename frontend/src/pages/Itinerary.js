@@ -51,12 +51,12 @@ function Itinerary() {
     if (!trip) return;
 
     const fetchPlaces = async () => {
-      if (sidebarSelection.type === "attractions") {
-        setPlaces([]); // attractions are in trip object
-        return;
-      }
-
-      let query = sidebarSelection.type === "restaurants" ? "restaurant" : "hotel";
+      let query =
+      sidebarSelection.type === "restaurants"
+      ? "restaurant"
+      : sidebarSelection.type === "hotels"
+      ? "hotel"
+      : "tourist attraction";
 
       try {
         const response = await axios.get("http://localhost:5000/api/search-places", {
@@ -91,14 +91,14 @@ function Itinerary() {
   );
 
   // Determine sidebar places for display
-  const sidebarPlaces =
-    sidebarSelection.type === "attractions" ? trip.attractions : places.map(p => ({
-      name: p.name || p.title,
-      coords: [p.gps_coordinates.latitude, p.gps_coordinates.longitude],
-      rating: p.rating,
-      address: p.address,
-      order_online: p.order_online,
-    }));
+  const sidebarPlaces = places.map(p => ({
+    name: p.name || p.title,
+    coords: [p.gps_coordinates.latitude, p.gps_coordinates.longitude],
+    rating: p.rating,
+    address: p.address,
+    order_online: p.order_online,
+  }));
+
 
   return (
     <div className={`itinerary-page ${isSidebarHidden ? "sidebar-hidden" : ""}`}>
