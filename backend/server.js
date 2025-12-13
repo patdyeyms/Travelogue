@@ -66,4 +66,52 @@ app.get("/api/hotels", async (req, res) => {
   }
 });
 
+app.get("/api/search-places", async (req, res) => {
+  const { lat, lng, query } = req.query;
+
+  if (!lat || !lng || !query) {
+    return res.status(400).json({ error: "Missing parameters" });
+  }
+
+  try {
+    const response = await axios.get("https://serpapi.com/search.json", {
+      params: {
+        engine: "google_maps",
+        q: query,
+        ll: `@${lat},${lng},15.1z`,
+        type: "search",
+        api_key: process.env.SERPAPI_KEY, 
+      },
+    });
+
+    res.json(response.data);
+  } catch (error) {
+    console.error("Error fetching places:", error.message);
+    res.status(500).json({ error: "Failed to fetch places" });
+  }
+});
+
+// TripAdvisor dynamic search
+app.get("/api/tripadvisor", async (req, res) => {
+  const { q, type } = req.query; // q = city, type = a/r/h (attractions/restaurants/hotels)
+
+  if (!q || !type) return res.status(400).json({ error: "Query 'q' and 'type' are required" });
+
+  try {
+    const response = await axios.get("https://serpapi.com/search.json", {
+      params: {
+        engine: "tripadvisor",
+        q,
+        ssrc: type, // a = attractions, r = restaurants, h = hotels
+        api_key: process.env.SERPAPI_KEY,
+      },
+    });
+
+    res.json(response.data.locations || []);
+  } catch (err) {
+    console.error("TripAdvisor API Error:", err.message);
+    res.status(500).json({ error: "Failed to fetch TripAdvisor data" });
+  }
+});
+
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));

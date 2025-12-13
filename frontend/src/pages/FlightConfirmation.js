@@ -39,6 +39,25 @@ function FlightConfirmation() {
     navigate("/itinerary");
   };
 
+  const handleGoToHotels = () => {
+    // Pre-fill the Hotels page search using the flight destination
+    const destination = flightDetails.to; // e.g., "Tokyo, Japan"
+
+    // Save both destination and flight info
+    localStorage.setItem("selectedDestination", destination);
+    localStorage.setItem("bookedFlight", JSON.stringify({
+      origin: flightDetails.from,
+      destination: flightDetails.to,
+      departureDate: flightDetails.departure,
+      returnDate: flightDetails.return,
+      airline: flight.airline,
+      price: flight.price,
+      passenger: formData.firstName + " " + formData.lastName
+    }));
+
+    navigate("/hotels");
+  };
+
   return (
     <div className="thankyou-section">
       <div className="thankyou-card">
@@ -130,7 +149,8 @@ function FlightConfirmation() {
 
           <div className="confirm-actions">
             <button className="back-btn" onClick={() => navigate(-1)}>Back</button>
-            <button className="confirm-btn" onClick={handleGoToItinerary}>Go to Itinerary</button>
+            <button className="confirm-btn" onClick={handleGoToItinerary}>Itinerary</button>
+            <button className="confirm-btn" onClick={handleGoToHotels}>Hotels</button>
           </div>
         </div>
       </div>

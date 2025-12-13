@@ -18,6 +18,7 @@ import FlightDetails from "./pages/FlightDetails";
 import FlightConfirmation from "./pages/FlightConfirmation";
 import "./css/Pages.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
+import 'leaflet/dist/leaflet.css';
 
 function App() {
   return (

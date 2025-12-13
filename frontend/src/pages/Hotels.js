@@ -114,20 +114,23 @@ function Hotels() {
 
   // Book hotel
   const handleBook = (hotel) => {
-    const flightDetails = JSON.parse(
-      localStorage.getItem("flightDetails") || "{}"
-    );
-    if (!flightDetails.to) {
-      alert(
-        "Please select a flight first to associate this hotel with a trip."
-      );
+    const flightDetails = JSON.parse(localStorage.getItem("bookedFlight") || "{}");
+
+    if (!flightDetails.destination) {
+      alert("Please select a flight first to associate this hotel with a trip.");
       return;
     }
 
-    const hotelToSave = { ...hotel, bookedForTrip: flightDetails.to };
+    const hotelToSave = {
+      ...hotel,
+      bookedForTrip: flightDetails.destination,
+      flightInfo: flightDetails // pass full flight info
+    };
+
     localStorage.setItem("selectedHotel", JSON.stringify(hotelToSave));
     navigate("/booking-details", { state: { hotel: hotelToSave } });
   };
+
 
   return (
     <div className="hotels-page">
