@@ -8,10 +8,7 @@ function FlightConfirmation() {
   const { flight, flightDetails, formData } = useLocation().state || {};
   const [openLegIndex, setOpenLegIndex] = useState(null);
 
-  const bookingId = useMemo(
-    () => Math.floor(Math.random() * 900000 + 100000),
-    []
-  );
+  const bookingId = useMemo(() => Math.floor(Math.random() * 900000 + 100000), []);
 
   if (!flight || !flightDetails || !formData) {
     return (
@@ -36,10 +33,21 @@ function FlightConfirmation() {
     setOpenLegIndex(openLegIndex === index ? null : index);
 
   const handleGoToItinerary = () => {
-    const itineraryData = { ...flight, ...flightDetails, ...formData, bookingId };
-    const existing = JSON.parse(localStorage.getItem("itinerary")) || [];
+    const itineraryData = {
+      ...flight,
+      ...flightDetails,
+      ...formData,
+      bookingId,
+    };
+    const existing = JSON.parse(localStorage.getItem("itinerary") || "[]");
     localStorage.setItem("itinerary", JSON.stringify([...existing, itineraryData]));
-    navigate("/itinerary");
+
+    localStorage.setItem("flightDetails", JSON.stringify(flightDetails));
+
+    // Check if a hotel has been booked
+    const bookedHotel = JSON.parse(localStorage.getItem("bookedHotel") || "null");
+
+    navigate("/itinerary", { state: { flightDetails, hotel: bookedHotel } });
   };
 
   const handleGoToHotels = () => {
@@ -56,7 +64,8 @@ function FlightConfirmation() {
         passenger: `${formData.firstName} ${formData.lastName}`,
       })
     );
-    navigate("/hotels");
+
+    navigate("/hotels", { state: { flightDetails } });
   };
 
   return (
@@ -65,7 +74,6 @@ function FlightConfirmation() {
         ← Back
       </button>
 
-      {/* ================= BOOKING CONFIRMATION ================= */}
       <div className="flight-details-card">
         <div className="flight-details-header">
           <img
@@ -75,16 +83,22 @@ function FlightConfirmation() {
           />
           <h2>Booking Confirmed!</h2>
           <span>Booking ID: #{bookingId}</span>
+          <img
+            src={process.env.PUBLIC_URL + "/printer.png"}
+            alt="Print"
+            className="print-btn"
+            onClick={() => window.print()}
+            title="Print Confirmation"
+          />
         </div>
 
-        {/* ================= FLIGHT SUMMARY ================= */}
         <div className="flight-details-info">
           <p>
             {flightDetails.from} → {flightDetails.to}
           </p>
           <p>
-            <strong>Departure:</strong> {flight.departureTime || flightDetails.departure} <br />
-            <strong>Arrival:</strong> {flight.arrivalTime || flightDetails.return} <br />
+            <strong>Departure:</strong> {flightDetails.departureTime || flightDetails.departure} <br />
+            <strong>Arrival:</strong> {flightDetails.arrivalTime || flightDetails.return} <br />
             <strong>Stops:</strong> {flight.stops || 0} • {formatDuration(flight.duration)}
           </p>
           <p>
@@ -94,54 +108,9 @@ function FlightConfirmation() {
             <strong>Price:</strong> ₱ {Number(flight.price || 0).toLocaleString()}
           </p>
 
-          {/* ================= FLIGHT LEGS ================= */}
-          {flight.flights?.map((leg, idx) => (
-            <div key={idx} className="flight-summary-card">
-              <div
-                className="flight-summary-top"
-                onClick={() => toggleLegDetails(idx)}
-              >
-                <div className="flight-summary-left">
-                  <img
-                    src={getAirlineLogo(leg.airline_code)}
-                    alt={leg.airline}
-                    className="airline-img"
-                  />
-                  <div className="flight-summary-info">
-                    <span>{leg.airline} • {leg.flight_number}</span>
-                    <span>
-                      {leg.departure_airport?.id} {leg.departure_airport?.time} →{" "}
-                      {leg.arrival_airport?.id} {leg.arrival_airport?.time}
-                    </span>
-                  </div>
-                </div>
-                <div className="flight-summary-right">
-                  {formatDuration(leg.duration)}
-                  <span className={`flight-summary-arrow ${openLegIndex === idx ? "open" : ""}`}>
-                    ▼
-                  </span>
-                </div>
-              </div>
-
-              <div
-                className={`flight-summary-details ${openLegIndex === idx ? "open scrollable" : ""}`}
-              >
-                <p><strong>Airplane:</strong> {leg.airplane || "N/A"}</p>
-                <p><strong>Travel Class:</strong> {leg.travel_class || "Economy"}</p>
-                {leg.legroom && <p><strong>Legroom:</strong> {leg.legroom}</p>}
-                {leg.extensions?.length > 0 && (
-                  <ul>{leg.extensions.map((ext, i) => <li key={i}>{ext}</li>)}</ul>
-                )}
-              </div>
-            </div>
-          ))}
-
-          {/* ================= PASSENGER DETAILS ================= */}
           <div className="booking-form extend">
             <h3>Passenger Details</h3>
-            <p>
-              Passenger information must match exactly as shown on the passport.
-            </p>
+            <p>Passenger information must match passport details.</p>
             <div className="booking-grid">
               <div className="input-group">
                 <label>Name</label>
@@ -178,10 +147,13 @@ function FlightConfirmation() {
             </div>
           </div>
 
-          {/* ================= ACTION BUTTONS ================= */}
           <div>
-            <button className="confirm-btn" onClick={handleGoToItinerary}>Itinerary</button>
-            <button className="confirm-btn" onClick={handleGoToHotels}>Hotels</button>
+            <button className="confirm-btn" onClick={handleGoToItinerary}>
+              Itinerary
+            </button>
+            <button className="confirm-btn" onClick={handleGoToHotels}>
+              Hotels
+            </button>
           </div>
         </div>
       </div>

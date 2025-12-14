@@ -7,7 +7,7 @@ import "../css/NavbarComponent.css";
 function NavbarComponent() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
-  const [user, setUser] = useState(null); // store logged-in user
+  const [user, setUser] = useState(null);
   const collapseRef = useRef(null);
   const location = useLocation();
 
@@ -36,11 +36,21 @@ function NavbarComponent() {
     setOpen(false);
   }, [location.pathname]);
 
-  // Load user from localStorage
+  // Load user
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) setUser(JSON.parse(storedUser));
   }, []);
+
+  // Logout function
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    localStorage.setItem("isLoggedIn", "false"); // important
+    setUser(null);
+
+    // Trigger storage event so Offers updates immediately
+    window.dispatchEvent(new Event("storage"));
+  };
 
   return (
     <Navbar
@@ -93,16 +103,11 @@ function NavbarComponent() {
             {user ? (
               <Dropdown align="end">
                 <Dropdown.Toggle variant="success" id="dropdown-basic">
-                  {user.email} {/* or user.name if you have it */}
+                  {user.email}
                 </Dropdown.Toggle>
 
                 <Dropdown.Menu>
-                  <Dropdown.Item
-                    onClick={() => {
-                      localStorage.removeItem("user");
-                      setUser(null);
-                    }}
-                  >
+                  <Dropdown.Item onClick={handleLogout}>
                     Logout
                   </Dropdown.Item>
                 </Dropdown.Menu>
