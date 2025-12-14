@@ -1,68 +1,55 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../css/Login.css";
+import { FaGoogle, FaFacebookF, FaApple } from "react-icons/fa";
 
 function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
 
-  const handleLogin = async (e) => {
+  const handleLogin = (e) => {
     e.preventDefault();
-    try {
-      const res = await fetch("http://localhost/travelogue-api/login.php", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
-      const data = await res.json();
-      if (data.success) {
-        localStorage.setItem("user", JSON.stringify(data.user));
-        navigate("/Itinerary");
-      } else {
-        alert(data.message);
-      }
-    } catch (err) {
-      console.error(err);
-      alert("Error connecting to server");
-    }
+    alert(`Logging in with email: ${email}`);
+    // Your API call can go here
   };
-
 
   return (
     <div className="login-page">
       <div className="login-card">
-        <h2 className="login-title">Welcome Back</h2>
+        <h2 className="login-title">Sign in or create an account</h2>
         <p className="login-subtitle">
-          Log in to access your personalized offers and itineraries.
+          Sign up for free or log in to access amazing deals and benefits!
         </p>
 
+        {/* Social Login */}
+        <div className="social-login">
+          <button className="social-btn google">
+            <FaGoogle className="social-icon" /> Sign in with Google
+          </button>
+          <button className="social-btn facebook">
+            <FaFacebookF className="social-icon" /> Sign in with Facebook
+          </button>
+          <button className="social-btn apple">
+            <FaApple className="social-icon" /> Sign in with Apple
+          </button>
+        </div>
+
+        <div className="divider">or</div>
+
+        {/* Email Login */}
         <form className="login-form" onSubmit={handleLogin}>
           <input
             type="email"
-            placeholder="Email"
+            placeholder="id@email.com"
             className="login-input"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
           />
-          <input
-            type="password"
-            placeholder="Password"
-            className="login-input"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
           <button className="login-submit-btn" type="submit">
-            Login
+            Continue
           </button>
         </form>
-
-        <p className="login-switch">
-          New to Travelogue?{" "}
-          <span onClick={() => navigate("/Signup")}>Sign up</span>
-        </p>
       </div>
     </div>
   );

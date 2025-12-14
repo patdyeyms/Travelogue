@@ -6,7 +6,6 @@ import ScrollToTop from "./ScrollToTop";
 import NavbarComponent from "./component/NavbarComponent";
 import Flights from "./pages/Flights";
 import Hotels from "./pages/Hotels";
-import Signup from "./pages/Signup";
 import Offers from "./pages/Offers";
 import Login from "./pages/Login";
 import BookingDetails from "./pages/BookingDetails";
@@ -33,7 +32,6 @@ function App() {
           <Route path="/Flights" element={<Flights />} />
           <Route path="/Login" element={<Login />} />
           <Route path="/Offers" element={<Offers />} />
-          <Route path="/Signup" element={<Signup />} />
           <Route path="/Flights/Results" element={<FlightResults />} />
           <Route path="/flight-details" element={<FlightDetails />} />
           <Route path="/flight-confirmation" element={<FlightConfirmation />} />
