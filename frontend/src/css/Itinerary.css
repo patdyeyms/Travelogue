@@ -34,7 +34,6 @@
   overflow: hidden;
 }
 
-/* Sidebar sections */
 .sidebar-section {
   margin-bottom: 10px;
 }
@@ -68,7 +67,6 @@
   color: #007bff;
 }
 
-/* Hide/Show button */
 .hide-sidebar-btn {
   position: fixed;
   top: 100px;
@@ -88,7 +86,6 @@
   left: 20px;
 }
 
-/* Main content */
 .main-content {
   flex: 1;
   margin-left: 260px;
@@ -120,7 +117,7 @@
 
 .trip-header-card {
   position: absolute;
-  bottom: -40px;
+  bottom: -20px; /* reduced from -40px */
   left: 50%;
   transform: translateX(-50%);
   background: #fff;
@@ -143,9 +140,25 @@
   color: #666;
 }
 
+/* Flights & Lodging sections */
+.flights-section,
+.lodging-section {
+  padding: 16px 40px; /* reduced vertical padding */
+  margin-top: 0;
+}
+
+.flights-section h2,
+.lodging-section h2 {
+  margin-bottom: 8px; /* reduce header spacing */
+}
+
+.flights-section + .lodging-section {
+  margin-top: 8px; /* small gap between sections */
+}
+
 /* Map */
 .map-wrapper {
-  margin: 40px;
+  margin: 24px 40px; /* tighter margin to section above */
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
@@ -160,14 +173,14 @@
 
 /* Explore */
 .explore-section {
-  margin-top: 80px;
-  padding: 30px 40px;
+  margin-top: 60px;
+  padding: 24px 40px;
 }
 
 .explore-section h2 {
   font-size: 20px;
   font-weight: 700;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
   color: #222;
 }
 
@@ -221,3 +234,4 @@
   color: #777;
   font-size: 15px;
 }
+

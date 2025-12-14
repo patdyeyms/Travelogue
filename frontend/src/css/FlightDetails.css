@@ -1,0 +1,364 @@
+/* =======================
+   FLIGHT DETAILS PAGE
+======================= */
+.results-section {
+  padding: 2rem 1rem;
+  max-width: 1300px;
+  margin: 80px auto 0;
+  color: #0b3a3a;
+  font-family: "Poppins", sans-serif;
+  line-height: 1.5;
+}
+
+.back-btn {
+  background: linear-gradient(135deg, #28a1a1, #5cd6d6);
+  color: #fff;
+  border: none;
+  padding: 0.7rem 1.2rem;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.back-btn:hover {
+  background: #1f7f7f;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(31, 127, 127, 0.3);
+}
+
+.flight-details-card {
+  max-width: 700px;
+  margin: 2rem auto;
+  padding: 2rem;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+  transition: all 0.3s ease;
+}
+
+.flight-details-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2rem;
+  gap: 0.8rem;
+}
+
+.flight-details-header h2 {
+  font-size: 1.8rem;
+  color: #0b3a3a;
+}
+
+.flight-details-info p {
+  font-size: 1rem;
+  margin: 0.5rem 0;
+  color: #333;
+}
+
+/* =======================
+   FLIGHT LEGS COLLAPSIBLE
+======================= */
+.flight-summary-card {
+  background: #f8fdfd;
+  border-radius: 16px;
+  padding: 1.2rem 1.5rem;
+  margin-bottom: 1.8rem;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+  border-top: 2px dashed #00b09b;
+  border-bottom: 2px dashed #00b09b;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.flight-summary-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+}
+
+.flight-summary-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  flex-wrap: wrap;
+}
+
+.flight-summary-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.flight-summary-info {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  white-space: pre-line;
+}
+
+.flight-summary-info span {
+  display: block;
+  font-size: 0.95rem;
+  color: #0b3a3a;
+}
+
+.flight-summary-right {
+  font-weight: 600;
+  color: #00b09b;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.flight-summary-arrow {
+  transition: transform 0.3s ease;
+}
+
+.flight-summary-arrow.open {
+  transform: rotate(180deg);
+}
+
+.flight-summary-details {
+  margin-top: 0.5rem;
+  padding: 0;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  font-size: 0.95rem;
+  color: #28525e;
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(-5px);
+  transition: all 0.4s ease;
+}
+
+.flight-summary-details.open {
+  padding: 1rem 1.2rem;
+  max-height: 1000px;
+  opacity: 1;
+  transform: translateY(0);
+  overflow-y: auto;
+  background: #f0fcfc;
+}
+
+.flight-summary-details.scrollable {
+  max-height: 300px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #28a1a1 #f8fdfd;
+}
+
+.flight-summary-details.scrollable::-webkit-scrollbar {
+  width: 6px;
+}
+
+.flight-summary-details.scrollable::-webkit-scrollbar-thumb {
+  background: #28a1a1;
+  border-radius: 6px;
+}
+
+/* =======================
+   BOOKING FORM
+======================= */
+.booking-form.extended {
+  max-width: 700px;
+  margin: 2rem auto;
+  padding: 2.5rem;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+  transition: all 0.3s ease;
+}
+
+.booking-form h3 {
+  margin-bottom: 0.5rem;
+  color: #0b3a3a;
+  font-size: 1.4rem;
+}
+
+.booking-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px,1fr));
+  gap: 1rem 1.5rem;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-group input,
+.input-group select {
+  padding: 0.7rem 0.9rem;
+  border-radius: 12px;
+  border: 1.5px solid #ddd;
+  font-size: 0.95rem;
+  outline: none;
+  background-color: #fafafa;
+  transition: all 0.3s ease;
+}
+
+.input-group input:focus,
+.input-group select:focus {
+  border-color: #28a1a1;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(40, 161, 161, 0.25);
+}
+
+.confirm-btn {
+  width: 100%;
+  margin-top: 1.8rem;
+  font-size: 1rem;
+  padding: 1rem 0;
+  border-radius: 12px;
+  background: #28a1a1;
+  color: #fff;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.confirm-btn:hover {
+  background: #1f7f7f;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(31,127,127,0.2);
+}
+
+/* =======================
+   AIRLINE LOGO
+======================= */
+.airline-img {
+  width: 55px;
+  height: 55px;
+  object-fit: contain;
+  display: block;
+  border-radius: 50%;
+  border: 1px solid #e0f7f5;
+  padding: 4px;
+}
+
+/* =======================
+   RESPONSIVE
+======================= */
+@media (max-width: 900px) {
+  .flight-summary-card {
+    padding: 1rem 1rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .booking-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .flight-summary-left {
+    gap: 0.7rem;
+    flex-wrap: wrap;
+  }
+
+  .airline-img {
+    width: 45px;
+    height: 45px;
+  }
+
+  .flight-summary-info,
+  .flight-summary-right {
+    font-size: 0.9rem;
+  }
+
+  .confirm-btn {
+    font-size: 0.95rem;
+    padding: 0.8rem 0;
+  }
+}
+
+/* =======================
+   INPUT + LABEL ENHANCEMENTS
+======================= */
+
+.input-group label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+  color: #28525e;
+}
+
+/* Required asterisk style */
+.input-group label::after {
+  content: attr(data-required);
+  color: #e25555;
+  margin-left: 4px;
+}
+
+/* Inputs */
+.input-group input,
+.input-group select {
+  height: 44px;
+  border-radius: 12px;
+  border: 1.6px solid #dfeeee;
+  background: #f9fefe;
+  padding: 0 0.95rem;
+  font-size: 0.95rem;
+  transition: all 0.25s ease;
+}
+
+/* Placeholder */
+.input-group input::placeholder {
+  color: #9bbcbc;
+  font-size: 0.9rem;
+}
+
+/* Focus state */
+.input-group input:focus,
+.input-group select:focus {
+  border-color: #28a1a1;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(40, 161, 161, 0.15);
+}
+
+/* Hover */
+.input-group input:hover,
+.input-group select:hover {
+  border-color: #9fdede;
+}
+
+/* Disabled */
+.input-group input:disabled,
+.input-group select:disabled {
+  background: #f1f5f5;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* =======================
+   MULTI-INPUT GROUPS
+   (YYYY / MM / DD)
+======================= */
+
+.input-group input + input {
+  margin-top: 0.45rem;
+}
+
+/* On desktop, make date fields inline */
+@media (min-width: 600px) {
+  .input-group {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .input-group input[name*="Year"],
+  .input-group input[name*="Month"],
+  .input-group input[name*="Day"] {
+    width: 100%;
+    margin-top: 0;
+  }
+}
+
+
+

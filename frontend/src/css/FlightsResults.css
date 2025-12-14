@@ -1,0 +1,232 @@
+/* =======================
+   RESULTS PAGE - GLOBAL
+======================= */
+.results-section {
+  font-family: "Poppins", sans-serif;
+  color: #0b3a3a;
+  padding: 2rem 1rem;
+  max-width: 1300px;
+  margin: 80px auto 0;
+  min-height: 100vh;
+  transition: all 0.3s ease-in-out;
+}
+
+.results-section h1 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  transition: color 0.3s ease;
+}
+
+.results-section p {
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+  color: #1f7f7f;
+  transition: color 0.3s ease;
+}
+
+/* =======================
+   BACK BUTTON
+======================= */
+.back-btn {
+  background: linear-gradient(135deg, #28a1a1, #5cd6d6);
+  color: white;
+  border: none;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 1.5rem;
+  transition: all 0.35s ease;
+  box-shadow: 0 4px 12px rgba(40, 161, 161, 0.25);
+}
+
+.back-btn:hover {
+  background: #1f7f7f;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 18px rgba(31, 127, 127, 0.35);
+}
+
+/* =======================
+   FLIGHTS LIST
+======================= */
+.results-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* =======================
+   FLIGHT CARD
+======================= */
+.flight-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fff;
+  padding: 1rem 1.2rem;
+  border-radius: 12px;
+  border: 1px solid #d1eaea;
+  transition: transform 0.35s ease, box-shadow 0.35s ease, background 0.35s ease;
+  flex-wrap: wrap;
+}
+
+.flight-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 14px 28px rgba(0,0,0,0.12);
+  background: #f0fcfc;
+}
+
+/* FLIGHT LOGO */
+.flight-logo {
+  flex: 0 0 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 1rem;
+  transition: transform 0.3s ease;
+}
+
+.flight-logo img {
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.flight-card:hover .flight-logo img {
+  transform: scale(1.05);
+}
+
+/* FLIGHT DETAILS */
+.flight-details {
+  flex: 2 1 400px;
+  min-width: 320px;
+}
+
+.flight-leg h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.2rem;
+}
+
+.flight-leg p {
+  font-size: 0.85rem;
+  color: #1f7f7f;
+  margin-bottom: 0.15rem;
+  transition: color 0.3s ease;
+}
+
+/* PRICE & BOOK BUTTON */
+.flight-price-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.3rem;
+  flex: 0 0 120px;
+}
+
+.flight-price {
+  font-weight: 600;
+  color: #00b09b;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: color 0.3s ease;
+}
+
+.flight-book-btn {
+  background: #28a1a1;
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.35s ease;
+  box-shadow: 0 3px 8px rgba(40, 161, 161, 0.2);
+}
+
+.flight-book-btn:hover {
+  background: #1f7f7f;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(31,127,127,0.3);
+}
+
+/* DETAILS/EXPANDABLE */
+.flight-leg details summary {
+  cursor: pointer;
+  font-weight: 600;
+  margin-top: 0.3rem;
+  transition: color 0.3s ease;
+}
+
+.flight-leg details[open] summary::after {
+  content: " ▲";
+}
+
+.flight-leg details summary::after {
+  content: " ▼";
+}
+
+/* =======================
+   RESPONSIVE MEDIA
+======================= */
+@media (max-width: 900px) {
+  .flight-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .flight-price-btn,
+  .flight-book-btn {
+    width: 100%;
+    align-items: flex-start;
+    margin-top: 0.5rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .flight-card {
+    padding: 0.8rem 1rem;
+  }
+
+  .flight-price-btn,
+  .flight-book-btn {
+    align-items: stretch;
+  }
+}
+
+/* EXTENSIONS SMOOTH TOGGLE */
+.extensions-container {
+  margin-top: 0.5rem;
+}
+
+.extensions-toggle {
+  background: #f0fafa;
+  border: 1px solid #cce8e8;
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.extensions-toggle:hover {
+  background: #e0f7f5;
+}
+
+.extensions-list {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s ease, opacity 0.35s ease, padding 0.35s ease;
+  opacity: 0;
+  padding: 0 0.5rem;
+}
+
+.extensions-list.open {
+  max-height: 500px; /* enough for multiple extensions */
+  opacity: 1;
+  padding: 0.5rem 0.5rem;
+}

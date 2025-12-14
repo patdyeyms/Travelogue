@@ -161,9 +161,73 @@ function Itinerary() {
           </div>
         </div>
 
+        {/* Flights Section */}
+          {flightDetails && (
+            <section className="flights-section" style={{ paddingTop: "40px" }}>
+              <h2 style={{ fontSize: "20px", fontWeight: "700", marginBottom: "16px" }}>
+                Flights
+              </h2>
+
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  background: "#fff",
+                  borderRadius: "12px",
+                  boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
+                  padding: "20px",
+                  gap: "20px",
+                }}
+              >
+                {/* Flight icon / placeholder */}
+                <div
+                  style={{
+                    width: "160px",
+                    height: "120px",
+                    borderRadius: "10px",
+                    background: "linear-gradient(135deg, #0b3a3a, #1f6f6f)",
+                    color: "#fff",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontSize: "32px",
+                    fontWeight: "700",
+                  }}
+                >
+                  ✈
+                </div>
+
+                <div>
+                  <h3 style={{ marginBottom: "6px", fontSize: "18px" }}>
+                    {flightDetails.from} → {flightDetails.to}
+                  </h3>
+
+                  <p style={{ marginBottom: "4px" }}>
+                    📅 {flightDetails.departure} – {flightDetails.return}
+                  </p>
+
+                  {flightDetails.airline && (
+                    <p style={{ marginBottom: "4px" }}>
+                      🛫 {flightDetails.airline}
+                      {flightDetails.flightNumber && ` • ${flightDetails.flightNumber}`}
+                    </p>
+                  )}
+
+                  {(flightDetails.passengers || flightDetails.class) && (
+                    <p style={{ fontSize: "14px", color: "#555" }}>
+                      {flightDetails.passengers && `${flightDetails.passengers} passenger(s)`}
+                      {flightDetails.passengers && flightDetails.class && " • "}
+                      {flightDetails.class}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </section>
+          )}
+
         {/* Lodging Section */}
         {(bookedHotel || sidebarHotel) && (
-          <section className="lodging-section" style={{ padding: "40px" }}>
+          <section className="lodging-section">
             <h2 style={{ fontSize: "20px", fontWeight: "700", marginBottom: "16px" }}>Lodging</h2>
             <div
               style={{

@@ -1,29 +1,29 @@
 import React, { useState, useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import "../css/Flights.css";
+import "../css/FlightConfirmation.css";
 import { getAirlineLogo } from "../utils/airlines";
 
 function FlightConfirmation() {
   const navigate = useNavigate();
   const { flight, flightDetails, formData } = useLocation().state || {};
-  const [showDetails, setShowDetails] = useState(false);
+  const [openLegIndex, setOpenLegIndex] = useState(null);
 
-  // Generate booking ID only once
-  const bookingId = useMemo(() => Math.floor(Math.random() * 900000 + 100000), []);
+  const bookingId = useMemo(
+    () => Math.floor(Math.random() * 900000 + 100000),
+    []
+  );
 
   if (!flight || !flightDetails || !formData) {
     return (
       <div className="results-section">
-        <h1>No booking data</h1>
+        <h2>No booking data</h2>
         <p>Please go back and book a flight first.</p>
         <button className="back-btn" onClick={() => navigate("/flights")}>
-          Return to Flights
+          ← Back to Flights
         </button>
       </div>
     );
   }
-
-  const displayPrice = Number(flight.price || 0).toLocaleString();
 
   const formatDuration = (minutes) => {
     if (!minutes) return "N/A";
@@ -32,123 +32,154 @@ function FlightConfirmation() {
     return `${hrs}h ${mins}m`;
   };
 
+  const toggleLegDetails = (index) =>
+    setOpenLegIndex(openLegIndex === index ? null : index);
+
   const handleGoToItinerary = () => {
-    const itineraryData = { ...flight, ...flightDetails, ...formData, type: "Flight", bookingId };
-    const existingItinerary = JSON.parse(localStorage.getItem("itinerary")) || [];
-    localStorage.setItem("itinerary", JSON.stringify([...existingItinerary, itineraryData]));
+    const itineraryData = { ...flight, ...flightDetails, ...formData, bookingId };
+    const existing = JSON.parse(localStorage.getItem("itinerary")) || [];
+    localStorage.setItem("itinerary", JSON.stringify([...existing, itineraryData]));
     navigate("/itinerary");
   };
 
   const handleGoToHotels = () => {
-    // Pre-fill the Hotels page search using the flight destination
-    const destination = flightDetails.to; // e.g., "Tokyo, Japan"
-
-    // Save both destination and flight info
-    localStorage.setItem("selectedDestination", destination);
-    localStorage.setItem("bookedFlight", JSON.stringify({
-      origin: flightDetails.from,
-      destination: flightDetails.to,
-      departureDate: flightDetails.departure,
-      returnDate: flightDetails.return,
-      airline: flight.airline,
-      price: flight.price,
-      passenger: formData.firstName + " " + formData.lastName
-    }));
-
+    localStorage.setItem("selectedDestination", flightDetails.to);
+    localStorage.setItem(
+      "bookedFlight",
+      JSON.stringify({
+        origin: flightDetails.from,
+        destination: flightDetails.to,
+        departureDate: flightDetails.departure,
+        returnDate: flightDetails.return,
+        airline: flight.airline,
+        price: flight.price,
+        passenger: `${formData.firstName} ${formData.lastName}`,
+      })
+    );
     navigate("/hotels");
   };
 
   return (
-    <div className="thankyou-section">
-      <div className="thankyou-card">
-        <div className="thankyou-header">
-          <h1>Booking Confirmed!</h1>
-          <span className="booking-id">Booking ID: #{bookingId}</span>
+    <div className="results-section">
+      <button className="back-btn" onClick={() => navigate(-1)}>
+        ← Back
+      </button>
+
+      {/* ================= BOOKING CONFIRMATION ================= */}
+      <div className="flight-details-card">
+        <div className="flight-details-header">
+          <img
+            src={getAirlineLogo(flight.airline)}
+            alt={flight.airline}
+            className="airline-img"
+          />
+          <h2>Booking Confirmed!</h2>
+          <span>Booking ID: #{bookingId}</span>
         </div>
 
-        <div className="thankyou-content">
-          <div className="flight-summary-card">
-            <div className="flight-summary-top" onClick={() => setShowDetails(!showDetails)}>
-              <div className="flight-summary-left">
-                <img
-                  src={getAirlineLogo(flight.airline)}
-                  alt={flight.airline || "Airline"}
-                  className="airline-img"
-                />
-                <div className="flight-summary-info">
-                  <span className="airline-name">{flight.airline || "N/A"}</span>
-                  <span className="route">
-                    {flightDetails.from || "N/A"} → {flightDetails.to || "N/A"}<br/>
-                    Departure: {flight.departureTime || flightDetails.departure || "N/A"}<br/>
-                    Arrival: {flight.arrivalTime || flightDetails.return || "N/A"}<br/>
-                    Stops: {flight.stops || 0} • Duration: {formatDuration(flight.duration)}
+        {/* ================= FLIGHT SUMMARY ================= */}
+        <div className="flight-details-info">
+          <p>
+            {flightDetails.from} → {flightDetails.to}
+          </p>
+          <p>
+            <strong>Departure:</strong> {flight.departureTime || flightDetails.departure} <br />
+            <strong>Arrival:</strong> {flight.arrivalTime || flightDetails.return} <br />
+            <strong>Stops:</strong> {flight.stops || 0} • {formatDuration(flight.duration)}
+          </p>
+          <p>
+            <strong>Cabin:</strong> {flight.cabin || "Economy"}
+          </p>
+          <p>
+            <strong>Price:</strong> ₱ {Number(flight.price || 0).toLocaleString()}
+          </p>
+
+          {/* ================= FLIGHT LEGS ================= */}
+          {flight.flights?.map((leg, idx) => (
+            <div key={idx} className="flight-summary-card">
+              <div
+                className="flight-summary-top"
+                onClick={() => toggleLegDetails(idx)}
+              >
+                <div className="flight-summary-left">
+                  <img
+                    src={getAirlineLogo(leg.airline_code)}
+                    alt={leg.airline}
+                    className="airline-img"
+                  />
+                  <div className="flight-summary-info">
+                    <span>{leg.airline} • {leg.flight_number}</span>
+                    <span>
+                      {leg.departure_airport?.id} {leg.departure_airport?.time} →{" "}
+                      {leg.arrival_airport?.id} {leg.arrival_airport?.time}
+                    </span>
+                  </div>
+                </div>
+                <div className="flight-summary-right">
+                  {formatDuration(leg.duration)}
+                  <span className={`flight-summary-arrow ${openLegIndex === idx ? "open" : ""}`}>
+                    ▼
                   </span>
                 </div>
               </div>
-              <div className="flight-summary-right">
-                <span className="peso-symbol">₱</span>{displayPrice}
-                <span className={`flight-summary-arrow ${showDetails ? "open" : ""}`}>▼</span>
+
+              <div
+                className={`flight-summary-details ${openLegIndex === idx ? "open scrollable" : ""}`}
+              >
+                <p><strong>Airplane:</strong> {leg.airplane || "N/A"}</p>
+                <p><strong>Travel Class:</strong> {leg.travel_class || "Economy"}</p>
+                {leg.legroom && <p><strong>Legroom:</strong> {leg.legroom}</p>}
+                {leg.extensions?.length > 0 && (
+                  <ul>{leg.extensions.map((ext, i) => <li key={i}>{ext}</li>)}</ul>
+                )}
               </div>
             </div>
+          ))}
 
-            <div className={`flight-summary-details ${showDetails ? "open" : ""}`}>
-              <p><strong>Cabin:</strong> {flight.cabin || "N/A"}</p>
-              <p><strong>Passenger:</strong> {formData.firstName} {formData.lastName}</p>
-              <p><strong>Email:</strong> {formData.email}</p>
-              <p><strong>Phone:</strong> {formData.phone}</p>
-
-              {flight.flights?.map((leg, idx) => (
-                <div key={idx} className="flight-leg-card">
-                  <div className="flight-leg-header">
-                    {leg.airline} • {leg.flight_number} ({leg.travel_class})
-                  </div>
-                  <div className={`flight-leg-details open`}>
-                    <p>
-                      {leg.departure_airport?.name} ({leg.departure_airport?.id}) at {leg.departure_airport?.time} → {leg.arrival_airport?.name} ({leg.arrival_airport?.id}) at {leg.arrival_airport?.time}
-                    </p>
-                    <p>Duration: {formatDuration(leg.duration)}</p>
-                    <p>Airplane: {leg.airplane || "N/A"}</p>
-                    {leg.legroom && <p>Legroom: {leg.legroom}</p>}
-                    {leg.extensions?.length > 0 && (
-                      <div>
-                        <strong>Extensions:</strong>
-                        <ul>
-                          {leg.extensions.map((ext, i) => (
-                            <li key={i}>{ext}</li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              ))}
-
-              {flight.layovers?.length > 0 && (
-                <p>
-                  <strong>Layovers:</strong>{" "}
-                  {flight.layovers.map((layover, idx) => (
-                    <span key={idx}>
-                      {layover.name} ({formatDuration(layover.duration)})
-                      {layover.overnight ? " • Overnight" : ""}
-                      {idx < flight.layovers.length - 1 ? ", " : ""}
-                    </span>
-                  ))}
-                </p>
-              )}
-
-              {flight.carbon_emissions && (
-                <p>
-                  <strong>Carbon Emissions:</strong>{" "}
-                  {(flight.carbon_emissions.this_flight / 1000).toFixed(2)} kg (
-                  {flight.carbon_emissions.difference_percent > 0 ? "+" : ""}
-                  {flight.carbon_emissions.difference_percent}% vs typical)
-                </p>
-              )}
+          {/* ================= PASSENGER DETAILS ================= */}
+          <div className="booking-form extend">
+            <h3>Passenger Details</h3>
+            <p>
+              Passenger information must match exactly as shown on the passport.
+            </p>
+            <div className="booking-grid">
+              <div className="input-group">
+                <label>Name</label>
+                <input value={`${formData.firstName} ${formData.lastName}`} disabled />
+              </div>
+              <div className="input-group">
+                <label>Gender</label>
+                <input value={formData.gender || "N/A"} disabled />
+              </div>
+              <div className="input-group">
+                <label>Date of Birth</label>
+                <input value={`${formData.birthYear}/${formData.birthMonth}/${formData.birthDay}`} disabled />
+              </div>
+              <div className="input-group">
+                <label>Nationality</label>
+                <input value={formData.nationality} disabled />
+              </div>
+              <div className="input-group">
+                <label>Passport Number</label>
+                <input value={formData.passportNumber || "N/A"} disabled />
+              </div>
+              <div className="input-group">
+                <label>Passport Expiry</label>
+                <input value={`${formData.passportExpiryYear}/${formData.passportExpiryMonth}/${formData.passportExpiryDay}`} disabled />
+              </div>
+              <div className="input-group">
+                <label>Email</label>
+                <input value={formData.email} disabled />
+              </div>
+              <div className="input-group">
+                <label>Phone</label>
+                <input value={`${formData.countryCode} ${formData.phone}`} disabled />
+              </div>
             </div>
           </div>
 
-          <div className="confirm-actions">
-            <button className="back-btn" onClick={() => navigate(-1)}>Back</button>
+          {/* ================= ACTION BUTTONS ================= */}
+          <div>
             <button className="confirm-btn" onClick={handleGoToItinerary}>Itinerary</button>
             <button className="confirm-btn" onClick={handleGoToHotels}>Hotels</button>
           </div>
