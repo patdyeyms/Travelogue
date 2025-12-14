@@ -1,12 +1,13 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Navbar, Container, Nav, Button } from "react-bootstrap";
+import { Navbar, Container, Nav, Button, Dropdown } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../css/NavbarComponent.css";
 
 function NavbarComponent() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const [user, setUser] = useState(null); // store logged-in user
   const collapseRef = useRef(null);
   const location = useLocation();
 
@@ -31,10 +32,15 @@ function NavbarComponent() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [open]);
 
-  // Close navbar whenever route changes
   useEffect(() => {
     setOpen(false);
   }, [location.pathname]);
+
+  // Load user from localStorage
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) setUser(JSON.parse(storedUser));
+  }, []);
 
   return (
     <Navbar
@@ -75,13 +81,37 @@ function NavbarComponent() {
           </Nav>
 
           <div className="d-flex align-items-center">
-            <Nav.Link as={Link} to="/Offers" className="offer-btn" onClick={() => setOpen(false)}>
+            <Nav.Link
+              as={Link}
+              to="/Offers"
+              className="offer-btn"
+              onClick={() => setOpen(false)}
+            >
               Offers
             </Nav.Link>
 
-            <Link to="/Login" onClick={() => setOpen(false)}>
-              <Button className="login-btn">Login</Button>
-            </Link>
+            {user ? (
+              <Dropdown align="end">
+                <Dropdown.Toggle variant="success" id="dropdown-basic">
+                  {user.email} {/* or user.name if you have it */}
+                </Dropdown.Toggle>
+
+                <Dropdown.Menu>
+                  <Dropdown.Item
+                    onClick={() => {
+                      localStorage.removeItem("user");
+                      setUser(null);
+                    }}
+                  >
+                    Logout
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+            ) : (
+              <Link to="/Login" onClick={() => setOpen(false)}>
+                <Button className="login-btn">Login</Button>
+              </Link>
+            )}
           </div>
         </Navbar.Collapse>
       </Container>
