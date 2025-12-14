@@ -30,7 +30,6 @@
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
 
-/* Logo Image */
 .navbar-logo {
   height: 60px;
   width: auto;
@@ -46,7 +45,6 @@
   filter: none;
 }
 
-/* Links */
 .nav-link {
   color: #ffffff !important;
   font-weight: 500;
@@ -68,7 +66,6 @@
   color: #007bff !important;
 }
 
-/* Offer Button */
 .offer-btn {
   color: #ffffff;
   font-weight: 500;
@@ -95,7 +92,6 @@
   color: #007bff;
 }
 
-/* Login Button */
 .login-btn {
   background: linear-gradient(135deg, #00b09b, #96c93d);
   border-radius: 50px;
@@ -138,14 +134,8 @@
 }
 
 @keyframes fadeSlideIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .intro-section {
@@ -207,7 +197,6 @@
   outline: none;
 }
 
-/* Suggestions list */
 .suggestions-list {
   position: absolute;
   left: 16%;
@@ -433,27 +422,6 @@
   opacity: 0.95;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .pro-section {
-    padding: 70px 20px 80px;
-  }
-
-  .pro-section h1 {
-    font-size: 1.8rem;
-  }
-
-  .pro-desc {
-    font-size: 1rem;
-  }
-
-  .pro-card {
-    flex: 0 0 150px;
-    height: 150px;
-    padding: 15px;
-  }
-}
-
 /* ===============================
    EXPLORE SECTION
 =============================== */
@@ -463,6 +431,7 @@
   text-align: center;
   padding: 120px 20px;
 }
+
 
 .explore-section h1 {
   font-size: 2.6rem;
@@ -477,16 +446,21 @@
   line-height: 1.6;
 }
 
+/* Grid layout for even cards */
 .explore-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 25px;
-  justify-content: center;
+  justify-content: center; /* center all items */
+  padding: 0 20px;
 }
 
 .explore-card {
-  position: relative;
-  height: 260px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center; /* center icon/content */
+  height: 260px; /* fixed height for all cards */
   border-radius: 18px;
   background-size: cover;
   background-position: center;
@@ -500,15 +474,12 @@
 }
 
 .explore-overlay {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  width: 100%;
+  text-align: center;
   background: rgba(40, 162, 162, 0.85);
   color: white;
   padding: 14px;
   font-weight: 600;
-  text-align: center;
   font-size: 1rem;
 }
 
@@ -516,49 +487,53 @@
    ANIMATIONS
 =============================== */
 @keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(40px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes float {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-12px);
-  }
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
 }
 
 /* ===============================
    RESPONSIVE
 =============================== */
+@media (max-width: 991px) {
+  .intro-content h1 { font-size: 2.8rem; }
+  .intro-content p { font-size: 1.05rem; }
+}
+
 @media (max-width: 768px) {
-  .intro-content h1 {
-    font-size: 2.3rem;
-  }
-  .intro-content p {
-    font-size: 1rem;
-  }
-  .hero-section h2 {
-    font-size: 2rem;
-  }
-  .plane-image {
-    width: 150px;
-  }
-  .feature-title {
-    font-size: 1.8rem;
-  }
-  .pro-section {
-    padding: 80px 20px;
-  }
+  .intro-content h1 { font-size: 2.3rem; }
+  .intro-content p { font-size: 1rem; }
+  .hero-section h2 { font-size: 2rem; }
+  .plane-image { width: 150px; }
+  .feature-title { font-size: 1.8rem; }
+  .pro-section { padding: 80px 20px; }
   .objectives-grid,
-  .pro-features {
-    grid-template-columns: 1fr;
+  .pro-features { grid-template-columns: 1fr; }
+
+  /* Switch explore to horizontal scroll on small screens */
+  .explore-grid {
+    display: flex;
+    overflow-x: auto;
+    gap: 15px;
+    padding: 0 10px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .explore-card {
+    flex: 0 0 70%;
+    min-width: 200px;
+    height: 220px;
+  }
+}
+
+@media (max-width: 480px) {
+  .explore-card {
+    flex: 0 0 80%;
+    min-width: 180px;
+    height: 200px;
   }
 }
