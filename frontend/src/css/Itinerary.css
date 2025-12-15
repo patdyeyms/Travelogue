@@ -1,50 +1,56 @@
+/* ===============================
+   ITINERARY PAGE LAYOUT
+================================ */
 .itinerary-page {
   display: flex;
   width: 100%;
+  min-height: 100vh;
   overflow: hidden;
-  font-family: "Inter", sans-serif;
-  background: #f7f7f8;
+  font-family: "Inter", "Poppins", sans-serif;
+  background: linear-gradient(180deg, #f7f7f8 0%, #fafafa 100%);
   padding-top: 89px;
   box-sizing: border-box;
+  position: relative;
 }
 
-/* Sidebar */
+/* ===============================
+   SIDEBAR
+================================ */
 .sidebar {
   width: 260px;
-  background: #fff;
-  border-right: 1px solid #e5e5e5;
-  padding: 18px;
+  background: linear-gradient(180deg, #fff 0%, #fafafa 100%);
+  border-right: 1px solid #e0e0e0;
+  padding: 20px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 22px;
   overflow-y: auto;
   position: fixed;
   top: 89px;
   bottom: 0;
   left: 0;
-  transition: all 0.3s ease;
-  z-index: 10;
+  transition: transform 0.3s ease, width 0.3s ease;
+  z-index: 100;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
 }
 
 .sidebar.hidden {
   transform: translateX(-100%);
-  width: 0;
-  padding: 0;
-  border: none;
-  overflow: hidden;
 }
 
 .sidebar-section {
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 
 .sidebar-title {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
   text-transform: uppercase;
-  color: #444;
-  margin-bottom: 8px;
-  letter-spacing: 0.5px;
+  color: #555;
+  margin-bottom: 10px;
+  letter-spacing: 0.8px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #e8f5f5;
 }
 
 .sidebar-section ul {
@@ -56,36 +62,85 @@
 .sidebar-section li {
   font-size: 14px;
   color: #333;
-  padding: 6px 4px;
-  border-radius: 6px;
+  padding: 10px 12px;
+  border-radius: 8px;
   cursor: pointer;
   transition: all 0.2s ease;
+  line-height: 1.5;
+  font-weight: 500;
 }
 
 .sidebar-section li:hover {
-  background: #f3f4f6;
-  color: #007bff;
+  background: linear-gradient(135deg, #f0fafa, #e8f5f5);
+  color: #28a1a1;
+  transform: translateX(4px);
 }
 
+.sidebar-section li:active {
+  background: #d4eded;
+}
+
+/* Scrollbar styling for sidebar */
+.sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: #f8f8f8;
+  border-radius: 3px;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background: #28a1a1;
+  border-radius: 3px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+  background: #1f7f7f;
+}
+
+/* ===============================
+   HIDE/SHOW SIDEBAR BUTTON
+================================ */
 .hide-sidebar-btn {
   position: fixed;
-  top: 100px;
+  top: 105px;
   left: 270px;
-  background: #fff;
-  border: 1px solid #ddd;
+  background: linear-gradient(135deg, #fff, #fafafa);
+  border: 1.5px solid #ddd;
   border-radius: 999px;
-  padding: 6px 12px;
+  padding: 10px 16px;
   font-size: 14px;
+  font-weight: 600;
   color: #555;
   cursor: pointer;
-  z-index: 11;
+  z-index: 101;
   transition: all 0.3s ease;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.hide-sidebar-btn:hover {
+  background: #28a1a1;
+  color: #fff;
+  border-color: #1f7f7f;
+  transform: scale(1.05);
+  box-shadow: 0 4px 15px rgba(40, 161, 161, 0.3);
+}
+
+.hide-sidebar-btn:active {
+  transform: scale(0.98);
 }
 
 .itinerary-page.sidebar-hidden .hide-sidebar-btn {
   left: 20px;
 }
 
+/* ===============================
+   MAIN CONTENT
+================================ */
 .main-content {
   flex: 1;
   margin-left: 260px;
@@ -93,145 +148,902 @@
   background: #fafafa;
   padding-bottom: 40px;
   transition: margin-left 0.3s ease;
+  min-height: calc(100vh - 89px);
 }
 
 .itinerary-page.sidebar-hidden .main-content {
   margin-left: 0;
 }
 
-/* Header banner */
+/* ===============================
+   HEADER BANNER
+================================ */
 .trip-header-banner {
   position: relative;
   width: 100%;
-  height: 220px;
+  height: 240px;
   overflow: hidden;
-  border-bottom: 1px solid #e5e5e5;
+  border-bottom: 1px solid #e0e0e0;
+  background: linear-gradient(135deg, #0b3a3a, #1f6f6f);
+}
+
+.trip-header-banner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(40, 161, 161, 0.2), rgba(11, 58, 58, 0.3));
+  z-index: 1;
 }
 
 .trip-header-banner img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: brightness(0.85);
+  filter: brightness(0.7);
 }
 
 .trip-header-card {
   position: absolute;
-  bottom: -20px; /* reduced from -40px */
+  bottom: -25px;
   left: 50%;
   transform: translateX(-50%);
   background: #fff;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
-  border-radius: 12px;
-  padding: 18px 28px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  border-radius: 16px;
+  padding: 22px 32px;
   text-align: center;
-  width: 380px;
+  max-width: 90%;
+  width: 420px;
+  z-index: 10;
+  border: 1px solid #e8f5f5;
+  transition: all 0.3s ease;
+}
+
+.trip-header-card:hover {
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+  transform: translateX(-50%) translateY(-3px);
 }
 
 .trip-header-card h1 {
-  font-size: 22px;
+  font-size: 24px;
   font-weight: 700;
-  color: #111;
-  margin-bottom: 6px;
+  color: #0b3a3a;
+  margin: 0 0 8px 0;
+  line-height: 1.3;
 }
 
 .trip-header-card p {
   font-size: 14px;
   color: #666;
+  margin: 0;
+  font-weight: 500;
 }
 
-/* Flights & Lodging sections */
+/* ===============================
+   FLIGHTS & LODGING SECTIONS
+================================ */
 .flights-section,
 .lodging-section {
-  padding: 16px 40px; /* reduced vertical padding */
+  padding: 50px 40px 20px;
   margin-top: 0;
 }
 
 .flights-section h2,
 .lodging-section h2 {
-  margin-bottom: 8px; /* reduce header spacing */
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 18px;
+  color: #0b3a3a;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.flights-section h2::before,
+.lodging-section h2::before {
+  content: "";
+  width: 4px;
+  height: 24px;
+  background: linear-gradient(180deg, #28a1a1, #5cd6d6);
+  border-radius: 2px;
 }
 
 .flights-section + .lodging-section {
-  margin-top: 8px; /* small gap between sections */
+  padding-top: 30px;
 }
 
-/* Map */
-.map-wrapper {
-  margin: 24px 40px; /* tighter margin to section above */
-  border-radius: 12px;
+/* Flight/Hotel Card Styles */
+.flights-section > div,
+.lodging-section > div {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+  padding: 24px;
+  gap: 24px;
+  transition: all 0.3s ease;
+  border: 1px solid #e8f5f5;
+  position: relative;
   overflow: hidden;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-  border: 1px solid #e5e5e5;
+}
+
+.flights-section > div::before,
+.lodging-section > div::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(180deg, #28a1a1, #5cd6d6);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.flights-section > div:hover::before,
+.lodging-section > div:hover::before {
+  opacity: 1;
+}
+
+.flights-section > div:hover,
+.lodging-section > div:hover {
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  transform: translateY(-3px);
+  border-color: #c8e8e8;
+}
+
+/* Flight icon placeholder */
+.flights-section > div > div:first-child {
+  width: 180px;
+  height: 140px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #28a1a1, #1f7f7f);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36px;
+  font-weight: 700;
+  flex-shrink: 0;
+  box-shadow: 0 4px 15px rgba(40, 161, 161, 0.3);
+}
+
+/* Hotel image */
+.lodging-section img {
+  width: 180px;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 12px;
+  flex-shrink: 0;
+  border: 2px solid #e8f5f5;
+  transition: transform 0.3s ease;
+}
+
+.lodging-section > div:hover img {
+  transform: scale(1.05);
+}
+
+/* Text content */
+.flights-section h3,
+.lodging-section h3 {
+  margin: 0 0 8px 0;
+  font-size: 19px;
+  font-weight: 600;
+  color: #0b3a3a;
+  line-height: 1.4;
+}
+
+.flights-section p,
+.lodging-section p {
+  margin: 5px 0;
+  font-size: 14px;
+  color: #555;
+  line-height: 1.6;
+}
+
+.flights-section strong,
+.lodging-section strong {
+  color: #0b3a3a;
+  font-weight: 600;
+}
+
+/* ===============================
+   MAP SECTION
+================================ */
+.map-wrapper {
+  margin: 30px 40px;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  border: 2px solid #e8f5f5;
+  background: #fff;
+  transition: all 0.3s ease;
+}
+
+.map-wrapper:hover {
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+  border-color: #c8e8e8;
 }
 
 .map-view {
-  height: 400px;
+  height: 450px;
   width: 100%;
-  border-radius: 12px;
 }
 
-/* Explore */
+/* ===============================
+   EXPLORE SECTION
+================================ */
 .explore-section {
-  margin-top: 60px;
-  padding: 24px 40px;
+  margin-top: 50px;
+  padding: 30px 40px;
 }
 
 .explore-section h2 {
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 700;
-  margin-bottom: 16px;
-  color: #222;
+  margin-bottom: 20px;
+  color: #0b3a3a;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.explore-section h2::before {
+  content: "";
+  width: 4px;
+  height: 24px;
+  background: linear-gradient(180deg, #28a1a1, #5cd6d6);
+  border-radius: 2px;
 }
 
 .explore-grid {
-  display: flex;
-  gap: 20px;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
 }
 
 .explore-card {
   background: #fff;
-  border-radius: 12px;
+  border-radius: 14px;
   overflow: hidden;
-  flex: 1;
-  min-width: 250px;
-  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: 1px solid #e8f5f5;
+  position: relative;
+}
+
+.explore-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, #28a1a1, #5cd6d6);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.explore-card:hover::before {
+  opacity: 1;
 }
 
 .explore-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+  border-color: #c8e8e8;
 }
 
 .explore-card img {
   width: 100%;
-  height: 160px;
+  height: 180px;
   object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.explore-card:hover img {
+  transform: scale(1.1);
 }
 
 .explore-card p {
-  padding: 10px 15px;
+  padding: 14px 18px;
   font-size: 15px;
   color: #333;
   font-weight: 500;
+  margin: 0;
+  line-height: 1.5;
 }
 
+/* ===============================
+   EMPTY STATE
+================================ */
 .itinerary-empty {
   text-align: center;
   padding: 120px 40px;
+  background: #fff;
+  border-radius: 16px;
+  margin: 40px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
 }
 
 .itinerary-empty h2 {
-  font-size: 24px;
+  font-size: 26px;
   font-weight: 700;
-  margin-bottom: 10px;
-  color: #333;
+  margin-bottom: 12px;
+  color: #0b3a3a;
 }
 
 .itinerary-empty p {
-  color: #777;
-  font-size: 15px;
+  color: #666;
+  font-size: 16px;
+  line-height: 1.7;
+  max-width: 500px;
+  margin: 0 auto;
 }
 
+/* ===============================
+   RESPONSIVE - LARGE TABLET
+================================ */
+@media (max-width: 1024px) {
+  .itinerary-page {
+    padding-top: 70px;
+  }
+
+  .sidebar {
+    top: 70px;
+    width: 240px;
+  }
+
+  .hide-sidebar-btn {
+    top: 85px;
+    left: 250px;
+  }
+
+  .main-content {
+    margin-left: 240px;
+  }
+
+  .flights-section,
+  .lodging-section,
+  .map-wrapper,
+  .explore-section {
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+
+  .trip-header-card {
+    width: 380px;
+  }
+
+  .map-view {
+    height: 400px;
+  }
+}
+
+/* ===============================
+   RESPONSIVE - TABLET
+================================ */
+@media (max-width: 768px) {
+  .itinerary-page {
+    padding-top: 60px;
+  }
+
+  .sidebar {
+    top: 60px;
+    width: 280px;
+    max-width: 80vw;
+  }
+
+  .sidebar.hidden {
+    transform: translateX(-100%);
+  }
+
+  .hide-sidebar-btn {
+    top: 75px;
+    padding: 8px 14px;
+    font-size: 13px;
+    left: 290px;
+  }
+
+  .itinerary-page.sidebar-hidden .hide-sidebar-btn {
+    left: 15px;
+  }
+
+  .main-content {
+    margin-left: 0;
+  }
+
+  .trip-header-banner {
+    height: 200px;
+  }
+
+  .trip-header-card {
+    width: 340px;
+    padding: 18px 26px;
+    bottom: -20px;
+  }
+
+  .trip-header-card h1 {
+    font-size: 21px;
+  }
+
+  .trip-header-card p {
+    font-size: 13px;
+  }
+
+  .flights-section,
+  .lodging-section {
+    padding: 40px 20px 15px;
+  }
+
+  .flights-section h2,
+  .lodging-section h2 {
+    font-size: 20px;
+    margin-bottom: 15px;
+  }
+
+  .flights-section > div,
+  .lodging-section > div {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 18px;
+    gap: 16px;
+  }
+
+  .flights-section > div > div:first-child,
+  .lodging-section img {
+    width: 100%;
+    height: 160px;
+  }
+
+  .flights-section h3,
+  .lodging-section h3 {
+    font-size: 17px;
+  }
+
+  .flights-section p,
+  .lodging-section p {
+    font-size: 13px;
+  }
+
+  .map-wrapper {
+    margin: 25px 20px;
+    border-radius: 12px;
+  }
+
+  .map-view {
+    height: 320px;
+  }
+
+  .explore-section {
+    padding: 25px 20px;
+    margin-top: 40px;
+  }
+
+  .explore-section h2 {
+    font-size: 20px;
+  }
+
+  .explore-grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 18px;
+  }
+
+  .explore-card img {
+    height: 160px;
+  }
+
+  .itinerary-empty {
+    padding: 100px 30px;
+    margin: 30px 20px;
+  }
+
+  .itinerary-empty h2 {
+    font-size: 22px;
+  }
+
+  .itinerary-empty p {
+    font-size: 14px;
+  }
+}
+
+/* ===============================
+   RESPONSIVE - MOBILE
+================================ */
+@media (max-width: 600px) {
+  .sidebar {
+    width: 260px;
+  }
+
+  .hide-sidebar-btn {
+    top: 72px;
+    left: 270px;
+  }
+
+  .trip-header-banner {
+    height: 180px;
+  }
+
+  .trip-header-card {
+    width: 300px;
+    padding: 16px 22px;
+  }
+
+  .trip-header-card h1 {
+    font-size: 19px;
+  }
+
+  .flights-section,
+  .lodging-section {
+    padding: 35px 18px 12px;
+  }
+
+  .explore-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .itinerary-empty {
+    padding: 80px 25px;
+  }
+}
+
+/* ===============================
+   RESPONSIVE - SMALL MOBILE
+================================ */
+@media (max-width: 480px) {
+  .itinerary-page {
+    padding-top: 60px;
+  }
+
+  .sidebar {
+    width: 240px;
+  }
+
+  .hide-sidebar-btn {
+    top: 70px;
+    padding: 7px 12px;
+    font-size: 12px;
+    left: 250px;
+  }
+
+  .trip-header-banner {
+    height: 160px;
+  }
+
+  .trip-header-card {
+    width: 270px;
+    padding: 14px 20px;
+    bottom: -15px;
+  }
+
+  .trip-header-card h1 {
+    font-size: 17px;
+  }
+
+  .trip-header-card p {
+    font-size: 12px;
+  }
+
+  .flights-section,
+  .lodging-section {
+    padding: 30px 15px 10px;
+  }
+
+  .flights-section h2,
+  .lodging-section h2 {
+    font-size: 18px;
+    margin-bottom: 12px;
+  }
+
+  .flights-section > div,
+  .lodging-section > div {
+    padding: 15px;
+    gap: 14px;
+    border-radius: 12px;
+  }
+
+  .flights-section > div > div:first-child,
+  .lodging-section img {
+    height: 130px;
+  }
+
+  .flights-section h3,
+  .lodging-section h3 {
+    font-size: 16px;
+  }
+
+  .flights-section p,
+  .lodging-section p {
+    font-size: 12px;
+  }
+
+  .map-wrapper {
+    margin: 20px 15px;
+    border-radius: 10px;
+  }
+
+  .map-view {
+    height: 280px;
+  }
+
+  .explore-section {
+    padding: 20px 15px;
+    margin-top: 35px;
+  }
+
+  .explore-section h2 {
+    font-size: 18px;
+    margin-bottom: 15px;
+  }
+
+  .explore-card img {
+    height: 150px;
+  }
+
+  .explore-card p {
+    padding: 12px 15px;
+    font-size: 14px;
+  }
+
+  .itinerary-empty {
+    padding: 70px 20px;
+    margin: 25px 15px;
+  }
+
+  .itinerary-empty h2 {
+    font-size: 20px;
+  }
+
+  .itinerary-empty p {
+    font-size: 13px;
+  }
+}
+
+/* ===============================
+   ACCESSIBILITY
+================================ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Focus visible for keyboard navigation */
+*:focus-visible {
+  outline: 2px solid #28a1a1;
+  outline-offset: 2px;
+}
+
+.hide-sidebar-btn:focus-visible {
+  outline: 3px solid #28a1a1;
+  outline-offset: 3px;
+}
+
+.sidebar-section li:focus-visible,
+.explore-card:focus-visible {
+  outline: 2px solid #28a1a1;
+  outline-offset: 2px;
+}
+
+/* ===============================
+   PRINT STYLES - ITINERARY
+================================ */
+@media print {
+  /* Reset page */
+  body {
+    background: white;
+  }
+
+  /* Hide interactive elements */
+  .sidebar,
+  .hide-sidebar-btn {
+    display: none !important;
+  }
+
+  .main-content {
+    margin-left: 0 !important;
+  }
+
+  .itinerary-page {
+    padding-top: 0;
+    background: white;
+  }
+
+  /* Header banner as cover page */
+  .trip-header-banner {
+    page-break-after: always;
+    height: auto;
+    min-height: 200pt;
+    border: 3pt solid #000;
+    background: #f0f0f0;
+    position: relative;
+  }
+
+  .trip-header-banner::before {
+    background: none;
+  }
+
+  .trip-header-banner img {
+    filter: brightness(0.5);
+  }
+
+  .trip-header-card {
+    position: relative;
+    bottom: auto;
+    left: auto;
+    transform: none;
+    border: 2pt solid #000;
+    box-shadow: none;
+    padding: 20pt;
+    margin: 30pt auto;
+    width: auto;
+    max-width: 400pt;
+  }
+
+  .trip-header-card h1 {
+    font-size: 20pt;
+    color: #000;
+  }
+
+  .trip-header-card p {
+    font-size: 11pt;
+    color: #000;
+  }
+
+  /* Flights section */
+  .flights-section,
+  .lodging-section {
+    page-break-inside: avoid;
+    padding: 20pt 30pt;
+  }
+
+  .flights-section h2,
+  .lodging-section h2 {
+    font-size: 16pt;
+    color: #000;
+    border-bottom: 2pt solid #000;
+    padding-bottom: 6pt;
+    margin-bottom: 12pt;
+  }
+
+  .flights-section h2::before,
+  .lodging-section h2::before {
+    background: #000;
+  }
+
+  .flights-section > div,
+  .lodging-section > div {
+    border: 2pt solid #000;
+    box-shadow: none;
+    page-break-inside: avoid;
+    margin-bottom: 15pt;
+    padding: 15pt;
+  }
+
+  .flights-section > div::before,
+  .lodging-section > div::before {
+    display: none;
+  }
+
+  .flights-section > div > div:first-child {
+    background: #f0f0f0;
+    color: #000;
+    border: 2pt solid #000;
+  }
+
+  .lodging-section img {
+    border: 2pt solid #000;
+  }
+
+  .flights-section h3,
+  .lodging-section h3 {
+    font-size: 13pt;
+    color: #000;
+  }
+
+  .flights-section p,
+  .lodging-section p {
+    font-size: 10pt;
+    color: #000;
+  }
+
+  /* Map section */
+  .map-wrapper {
+    page-break-inside: avoid;
+    margin: 20pt 30pt;
+    border: 2pt solid #000;
+    box-shadow: none;
+  }
+
+  .map-view {
+    height: 300pt;
+  }
+
+  /* Explore section */
+  .explore-section {
+    page-break-before: always;
+    padding: 20pt 30pt;
+  }
+
+  .explore-section h2 {
+    font-size: 16pt;
+    color: #000;
+    border-bottom: 2pt solid #000;
+    padding-bottom: 6pt;
+  }
+
+  .explore-section h2::before {
+    background: #000;
+  }
+
+  .explore-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15pt;
+  }
+
+  .explore-card {
+    border: 1pt solid #000;
+    box-shadow: none;
+    page-break-inside: avoid;
+  }
+
+  .explore-card::before {
+    display: none;
+  }
+
+  .explore-card img {
+    height: 120pt;
+    border-bottom: 1pt solid #000;
+  }
+
+  .explore-card p {
+    font-size: 10pt;
+    color: #000;
+  }
+
+  /* Empty state */
+  .itinerary-empty {
+    page-break-inside: avoid;
+    border: 2pt solid #000;
+    box-shadow: none;
+  }
+
+  .itinerary-empty h2 {
+    font-size: 18pt;
+    color: #000;
+  }
+
+  .itinerary-empty p {
+    font-size: 11pt;
+    color: #000;
+  }
+
+  /* Footer */
+  .itinerary-page::after {
+    content: "Travelogue Itinerary - Printed on " attr(data-print-date);
+    display: block;
+    text-align: center;
+    font-size: 8pt;
+    color: #666;
+    padding: 10pt;
+    border-top: 1pt solid #666;
+    margin-top: 20pt;
+  }
+
+  /* Remove all transitions and animations */
+  * {
+    transition: none !important;
+    animation: none !important;
+    accent-color: exact;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}

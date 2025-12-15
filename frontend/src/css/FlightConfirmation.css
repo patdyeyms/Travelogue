@@ -1,30 +1,840 @@
+/* =======================
+   FLIGHT CONFIRMATION PAGE
+======================= */
+.results-section {
+  padding: 2rem 1rem;
+  max-width: 950px;
+  margin: 80px auto 0;
+  color: #0b3a3a;
+  font-family: "Poppins", sans-serif;
+  line-height: 1.6;
+  background: linear-gradient(180deg, #f8fafa 0%, #ffffff 100%);
+  min-height: 100vh;
+}
+
+.flight-details-card {
+  background: #fff;
+  border-radius: 18px;
+  padding: 2.5rem;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+  border: 1px solid #e0f0f0;
+  transition: all 0.3s ease;
+}
+
+.flight-details-card:hover {
+  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.12);
+}
+
+.back-btn {
+  background: linear-gradient(135deg, #28a1a1, #5cd6d6);
+  color: #fff;
+  border: none;
+  padding: 0.7rem 1.2rem;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 1.5rem;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: inherit;
+  box-shadow: 0 4px 12px rgba(40, 161, 161, 0.25);
+}
+
+.back-btn:hover {
+  background: linear-gradient(135deg, #1f7f7f, #44c0c0);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(31, 127, 127, 0.3);
+}
+
+.back-btn:active {
+  transform: translateY(0);
+}
+
+/* =======================
+   CONFIRMATION HEADER
+======================= */
 .flight-details-header {
   position: relative;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 1rem;
-  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.8rem;
+  margin-bottom: 2rem;
+  padding: 2rem;
+  background: linear-gradient(135deg, #f0fcfc 0%, #e0f7f5 100%);
+  border-radius: 14px;
+  border: 2px solid #d4eded;
 }
 
+.flight-details-header h2 {
+  font-size: 2.2rem;
+  color: #0b3a3a;
+  margin: 0.5rem 0 0 0;
+  text-align: center;
+  font-weight: 700;
+}
+
+.flight-details-header span {
+  font-size: 1.05rem;
+  color: #28525e;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 0.4rem 1rem;
+  border-radius: 20px;
+  border: 1px solid #c8e8e8;
+}
+
+.flight-details-info {
+  margin-top: 1.5rem;
+}
+
+.flight-details-info > p {
+  font-size: 1rem;
+  margin: 1rem 0;
+  color: #333;
+  line-height: 1.8;
+}
+
+.flight-details-info > p strong {
+  color: #0b3a3a;
+  font-weight: 600;
+}
+
+/* =======================
+   PRINT BUTTON
+======================= */
 .print-btn {
   position: absolute;
-  top: 10px;
-  right: 10px;
-  width: 32px; /* adjust size for your icon */
-  height: 32px;
+  top: 15px;
+  right: 15px;
+  width: 44px;
+  height: 44px;
   cursor: pointer;
-  transition: transform 0.2s;
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.9);
+  border: 2px solid #28a1a1;
+  border-radius: 50%;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .print-btn:hover {
   transform: scale(1.1);
+  background: #e0f7f5;
+  border-color: #1f7f7f;
+  box-shadow: 0 4px 12px rgba(40, 161, 161, 0.3);
 }
 
-/* Hide print button and other controls when printing */
+.print-btn:active {
+  transform: scale(0.95);
+}
+
+.print-btn img,
+.print-btn svg {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+}
+
+/* =======================
+   BOOKING FORM
+======================= */
+.booking-form,
+.booking-form.extend {
+  margin-top: 2rem;
+  padding: 2.5rem;
+  background: linear-gradient(135deg, #f8fdfd, #f0fafa);
+  border-radius: 14px;
+  border: 2px solid #e0f7f5;
+  transition: all 0.3s ease;
+}
+
+.booking-form:hover,
+.booking-form.extend:hover {
+  border-color: #c8e8e8;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.booking-form h3 {
+  font-size: 1.5rem;
+  color: #0b3a3a;
+  margin: 0 0 0.5rem 0;
+  font-weight: 700;
+}
+
+.booking-form > p {
+  font-size: 0.9rem;
+  color: #28525e;
+  margin: 0 0 1.8rem 0;
+  line-height: 1.6;
+}
+
+.booking-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.input-group label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #28525e;
+  display: block;
+  line-height: 1.3;
+}
+
+.input-group input,
+.input-group select {
+  height: 46px;
+  border-radius: 12px;
+  border: 1.5px solid #dfeeee;
+  background: #fff;
+  padding: 0 1rem;
+  font-size: 0.95rem;
+  font-family: inherit;
+  transition: all 0.25s ease;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.input-group input:disabled,
+.input-group select:disabled {
+  background: #f5fafa;
+  cursor: not-allowed;
+  opacity: 0.85;
+  color: #28525e;
+  border-color: #e8f5f5;
+}
+
+.input-group input:focus,
+.input-group select:focus {
+  outline: none;
+  border-color: #28a1a1;
+  box-shadow: 0 0 0 3px rgba(40, 161, 161, 0.1);
+}
+
+/* =======================
+   AIRLINE LOGO
+======================= */
+.airline-img {
+  width: 150px;
+  height: auto;
+  max-height: 150px;
+  object-fit: contain;
+  border-radius: 14px;
+  padding: 14px;
+  background: #fff;
+  border: 2px solid #e0f7f5;
+  display: block;
+  margin: 0 auto;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.airline-placeholder {
+  width: 150px;
+  height: 150px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: white;
+  text-align: center;
+  padding: 12px;
+  line-height: 1.3;
+  margin: 0 auto;
+  box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+}
+
+/* Small variant for inline display */
+.airline-img.small {
+  width: 60px;
+  height: 60px;
+  margin: 0;
+  padding: 8px;
+}
+
+.airline-placeholder.small {
+  width: 60px;
+  height: 60px;
+  font-size: 10px;
+  padding: 6px;
+  margin: 0;
+}
+
+/* =======================
+   CONFIRMATION DETAILS
+======================= */
+.confirmation-section {
+  margin-bottom: 2rem;
+}
+
+.confirmation-section h2 {
+  font-size: 1.5rem;
+  color: #0b3a3a;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #e0f7f5;
+  font-weight: 700;
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.detail-item {
+  background: #f8fdfd;
+  padding: 1.2rem;
+  border-radius: 12px;
+  border-left: 4px solid #28a1a1;
+  transition: all 0.3s ease;
+}
+
+.detail-item:hover {
+  transform: translateX(4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.detail-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #28525e;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.4rem;
+}
+
+.detail-value {
+  font-size: 1.1rem;
+  color: #0b3a3a;
+  font-weight: 600;
+}
+
+/* =======================
+   BUTTON CONTAINER
+======================= */
+.flight-details-info > div:last-child {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2.5rem;
+  flex-wrap: wrap;
+}
+
+/* =======================
+   CONFIRM BUTTONS
+======================= */
+.confirm-btn {
+  flex: 1;
+  min-width: 200px;
+  padding: 1.1rem 1.8rem;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1.05rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  font-family: inherit;
+  background: linear-gradient(135deg, #28a1a1, #5cd6d6);
+  color: #fff;
+  box-shadow: 0 6px 20px rgba(40, 161, 161, 0.3);
+}
+
+.confirm-btn:hover {
+  background: linear-gradient(135deg, #1f7f7f, #44c0c0);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(31, 127, 127, 0.4);
+}
+
+.confirm-btn:active {
+  transform: translateY(0);
+}
+
+.confirm-btn:disabled {
+  background: #b0d4d4;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* =======================
+   PRINT STYLES - TICKET LAYOUT
+======================= */
 @media print {
+  /* Reset body and page */
+  body {
+    background: white;
+  }
+
+  /* Hide interactive elements */
   .print-btn,
   .back-btn,
   .confirm-btn {
     display: none !important;
   }
+
+  /* Optimize page for printing */
+  .results-section {
+    margin: 0;
+    padding: 20pt;
+    max-width: 100%;
+    background: white;
+  }
+
+  /* Flight confirmation as ticket */
+  .flight-details-card {
+    box-shadow: none;
+    border: 3pt solid #000;
+    page-break-inside: avoid;
+    padding: 25pt;
+    border-radius: 0;
+    position: relative;
+  }
+
+  /* Ticket header */
+  .flight-details-card::before {
+    content: "FLIGHT CONFIRMATION TICKET";
+    display: block;
+    font-size: 14pt;
+    font-weight: bold;
+    text-align: center;
+    padding: 10pt 0;
+    margin: -25pt -25pt 15pt -25pt;
+    background: #f0f0f0;
+    border-bottom: 2pt solid #000;
+    text-transform: uppercase;
+    letter-spacing: 1pt;
+  }
+
+  /* Confirmation header styling */
+  .flight-details-header {
+    background: white;
+    border: 2pt solid #000;
+    padding: 15pt;
+    margin-bottom: 15pt;
+    border-radius: 0;
+  }
+
+  .flight-details-header h2 {
+    font-size: 18pt;
+    color: #000;
+    margin: 0;
+  }
+
+  .flight-details-header span {
+    font-size: 12pt;
+    color: #000;
+    background: #f0f0f0;
+    border: 1pt solid #000;
+    padding: 6pt 12pt;
+  }
+
+  /* Airline logo */
+  .airline-img,
+  .airline-placeholder {
+    width: 60pt;
+    height: 60pt;
+    border: 2pt solid #000;
+    padding: 5pt;
+    box-shadow: none;
+  }
+
+  /* Flight details */
+  .flight-details-info > p {
+    font-size: 10pt;
+    color: #000;
+    margin: 5pt 0;
+    line-height: 1.6;
+  }
+
+  .flight-details-info > p strong {
+    font-weight: bold;
+    color: #000;
+  }
+
+  /* Booking form as passenger manifest */
+  .booking-form,
+  .booking-form.extend {
+    background: white;
+    border: 2pt solid #000;
+    padding: 20pt;
+    margin-top: 15pt;
+    border-radius: 0;
+  }
+
+  .booking-form h3 {
+    font-size: 14pt;
+    color: #000;
+    border-bottom: 2pt solid #000;
+    padding-bottom: 8pt;
+    margin-bottom: 12pt;
+    text-transform: uppercase;
+  }
+
+  .booking-form > p {
+    font-size: 9pt;
+    color: #000;
+    margin-bottom: 12pt;
+  }
+
+  .booking-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10pt;
+  }
+
+  .input-group {
+    break-inside: avoid;
+  }
+
+  .input-group label {
+    font-size: 8pt;
+    color: #000;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+
+  .input-group input,
+  .input-group select {
+    border: 1pt solid #000;
+    background: white;
+    font-size: 10pt;
+    color: #000;
+    height: auto;
+    padding: 6pt 8pt;
+  }
+
+  /* Confirmation details */
+  .confirmation-section {
+    break-inside: avoid;
+    margin-bottom: 15pt;
+  }
+
+  .confirmation-section h2 {
+    font-size: 12pt;
+    color: #000;
+    border-bottom: 2pt solid #000;
+  }
+
+  .detail-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10pt;
+  }
+
+  .detail-item {
+    background: #f9f9f9;
+    border: 1pt solid #000;
+    border-left: 3pt solid #000;
+    padding: 8pt;
+  }
+
+  .detail-label {
+    font-size: 7pt;
+    color: #000;
+  }
+
+  .detail-value {
+    font-size: 10pt;
+    color: #000;
+  }
+
+  /* Important notice */
+  .flight-details-info::after {
+    content: "IMPORTANT: Please arrive at the airport at least 2 hours before departure. Present this confirmation and valid ID at check-in.";
+    display: block;
+    margin-top: 20pt;
+    padding: 12pt;
+    background: #f9f9f9;
+    border: 2pt solid #000;
+    font-size: 8pt;
+    text-align: center;
+    color: #000;
+    font-weight: bold;
+  }
+
+  /* Booking reference section */
+  .flight-details-header::after {
+    content: "REFERENCE NUMBER";
+    display: block;
+    font-size: 8pt;
+    margin-top: 10pt;
+    color: #666;
+    font-weight: normal;
+  }
+
+  /* Barcode simulation at bottom */
+  .flight-details-card::after {
+    content: "";
+    display: block;
+    height: 50pt;
+    margin: 20pt -25pt -25pt -25pt;
+    background: repeating-linear-gradient(
+      90deg,
+      #000 0,
+      #000 2pt,
+      #fff 2pt,
+      #fff 5pt
+    );
+    border-top: 2pt solid #000;
+  }
+
+  /* Footer disclaimer */
+  .results-section::after {
+    content: "This is a confirmed booking. Please keep this document for your records and present it at the airport check-in counter.";
+    display: block;
+    margin-top: 15pt;
+    padding: 10pt;
+    border: 1pt dashed #666;
+    font-size: 7pt;
+    text-align: center;
+    color: #666;
+  }
+
+  /* Button container */
+  .flight-details-info > div:last-child {
+    display: none !important;
+  }
+
+  /* Remove all transitions and animations */
+  * {
+    transition: none !important;
+    animation: none !important;
+    accent-color: exact;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Ensure proper page breaks */
+  .booking-form,
+  .flight-details-header,
+  .confirmation-section {
+    page-break-inside: avoid;
+  }
+}
+
+/* =======================
+   RESPONSIVE - TABLET
+======================= */
+@media (max-width: 900px) {
+  .results-section {
+    margin-top: 60px;
+    padding: 1.5rem 1rem;
+  }
+
+  .flight-details-card {
+    padding: 2rem;
+  }
+
+  .flight-details-header {
+    padding: 1.5rem;
+  }
+
+  .flight-details-header h2 {
+    font-size: 1.9rem;
+  }
+
+  .booking-form,
+  .booking-form.extend {
+    padding: 2rem;
+  }
+
+  .booking-grid {
+    gap: 1.3rem;
+  }
+
+  .confirm-btn {
+    min-width: 180px;
+    padding: 1rem 1.5rem;
+  }
+}
+
+/* =======================
+   RESPONSIVE - MOBILE
+======================= */
+@media (max-width: 600px) {
+  .results-section {
+    padding: 1rem 0.75rem;
+    margin-top: 70px;
+  }
+
+  .flight-details-card {
+    padding: 1.5rem;
+    border-radius: 14px;
+  }
+
+  .flight-details-header {
+    padding: 1.2rem;
+  }
+
+  .flight-details-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .flight-details-header span {
+    font-size: 0.95rem;
+    padding: 0.3rem 0.8rem;
+  }
+
+  .print-btn {
+    width: 38px;
+    height: 38px;
+    top: 10px;
+    right: 10px;
+  }
+
+  .print-btn img,
+  .print-btn svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .airline-img {
+    width: 120px;
+    max-height: 120px;
+  }
+
+  .airline-placeholder {
+    width: 120px;
+    height: 120px;
+    font-size: 12px;
+  }
+
+  .flight-details-info > p {
+    font-size: 0.95rem;
+  }
+
+  .booking-form,
+  .booking-form.extend {
+    padding: 1.5rem;
+  }
+
+  .booking-form h3 {
+    font-size: 1.3rem;
+  }
+
+  .booking-grid {
+    grid-template-columns: 1fr;
+    gap: 1.1rem;
+  }
+
+  .input-group input,
+  .input-group select {
+    font-size: 0.9rem;
+    height: 44px;
+  }
+
+  .flight-details-info > div:last-child {
+    flex-direction: column;
+    gap: 0.8rem;
+    margin-top: 2rem;
+  }
+
+  .confirm-btn {
+    min-width: 100%;
+    padding: 1rem 1.2rem;
+    font-size: 1rem;
+  }
+}
+
+/* =======================
+   RESPONSIVE - SMALL MOBILE
+======================= */
+@media (max-width: 400px) {
+  .results-section {
+    padding: 0.75rem 0.5rem;
+  }
+
+  .flight-details-card {
+    padding: 1.2rem;
+  }
+
+  .flight-details-header {
+    padding: 1rem;
+  }
+
+  .flight-details-header h2 {
+    font-size: 1.3rem;
+  }
+
+  .print-btn {
+    width: 34px;
+    height: 34px;
+    top: 8px;
+    right: 8px;
+  }
+
+  .airline-img {
+    width: 100px;
+    max-height: 100px;
+  }
+
+  .airline-placeholder {
+    width: 100px;
+    height: 100px;
+    font-size: 11px;
+  }
+
+  .booking-form,
+  .booking-form.extend {
+    padding: 1.2rem;
+  }
+
+  .booking-form h3 {
+    font-size: 1.15rem;
+  }
+
+  .input-group input,
+  .input-group select {
+    height: 42px;
+    font-size: 0.85rem;
+  }
+
+  .confirm-btn {
+    padding: 0.9rem 1rem;
+    font-size: 0.95rem;
+  }
+}
+
+/* =======================
+   ACCESSIBILITY
+======================= */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Focus visible for keyboard navigation */
+*:focus-visible {
+  outline: 2px solid #28a1a1;
+  outline-offset: 2px;
+}
+
+.print-btn:focus-visible,
+.back-btn:focus-visible,
+.confirm-btn:focus-visible {
+  outline: 3px solid #28a1a1;
+  outline-offset: 3px;
 }

@@ -1,4 +1,6 @@
-/* HOTEL CONFIRMATION PAGE */
+/* ===============================
+   HOTEL CONFIRMATION PAGE
+================================ */
 .thankyou-section {
   display: flex;
   justify-content: center;
@@ -6,6 +8,7 @@
   min-height: calc(100vh - 80px);
   background: linear-gradient(135deg, #f4f9ff 0%, #dfe9ff 100%);
   padding: 40px 20px;
+  font-family: "Poppins", sans-serif;
 }
 
 .thankyou-card {
@@ -31,6 +34,9 @@
   }
 }
 
+/* ===============================
+   CLOSE BUTTON
+================================ */
 .close-btn {
   position: absolute;
   top: 15px;
@@ -40,27 +46,47 @@
   font-size: 26px;
   color: #777;
   cursor: pointer;
-  transition: color 0.2s ease;
+  transition: color 0.2s ease, transform 0.2s ease;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
 }
 
 .close-btn:hover {
   color: #000;
+  background: #f0f0f0;
+  transform: scale(1.1);
 }
 
+.close-btn:active {
+  transform: scale(0.95);
+}
+
+/* ===============================
+   HEADINGS
+================================ */
 .thankyou-card h1 {
   font-size: 1.9rem;
   font-weight: 700;
   color: #2b3a67;
   margin-bottom: 10px;
+  margin-top: 10px;
 }
 
 .small-muted {
   font-size: 0.95rem;
   color: #666;
   margin-bottom: 30px;
+  line-height: 1.5;
 }
 
-/* Top summary */
+/* ===============================
+   HOTEL SUMMARY TOP
+================================ */
 .hotel-summary-top {
   display: flex;
   justify-content: space-between;
@@ -70,17 +96,22 @@
   border-radius: 12px;
   padding: 15px 20px;
   cursor: pointer;
-  transition: background 0.3s ease;
+  transition: all 0.3s ease;
+  margin: 20px 0;
 }
 
 .hotel-summary-top:hover {
   background: #edf4ff;
+  box-shadow: 0 4px 12px rgba(74, 108, 247, 0.1);
 }
 
 .hotel-summary-left {
   display: flex;
   align-items: center;
   gap: 15px;
+  flex: 1;
+  min-width: 0;
+  text-align: left;
 }
 
 .hotel-img {
@@ -88,75 +119,137 @@
   height: 60px;
   object-fit: cover;
   border-radius: 10px;
+  flex-shrink: 0;
+  border: 1px solid #e0e9ff;
 }
 
 .hotel-info {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  gap: 3px;
+  min-width: 0;
+  flex: 1;
 }
 
 .hotel-info strong {
   font-size: 1rem;
   color: #2b3a67;
+  font-weight: 600;
+  line-height: 1.3;
 }
 
 .hotel-info span {
   font-size: 0.9rem;
   color: #555;
+  line-height: 1.4;
 }
 
+.hotel-summary-right {
+  font-size: 1.2rem;
+  color: #4a6cf7;
+  transition: transform 0.3s ease;
+  flex-shrink: 0;
+  margin-left: 10px;
+}
+
+/* ===============================
+   HOTEL SUMMARY DETAILS
+================================ */
 .hotel-summary-details {
-  display: none;
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
   text-align: left;
-  margin-top: 20px;
-  padding: 15px 20px;
+  padding: 0 20px;
   background: #f8fbff;
   border-radius: 12px;
   border: 1px solid #e0e9ff;
-  transition: all 0.3s ease;
+  transition: all 0.4s ease;
+  margin-top: 0;
 }
 
 .hotel-summary-details.open {
-  display: block;
+  max-height: 800px;
+  opacity: 1;
+  padding: 20px;
+  margin-top: 15px;
 }
 
 .hotel-summary-details p {
-  margin: 8px 0;
+  margin: 10px 0;
   color: #333;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.hotel-summary-details p strong {
+  color: #2b3a67;
+  font-weight: 600;
+}
+
+.hotel-summary-details > div {
+  margin-top: 15px;
+}
+
+.hotel-summary-details > div strong {
+  display: block;
+  color: #2b3a67;
+  font-weight: 600;
+  margin-bottom: 8px;
+  font-size: 0.95rem;
 }
 
 .hotel-summary-details ul {
-  margin: 5px 0 10px 20px;
+  margin: 8px 0 10px 20px;
   color: #555;
+  padding-left: 0;
+  list-style-position: inside;
 }
 
-/* Buttons */
+.hotel-summary-details li {
+  margin: 5px 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+/* ===============================
+   CONFIRMATION ACTIONS
+================================ */
 .confirm-actions {
   display: flex;
   justify-content: center;
-  gap: 20px;
+  gap: 15px;
   flex-wrap: wrap;
-  margin-top: 30px;
+  margin-top: 35px;
 }
 
 .action-btn {
-  padding: 10px 20px;
+  padding: 12px 24px;
   font-size: 1rem;
   font-weight: 600;
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
   cursor: pointer;
-  transition: all 0.2s ease-in-out;
+  transition: all 0.3s ease;
+  font-family: inherit;
+  min-width: 140px;
 }
 
 .action-btn.primary {
-  background-color: #4a6cf7;
+  background: linear-gradient(135deg, #4a6cf7 0%, #5d7ef9 100%);
   color: #fff;
+  box-shadow: 0 4px 12px rgba(74, 108, 247, 0.3);
 }
 
 .action-btn.primary:hover {
-  background-color: #3c59d2;
+  background: linear-gradient(135deg, #3c59d2 0%, #4a6cf7 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(74, 108, 247, 0.4);
+}
+
+.action-btn.primary:active {
+  transform: translateY(0);
 }
 
 .action-btn.secondary {
@@ -166,4 +259,315 @@
 
 .action-btn.secondary:hover {
   background-color: #d6def9;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(43, 58, 103, 0.15);
+}
+
+.action-btn.secondary:active {
+  transform: translateY(0);
+}
+
+.action-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* ===============================
+   PRINT BUTTON (OPTIONAL)
+================================ */
+.print-btn {
+  position: absolute;
+  top: 15px;
+  right: 60px;
+  width: 36px;
+  height: 36px;
+  cursor: pointer;
+  background: transparent;
+  border: 2px solid #e0e9ff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  padding: 0;
+}
+
+.print-btn:hover {
+  background: #f0f0f0;
+  border-color: #4a6cf7;
+  transform: scale(1.1);
+}
+
+.print-btn img,
+.print-btn svg {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+}
+
+/* ===============================
+   RESPONSIVE - TABLET
+================================ */
+@media (max-width: 768px) {
+  .thankyou-section {
+    padding: 30px 15px;
+    min-height: calc(100vh - 60px);
+  }
+
+  .thankyou-card {
+    padding: 35px 40px;
+  }
+
+  .thankyou-card h1 {
+    font-size: 1.7rem;
+  }
+
+  .hotel-summary-top {
+    padding: 12px 16px;
+  }
+
+  .confirm-actions {
+    gap: 12px;
+  }
+
+  .action-btn {
+    min-width: 130px;
+    padding: 11px 20px;
+  }
+}
+
+/* ===============================
+   RESPONSIVE - MOBILE
+================================ */
+@media (max-width: 600px) {
+  .thankyou-section {
+    padding: 20px 10px;
+    min-height: calc(100vh - 60px);
+  }
+
+  .thankyou-card {
+    padding: 30px 25px;
+    border-radius: 16px;
+  }
+
+  .close-btn {
+    top: 12px;
+    right: 12px;
+    font-size: 22px;
+    width: 32px;
+    height: 32px;
+  }
+
+  .print-btn {
+    top: 12px;
+    right: 50px;
+    width: 32px;
+    height: 32px;
+  }
+
+  .print-btn img,
+  .print-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .thankyou-card h1 {
+    font-size: 1.5rem;
+    margin-bottom: 8px;
+  }
+
+  .small-muted {
+    font-size: 0.9rem;
+    margin-bottom: 25px;
+  }
+
+  .hotel-summary-top {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 12px 15px;
+    gap: 10px;
+  }
+
+  .hotel-summary-left {
+    width: 100%;
+    gap: 12px;
+  }
+
+  .hotel-img {
+    width: 70px;
+    height: 70px;
+  }
+
+  .hotel-info strong {
+    font-size: 0.95rem;
+  }
+
+  .hotel-info span {
+    font-size: 0.85rem;
+  }
+
+  .hotel-summary-right {
+    align-self: center;
+    font-size: 1.1rem;
+  }
+
+  .hotel-summary-details {
+    padding: 0 15px;
+  }
+
+  .hotel-summary-details.open {
+    padding: 15px;
+    margin-top: 12px;
+  }
+
+  .hotel-summary-details p {
+    font-size: 0.9rem;
+    margin: 8px 0;
+  }
+
+  .hotel-summary-details li {
+    font-size: 0.85rem;
+  }
+
+  .confirm-actions {
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 25px;
+  }
+
+  .action-btn {
+    width: 100%;
+    min-width: 100%;
+    padding: 12px 20px;
+    font-size: 0.95rem;
+  }
+}
+
+/* ===============================
+   RESPONSIVE - SMALL MOBILE
+================================ */
+@media (max-width: 480px) {
+  .thankyou-section {
+    padding: 15px 8px;
+  }
+
+  .thankyou-card {
+    padding: 25px 20px;
+  }
+
+  .close-btn {
+    top: 10px;
+    right: 10px;
+    width: 30px;
+    height: 30px;
+    font-size: 20px;
+  }
+
+  .print-btn {
+    top: 10px;
+    right: 45px;
+    width: 30px;
+    height: 30px;
+  }
+
+  .thankyou-card h1 {
+    font-size: 1.3rem;
+  }
+
+  .small-muted {
+    font-size: 0.85rem;
+  }
+
+  .hotel-img {
+    width: 60px;
+    height: 60px;
+  }
+
+  .hotel-info strong {
+    font-size: 0.9rem;
+  }
+
+  .hotel-info span {
+    font-size: 0.8rem;
+  }
+
+  .hotel-summary-top {
+    padding: 10px 12px;
+  }
+
+  .hotel-summary-details.open {
+    padding: 12px;
+  }
+
+  .hotel-summary-details p,
+  .hotel-summary-details li {
+    font-size: 0.85rem;
+  }
+
+  .action-btn {
+    padding: 11px 18px;
+    font-size: 0.9rem;
+  }
+}
+
+/* ===============================
+   ACCESSIBILITY
+================================ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Focus visible for keyboard navigation */
+*:focus-visible {
+  outline: 2px solid #4a6cf7;
+  outline-offset: 2px;
+}
+
+.close-btn:focus-visible,
+.print-btn:focus-visible,
+.action-btn:focus-visible {
+  outline: 3px solid #4a6cf7;
+  outline-offset: 3px;
+}
+
+/* ===============================
+   PRINT STYLES
+================================ */
+@media print {
+  .close-btn,
+  .print-btn,
+  .confirm-actions {
+    display: none !important;
+  }
+
+  .thankyou-section {
+    padding: 1rem;
+    background: #fff;
+  }
+
+  .thankyou-card {
+    box-shadow: none;
+    border: 1px solid #ddd;
+    page-break-inside: avoid;
+  }
+
+  .hotel-summary-details {
+    display: block !important;
+    max-height: none !important;
+    opacity: 1 !important;
+    padding: 15px !important;
+  }
+
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
 }

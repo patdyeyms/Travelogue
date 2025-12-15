@@ -86,6 +86,7 @@ function FlightDetails() {
 
     const fullFlightData = {
       ...flight,
+      airline: flight.airline || firstLeg.airline, // ← FIXED: Added airline name
       departureTime: firstLeg.departure_airport?.time,
       arrivalTime: lastLeg.arrival_airport?.time,
       stops: flight.flights?.length - 1 || 0,
@@ -118,9 +119,12 @@ function FlightDetails() {
       <div className="flight-details-card">
         <div className="flight-details-header">
           <img
-            src={getAirlineLogo(firstLeg.airline_code)}
+            src={getAirlineLogo(firstLeg.airline || firstLeg.airline_code)}
             alt={flight.airline}
             className="airline-img"
+            onError={(e) => {
+              e.target.style.display = 'none';
+            }}
           />
           <h2>{flight.airline}</h2>
         </div>
@@ -153,9 +157,12 @@ function FlightDetails() {
               >
                 <div className="flight-summary-left">
                   <img
-                    src={getAirlineLogo(leg.airline_code)}
+                    src={getAirlineLogo(leg.airline || leg.airline_code)}
                     alt={leg.airline}
                     className="airline-img"
+                    onError={(e) => {
+                      e.target.style.display = 'none';
+                    }}
                   />
                   <div className="flight-summary-info">
                     <span>{leg.airline} • {leg.flight_number}</span>

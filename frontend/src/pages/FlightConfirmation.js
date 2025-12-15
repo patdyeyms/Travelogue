@@ -7,8 +7,14 @@ function FlightConfirmation() {
   const navigate = useNavigate();
   const { flight, flightDetails, formData } = useLocation().state || {};
   const [openLegIndex, setOpenLegIndex] = useState(null);
+  const [imgError, setImgError] = useState(false);
 
   const bookingId = useMemo(() => Math.floor(Math.random() * 900000 + 100000), []);
+
+  // Debug: Log the received data
+  React.useEffect(() => {
+    console.log('Flight Confirmation Data:', { flight, flightDetails, formData });
+  }, [flight, flightDetails, formData]);
 
   if (!flight || !flightDetails || !formData) {
     return (
@@ -59,7 +65,7 @@ function FlightConfirmation() {
         destination: flightDetails.to,
         departureDate: flightDetails.departure,
         returnDate: flightDetails.return,
-        airline: flight.airline,
+        airline: flight.airline || flight.airlineName || "Unknown Airline",
         price: flight.price,
         passenger: `${formData.firstName} ${formData.lastName}`,
       })
@@ -67,6 +73,17 @@ function FlightConfirmation() {
 
     navigate("/hotels", { state: { flightDetails } });
   };
+
+  const handleImageError = (e) => {
+    console.error('Failed to load airline logo');
+    console.error('Airline:', airlineName);
+    console.error('Airline Code:', flight.airlineCode);
+    console.error('Attempted path:', getAirlineLogo(airlineName));
+    setImgError(true);
+  };
+
+  // Get airline name with fallback options
+  const airlineName = flight.airline || flight.airlineName || flight.carrier || "Unknown Airline";
 
   return (
     <div className="results-section">
@@ -76,11 +93,31 @@ function FlightConfirmation() {
 
       <div className="flight-details-card">
         <div className="flight-details-header">
-          <img
-            src={getAirlineLogo(flight.airline)}
-            alt={flight.airline}
-            className="airline-img"
-          />
+          {airlineName !== "Unknown Airline" && !imgError ? (
+            <img
+              src={getAirlineLogo(airlineName)}
+              alt={airlineName}
+              className="airline-img"
+              onError={handleImageError}
+            />
+          ) : (
+            <div className="airline-placeholder" style={{
+              width: '60px',
+              height: '60px',
+              backgroundColor: '#f0f0f0',
+              borderRadius: '8px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '12px',
+              textAlign: 'center',
+              padding: '5px',
+              fontWeight: '600',
+              color: '#666'
+            }}>
+              {airlineName}
+            </div>
+          )}
           <h2>Booking Confirmed!</h2>
           <span>Booking ID: #{bookingId}</span>
           <img
@@ -97,6 +134,7 @@ function FlightConfirmation() {
             {flightDetails.from} → {flightDetails.to}
           </p>
           <p>
+            <strong>Airline:</strong> {airlineName} <br />
             <strong>Departure:</strong> {flightDetails.departureTime || flightDetails.departure} <br />
             <strong>Arrival:</strong> {flightDetails.arrivalTime || flightDetails.return} <br />
             <strong>Stops:</strong> {flight.stops || 0} • {formatDuration(flight.duration)}

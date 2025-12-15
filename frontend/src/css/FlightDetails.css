@@ -8,6 +8,8 @@
   color: #0b3a3a;
   font-family: "Poppins", sans-serif;
   line-height: 1.5;
+  background: linear-gradient(180deg, #f8fafa 0%, #ffffff 100%);
+  min-height: 100vh;
 }
 
 .back-btn {
@@ -20,60 +22,150 @@
   cursor: pointer;
   margin-bottom: 1.5rem;
   transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: inherit;
+  box-shadow: 0 4px 12px rgba(40, 161, 161, 0.25);
 }
 
 .back-btn:hover {
-  background: #1f7f7f;
+  background: linear-gradient(135deg, #1f7f7f, #44c0c0);
   transform: translateY(-2px);
   box-shadow: 0 6px 15px rgba(31, 127, 127, 0.3);
 }
 
+.back-btn:active {
+  transform: translateY(0);
+}
+
+/* =======================
+   FLIGHT DETAILS CARD
+======================= */
 .flight-details-card {
-  max-width: 700px;
+  max-width: 750px;
   margin: 2rem auto;
-  padding: 2rem;
-  border-radius: 14px;
+  padding: 2.5rem;
+  border-radius: 16px;
   background: #fff;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
+  border: 1px solid #e0f0f0;
+}
+
+.flight-details-card:hover {
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
 }
 
 .flight-details-header {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-bottom: 2rem;
   gap: 0.8rem;
+  text-align: center;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid #e8f5f5;
 }
 
 .flight-details-header h2 {
-  font-size: 1.8rem;
+  font-size: 2rem;
   color: #0b3a3a;
+  margin: 0;
+  font-weight: 700;
+}
+
+.flight-details-info {
+  margin-top: 1.5rem;
 }
 
 .flight-details-info p {
   font-size: 1rem;
-  margin: 0.5rem 0;
+  margin: 0.6rem 0;
   color: #333;
+  line-height: 1.7;
+}
+
+.flight-details-info p strong {
+  color: #0b3a3a;
+  font-weight: 600;
+}
+
+/* =======================
+   PRINT BUTTON
+======================= */
+.print-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: #f0fafa;
+  border: 2px solid #cce8e8;
+  border-radius: 50%;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.print-btn:hover {
+  transform: scale(1.1);
+  background: #e0f7f5;
+  border-color: #28a1a1;
+  box-shadow: 0 4px 12px rgba(40, 161, 161, 0.2);
+}
+
+.print-btn:active {
+  transform: scale(0.95);
+}
+
+.print-btn img,
+.print-btn svg {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
 }
 
 /* =======================
    FLIGHT LEGS COLLAPSIBLE
 ======================= */
 .flight-summary-card {
-  background: #f8fdfd;
+  background: linear-gradient(135deg, #f8fdfd, #f0fafa);
   border-radius: 16px;
-  padding: 1.2rem 1.5rem;
+  padding: 1.5rem;
   margin-bottom: 1.8rem;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
-  border-top: 2px dashed #00b09b;
-  border-bottom: 2px dashed #00b09b;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  border: 2px solid #e0f7f5;
+  border-top: 3px solid #00b09b;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.flight-summary-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #28a1a1, #5cd6d6);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.flight-summary-card:hover::before {
+  opacity: 1;
 }
 
 .flight-summary-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
+  border-color: #c8e8e8;
 }
 
 .flight-summary-top {
@@ -81,14 +173,22 @@
   justify-content: space-between;
   align-items: center;
   cursor: pointer;
-  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 0.5rem;
+  border-radius: 8px;
+  transition: background 0.2s ease;
+}
+
+.flight-summary-top:hover {
+  background: rgba(40, 161, 161, 0.05);
 }
 
 .flight-summary-left {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  flex-wrap: wrap;
+  gap: 1.2rem;
+  flex: 1;
+  min-width: 0;
 }
 
 .flight-summary-info {
@@ -96,12 +196,16 @@
   flex-direction: column;
   text-align: left;
   white-space: pre-line;
+  flex: 1;
+  min-width: 0;
 }
 
 .flight-summary-info span {
   display: block;
   font-size: 0.95rem;
   color: #0b3a3a;
+  line-height: 1.5;
+  font-weight: 500;
 }
 
 .flight-summary-right {
@@ -110,11 +214,15 @@
   font-size: 1rem;
   display: flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.5rem;
+  flex-shrink: 0;
 }
 
 .flight-summary-arrow {
   transition: transform 0.3s ease;
+  display: inline-block;
+  font-size: 1.2rem;
+  color: #28a1a1;
 }
 
 .flight-summary-arrow.open {
@@ -138,12 +246,13 @@
 }
 
 .flight-summary-details.open {
-  padding: 1rem 1.2rem;
+  padding: 1.2rem;
   max-height: 1000px;
   opacity: 1;
   transform: translateY(0);
-  overflow-y: auto;
-  background: #f0fcfc;
+  background: rgba(240, 252, 252, 0.8);
+  border: 1px solid #d4eded;
+  margin-top: 1rem;
 }
 
 .flight-summary-details.scrollable {
@@ -162,135 +271,64 @@
   border-radius: 6px;
 }
 
+.flight-summary-details.scrollable::-webkit-scrollbar-track {
+  background: #f8fdfd;
+  border-radius: 6px;
+}
+
 /* =======================
    BOOKING FORM
 ======================= */
+.booking-form,
 .booking-form.extended {
-  max-width: 700px;
+  max-width: 750px;
   margin: 2rem auto;
   padding: 2.5rem;
-  border-radius: 14px;
+  border-radius: 16px;
   background: #fff;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
+  border: 1px solid #e0f0f0;
+}
+
+.booking-form:hover,
+.booking-form.extended:hover {
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
 }
 
 .booking-form h3 {
-  margin-bottom: 0.5rem;
+  margin-bottom: 1.5rem;
+  margin-top: 0;
   color: #0b3a3a;
-  font-size: 1.4rem;
+  font-size: 1.5rem;
+  font-weight: 700;
 }
 
 .booking-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px,1fr));
-  gap: 1rem 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
 }
 
 .input-group {
   display: flex;
   flex-direction: column;
-}
-
-.input-group input,
-.input-group select {
-  padding: 0.7rem 0.9rem;
-  border-radius: 12px;
-  border: 1.5px solid #ddd;
-  font-size: 0.95rem;
-  outline: none;
-  background-color: #fafafa;
-  transition: all 0.3s ease;
-}
-
-.input-group input:focus,
-.input-group select:focus {
-  border-color: #28a1a1;
-  background-color: #fff;
-  box-shadow: 0 0 10px rgba(40, 161, 161, 0.25);
-}
-
-.confirm-btn {
-  width: 100%;
-  margin-top: 1.8rem;
-  font-size: 1rem;
-  padding: 1rem 0;
-  border-radius: 12px;
-  background: #28a1a1;
-  color: #fff;
-  border: none;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.confirm-btn:hover {
-  background: #1f7f7f;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 15px rgba(31,127,127,0.2);
-}
-
-/* =======================
-   AIRLINE LOGO
-======================= */
-.airline-img {
-  width: 55px;
-  height: 55px;
-  object-fit: contain;
-  display: block;
-  border-radius: 50%;
-  border: 1px solid #e0f7f5;
-  padding: 4px;
-}
-
-/* =======================
-   RESPONSIVE
-======================= */
-@media (max-width: 900px) {
-  .flight-summary-card {
-    padding: 1rem 1rem;
-  }
-}
-
-@media (max-width: 600px) {
-  .booking-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .flight-summary-left {
-    gap: 0.7rem;
-    flex-wrap: wrap;
-  }
-
-  .airline-img {
-    width: 45px;
-    height: 45px;
-  }
-
-  .flight-summary-info,
-  .flight-summary-right {
-    font-size: 0.9rem;
-  }
-
-  .confirm-btn {
-    font-size: 0.95rem;
-    padding: 0.8rem 0;
-  }
+  gap: 0.5rem;
 }
 
 /* =======================
    INPUT + LABEL ENHANCEMENTS
 ======================= */
-
 .input-group label {
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   font-weight: 600;
-  margin-bottom: 0.35rem;
   color: #28525e;
+  display: block;
+  line-height: 1.3;
 }
 
 /* Required asterisk style */
-.input-group label::after {
+.input-group label[data-required]::after {
   content: attr(data-required);
   color: #e25555;
   margin-left: 4px;
@@ -299,13 +337,16 @@
 /* Inputs */
 .input-group input,
 .input-group select {
-  height: 44px;
+  height: 46px;
   border-radius: 12px;
-  border: 1.6px solid #dfeeee;
+  border: 1.5px solid #dfeeee;
   background: #f9fefe;
-  padding: 0 0.95rem;
+  padding: 0 1rem;
   font-size: 0.95rem;
+  font-family: inherit;
   transition: all 0.25s ease;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* Placeholder */
@@ -317,15 +358,17 @@
 /* Focus state */
 .input-group input:focus,
 .input-group select:focus {
+  outline: none;
   border-color: #28a1a1;
   background: #ffffff;
   box-shadow: 0 0 0 3px rgba(40, 161, 161, 0.15);
 }
 
 /* Hover */
-.input-group input:hover,
-.input-group select:hover {
+.input-group input:hover:not(:disabled),
+.input-group select:hover:not(:disabled) {
   border-color: #9fdede;
+  background: #f5fafa;
 }
 
 /* Disabled */
@@ -336,29 +379,537 @@
   opacity: 0.7;
 }
 
+/* Date input group for inline layout */
+.date-input-group {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 0.5rem;
+}
+
+.date-input-group .input-group {
+  margin: 0;
+}
+
 /* =======================
-   MULTI-INPUT GROUPS
-   (YYYY / MM / DD)
+   CONFIRM BUTTON
 ======================= */
-
-.input-group input + input {
-  margin-top: 0.45rem;
+.confirm-btn {
+  width: 100%;
+  margin-top: 2rem;
+  font-size: 1.05rem;
+  padding: 1.1rem 0;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #28a1a1, #5cd6d6);
+  color: #fff;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: inherit;
+  box-shadow: 0 6px 20px rgba(40, 161, 161, 0.3);
 }
 
-/* On desktop, make date fields inline */
-@media (min-width: 600px) {
-  .input-group {
-    display: flex;
-    gap: 0.5rem;
+.confirm-btn:hover {
+  background: linear-gradient(135deg, #1f7f7f, #44c0c0);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(31, 127, 127, 0.4);
+}
+
+.confirm-btn:active {
+  transform: translateY(0);
+}
+
+.confirm-btn:disabled {
+  background: #b0d4d4;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* =======================
+   AIRLINE LOGO
+======================= */
+.airline-img {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  display: block;
+  border-radius: 50%;
+  border: 2px solid #e0f7f5;
+  padding: 6px;
+  background: #fff;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* Large airline logo for confirmation page */
+.airline-img.large {
+  width: 150px;
+  height: auto;
+  border-radius: 12px;
+  padding: 10px;
+}
+
+/* Airline placeholder when logo is not available */
+.airline-placeholder {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 700;
+  color: white;
+  text-align: center;
+  padding: 6px;
+  line-height: 1.2;
+  flex-shrink: 0;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.airline-placeholder.large {
+  width: 150px;
+  height: 150px;
+  border-radius: 12px;
+  font-size: 14px;
+  padding: 12px;
+}
+
+/* =======================
+   RESPONSIVE - TABLET
+======================= */
+@media (max-width: 900px) {
+  .results-section {
+    margin-top: 60px;
+    padding: 1.5rem 1rem;
   }
 
-  .input-group input[name*="Year"],
-  .input-group input[name*="Month"],
-  .input-group input[name*="Day"] {
-    width: 100%;
-    margin-top: 0;
+  .flight-details-card,
+  .booking-form,
+  .booking-form.extended {
+    padding: 2rem;
+  }
+
+  .flight-details-header h2 {
+    font-size: 1.8rem;
+  }
+
+  .flight-summary-card {
+    padding: 1.2rem;
+  }
+
+  .booking-grid {
+    gap: 1.3rem;
   }
 }
 
+/* =======================
+   RESPONSIVE - MOBILE
+======================= */
+@media (max-width: 600px) {
+  .results-section {
+    padding: 1rem 0.75rem;
+    margin-top: 70px;
+  }
 
+  .back-btn {
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
+  }
 
+  .flight-details-card,
+  .booking-form,
+  .booking-form.extended {
+    padding: 1.5rem;
+    margin: 1rem auto;
+    border-radius: 14px;
+  }
+
+  .flight-details-header {
+    padding-bottom: 1.2rem;
+  }
+
+  .flight-details-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .booking-form h3 {
+    font-size: 1.3rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .booking-grid {
+    grid-template-columns: 1fr;
+    gap: 1.1rem;
+  }
+
+  .flight-summary-card {
+    padding: 1rem;
+    margin-bottom: 1.3rem;
+    border-radius: 14px;
+  }
+
+  .flight-summary-top {
+    gap: 0.8rem;
+    padding: 0.3rem;
+  }
+
+  .flight-summary-left {
+    gap: 0.8rem;
+  }
+
+  .airline-img {
+    width: 50px;
+    height: 50px;
+  }
+
+  .airline-placeholder {
+    width: 50px;
+    height: 50px;
+    font-size: 9px;
+  }
+
+  .print-btn {
+    width: 36px;
+    height: 36px;
+    top: -5px;
+    right: -5px;
+  }
+
+  .print-btn img,
+  .print-btn svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .flight-summary-info span {
+    font-size: 0.88rem;
+  }
+
+  .flight-summary-right {
+    font-size: 0.95rem;
+  }
+
+  .flight-summary-details.open {
+    padding: 1rem;
+    font-size: 0.88rem;
+  }
+
+  .input-group label {
+    font-size: 0.85rem;
+  }
+
+  .input-group input,
+  .input-group select {
+    height: 44px;
+    font-size: 0.9rem;
+    padding: 0 0.9rem;
+  }
+
+  .date-input-group {
+    grid-template-columns: 1fr;
+    gap: 0.8rem;
+  }
+
+  .confirm-btn {
+    font-size: 1rem;
+    padding: 1rem 0;
+    margin-top: 1.6rem;
+  }
+}
+
+/* =======================
+   RESPONSIVE - VERY SMALL MOBILE
+======================= */
+@media (max-width: 400px) {
+  .results-section {
+    padding: 0.75rem 0.5rem;
+  }
+
+  .flight-details-card,
+  .booking-form,
+  .booking-form.extended {
+    padding: 1.2rem;
+  }
+
+  .flight-details-header h2 {
+    font-size: 1.3rem;
+  }
+
+  .booking-form h3 {
+    font-size: 1.15rem;
+  }
+
+  .flight-summary-card {
+    padding: 0.9rem;
+  }
+
+  .airline-img {
+    width: 45px;
+    height: 45px;
+  }
+
+  .airline-placeholder {
+    width: 45px;
+    height: 45px;
+    font-size: 8px;
+  }
+
+  .print-btn {
+    width: 32px;
+    height: 32px;
+  }
+
+  .flight-summary-info span {
+    font-size: 0.82rem;
+  }
+
+  .flight-summary-right {
+    font-size: 0.9rem;
+  }
+
+  .input-group input,
+  .input-group select {
+    height: 42px;
+    font-size: 0.85rem;
+  }
+
+  .confirm-btn {
+    font-size: 0.95rem;
+    padding: 0.95rem 0;
+  }
+}
+
+/* =======================
+   PRINT STYLES - BOOKING CONFIRMATION
+======================= */
+@media print {
+  /* Reset body and page */
+  body {
+    background: white;
+  }
+
+  /* Hide interactive elements */
+  .print-btn,
+  .back-btn,
+  .confirm-btn {
+    display: none !important;
+  }
+
+  /* Optimize page for printing */
+  .results-section {
+    margin: 0;
+    padding: 20pt;
+    max-width: 100%;
+    background: white;
+  }
+
+  /* Flight details card as booking confirmation */
+  .flight-details-card {
+    box-shadow: none;
+    border: 2pt solid #000;
+    page-break-inside: avoid;
+    padding: 20pt;
+    margin-bottom: 15pt;
+    border-radius: 0;
+  }
+
+  .flight-details-header {
+    border-bottom: 2pt solid #000;
+    padding-bottom: 12pt;
+    margin-bottom: 15pt;
+  }
+
+  .flight-details-header::before {
+    content: "BOOKING CONFIRMATION";
+    display: block;
+    font-size: 10pt;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #666;
+    margin-bottom: 8pt;
+  }
+
+  .flight-details-header h2 {
+    font-size: 16pt;
+    color: #000;
+  }
+
+  .flight-details-info p {
+    font-size: 10pt;
+    color: #000;
+    margin: 4pt 0;
+  }
+
+  /* Flight summary cards */
+  .flight-summary-card {
+    box-shadow: none;
+    border: 1pt solid #000;
+    page-break-inside: avoid;
+    margin-bottom: 12pt;
+    padding: 12pt;
+    background: white;
+  }
+
+  .flight-summary-card::before {
+    display: none;
+  }
+
+  .flight-summary-top {
+    background: none;
+    padding: 0;
+  }
+
+  .flight-summary-left {
+    gap: 10pt;
+  }
+
+  .airline-img,
+  .airline-placeholder {
+    width: 40pt;
+    height: 40pt;
+    border: 1pt solid #000;
+  }
+
+  .flight-summary-info span {
+    font-size: 10pt;
+    color: #000;
+  }
+
+  .flight-summary-right {
+    color: #000;
+  }
+
+  .flight-summary-arrow {
+    display: none;
+  }
+
+  /* Show all details when printing */
+  .flight-summary-details {
+    max-height: none !important;
+    opacity: 1 !important;
+    display: block !important;
+    padding: 10pt !important;
+    background: #f9f9f9;
+    border: 1pt solid #ddd;
+    margin-top: 8pt;
+    transform: none !important;
+  }
+
+  /* Booking form as passenger details */
+  .booking-form,
+  .booking-form.extended {
+    box-shadow: none;
+    border: 2pt solid #000;
+    page-break-inside: avoid;
+    padding: 20pt;
+    border-radius: 0;
+  }
+
+  .booking-form h3 {
+    font-size: 14pt;
+    color: #000;
+    border-bottom: 1pt solid #000;
+    padding-bottom: 8pt;
+    margin-bottom: 12pt;
+  }
+
+  .booking-grid {
+    gap: 10pt;
+  }
+
+  .input-group label {
+    font-size: 8pt;
+    color: #000;
+    font-weight: bold;
+  }
+
+  .input-group input,
+  .input-group select {
+    border: 1pt solid #000;
+    background: white;
+    font-size: 10pt;
+    color: #000;
+    height: auto;
+    padding: 6pt 8pt;
+  }
+
+  /* Add booking reference number */
+  .flight-details-card::after {
+    content: "";
+    display: block;
+    margin-top: 20pt;
+    padding-top: 12pt;
+    border-top: 1pt dashed #666;
+  }
+
+  /* Footer with barcode simulation */
+  .results-section::after {
+    content: "";
+    display: block;
+    height: 30pt;
+    margin-top: 20pt;
+    background: repeating-linear-gradient(
+      90deg,
+      #000 0,
+      #000 2pt,
+      #fff 2pt,
+      #fff 4pt
+    );
+    border: 1pt solid #000;
+  }
+
+  /* Important notices */
+  .flight-details-info::after {
+    content: "Please arrive at the airport at least 2 hours before departure time. Bring valid ID and this confirmation.";
+    display: block;
+    margin-top: 15pt;
+    padding: 10pt;
+    background: #f9f9f9;
+    border: 1pt solid #666;
+    font-size: 8pt;
+    text-align: center;
+    color: #000;
+  }
+
+  /* Remove all transitions and animations */
+  * {
+    transition: none !important;
+    animation: none !important;
+    accent-color: exact;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
+
+/* =======================
+   ACCESSIBILITY
+======================= */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Focus visible for keyboard navigation */
+*:focus-visible {
+  outline: 2px solid #28a1a1;
+  outline-offset: 2px;
+}
+
+.back-btn:focus-visible,
+.confirm-btn:focus-visible {
+  outline: 3px solid #28a1a1;
+  outline-offset: 3px;
+}
+
+.print-btn:focus-visible {
+  outline: 2px solid #28a1a1;
+  outline-offset: 2px;
+}
