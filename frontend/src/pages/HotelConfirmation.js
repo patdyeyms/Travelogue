@@ -10,14 +10,26 @@ function HotelConfirmation() {
   const [showDetails, setShowDetails] = useState(false);
 
   useEffect(() => {
-  if (bookingData) {
-    const flightDetails = JSON.parse(localStorage.getItem("flightDetails") || "{}");
-    const hotelToSave = { ...bookingData.hotel, bookedForTrip: flightDetails.to };
-    localStorage.setItem("selectedHotel", JSON.stringify(hotelToSave));
+    if (bookingData) {
+      // Get user info for user-specific storage
+      const user = JSON.parse(localStorage.getItem("user") || "null");
+      const userId = user?.email || user?.id || 'default';
+
+      // Get flight details (check user-specific key first)
+      let flightDetails = JSON.parse(localStorage.getItem(`flightDetails_${userId}`) || "{}");
+      if (!flightDetails || Object.keys(flightDetails).length === 0) {
+        flightDetails = JSON.parse(localStorage.getItem("flightDetails") || "{}");
+      }
+
+      const hotelToSave = { 
+        ...bookingData.hotel, 
+        bookedForTrip: flightDetails.to 
+      };
+
+      // Save with user-specific key
+      localStorage.setItem(`selectedHotel_${userId}`, JSON.stringify(hotelToSave));
     }
   }, [bookingData]);
-
-
 
   if (!bookingData || !bookingData.hotel) {
     return (
@@ -34,6 +46,25 @@ function HotelConfirmation() {
   }
 
   const { hotel, checkIn, checkOut, adults, children, adultDetails, childDetails } = bookingData;
+
+  const handleGoToItinerary = () => {
+    // Get user info
+    const user = JSON.parse(localStorage.getItem("user") || "null");
+    const userId = user?.email || user?.id || 'default';
+
+    // Get flight details from user-specific storage
+    let flightDetails = JSON.parse(localStorage.getItem(`flightDetails_${userId}`) || "null");
+    if (!flightDetails) {
+      flightDetails = JSON.parse(localStorage.getItem("flightDetails") || "null");
+    }
+
+    navigate("/itinerary", { 
+      state: { 
+        flightDetails, 
+        hotel: bookingData.hotel 
+      } 
+    });
+  };
 
   return (
     <div className="thankyou-section">
@@ -103,7 +134,7 @@ function HotelConfirmation() {
         <div className="confirm-actions">
           <button
             className="action-btn primary"
-            onClick={() => navigate("/itinerary")}
+            onClick={handleGoToItinerary}
           >
             Go to Itinerary
           </button>

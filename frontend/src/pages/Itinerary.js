@@ -154,17 +154,21 @@ function Itinerary() {
 
   // Load flight and hotel data only if logged in
   useEffect(() => {
-    if (!isLoggedIn) {
+    if (!isLoggedIn || !user) {
       setFlightDetails(null);
       setBookedHotel(null);
       setTrip(null);
+      setDays([]);
+      setTripName("My Trip");
       setLoading(false);
       return;
     }
 
     const loadData = () => {
       try {
-        const storedFlightDetails = localStorage.getItem("flightDetails");
+        const userId = user.email || user.id || 'default';
+        
+        const storedFlightDetails = localStorage.getItem(`flightDetails_${userId}`);
         const parsedFlightDetails = storedFlightDetails 
           ? JSON.parse(storedFlightDetails) 
           : null;
@@ -172,13 +176,13 @@ function Itinerary() {
         const finalFlightDetails = passedFlightDetails || parsedFlightDetails;
         setFlightDetails(finalFlightDetails);
 
-        const storedHotel = localStorage.getItem("selectedHotel");
+        const storedHotel = localStorage.getItem(`selectedHotel_${userId}`);
         const parsedHotel = storedHotel ? JSON.parse(storedHotel) : null;
         
         setBookedHotel(passedHotel || parsedHotel);
 
-        // Load planner data
-        const savedItinerary = localStorage.getItem("plannedItinerary");
+        // Load planner data with user-specific key
+        const savedItinerary = localStorage.getItem(`plannedItinerary_${userId}`);
         if (savedItinerary) {
           const data = JSON.parse(savedItinerary);
           setTripName(data.tripName || "My Trip");
@@ -192,12 +196,14 @@ function Itinerary() {
         console.error("Error loading itinerary data:", error);
         setFlightDetails(null);
         setBookedHotel(null);
+        setDays([]);
+        setTripName("My Trip");
         setLoading(false);
       }
     };
 
     loadData();
-  }, [passedFlightDetails, passedHotel, isLoggedIn]);
+  }, [passedFlightDetails, passedHotel, isLoggedIn, user]);
 
   // Initialize days from flight dates
   const initializeDaysFromFlight = (flight) => {

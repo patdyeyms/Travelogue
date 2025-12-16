@@ -73,7 +73,7 @@ const POPULAR_COUNTRIES = [
 function BookingDetails() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { hotel, flight: passedFlight, onHotelBooked } = location.state || {};
+  const { hotel, flight: passedFlight, flightDetails: passedFlightDetails, onHotelBooked } = location.state || {};
 
   const today = new Date().toISOString().split("T")[0];
 
@@ -99,30 +99,69 @@ function BookingDetails() {
 
   // Load flight data
   useEffect(() => {
-    if (passedFlight) {
-      setFlightData(passedFlight);
-      setFormData(prev => ({ 
-        ...prev, 
-        checkIn: passedFlight.departureDate || "", 
-        checkOut: passedFlight.returnDate || "" 
-      }));
-    } else {
-      const savedFlight = localStorage.getItem("bookedFlight");
-      if (savedFlight) {
+    const loadFlightData = () => {
+      // Get user info for user-specific storage
+      const user = JSON.parse(localStorage.getItem("user") || "null");
+      const userId = user?.email || user?.id || 'default';
+
+      let flight = null;
+
+      // Priority 1: Check passedFlight from navigation state
+      if (passedFlight) {
+        flight = passedFlight;
+      }
+      // Priority 2: Check passedFlightDetails from navigation state
+      else if (passedFlightDetails) {
+        flight = {
+          origin: passedFlightDetails.from,
+          destination: passedFlightDetails.to,
+          departureDate: passedFlightDetails.departure,
+          returnDate: passedFlightDetails.return,
+        };
+      }
+      // Priority 3: Check user-specific localStorage
+      else {
         try {
-          const parsedFlight = JSON.parse(savedFlight);
-          setFlightData(parsedFlight);
-          setFormData(prev => ({ 
-            ...prev, 
-            checkIn: parsedFlight.departureDate || "", 
-            checkOut: parsedFlight.returnDate || "" 
-          }));
+          // Check user-specific key
+          let savedFlight = localStorage.getItem(`bookedFlight_${userId}`);
+          
+          // Fallback to generic key
+          if (!savedFlight) {
+            savedFlight = localStorage.getItem("bookedFlight");
+          }
+
+          // Also check for flightDetails_userId
+          if (!savedFlight) {
+            const flightDetails = localStorage.getItem(`flightDetails_${userId}`);
+            if (flightDetails) {
+              const parsed = JSON.parse(flightDetails);
+              flight = {
+                origin: parsed.from,
+                destination: parsed.to,
+                departureDate: parsed.departure,
+                returnDate: parsed.return,
+              };
+            }
+          } else {
+            flight = JSON.parse(savedFlight);
+          }
         } catch (error) {
           console.error("Error loading flight data:", error);
         }
       }
-    }
-  }, [passedFlight]);
+
+      if (flight) {
+        setFlightData(flight);
+        setFormData(prev => ({ 
+          ...prev, 
+          checkIn: flight.departureDate || "", 
+          checkOut: flight.returnDate || "" 
+        }));
+      }
+    };
+
+    loadFlightData();
+  }, [passedFlight, passedFlightDetails]);
 
   // Update guest detail arrays when counts change
   useEffect(() => {
@@ -244,6 +283,14 @@ function BookingDetails() {
     };
 
     try {
+      // Get user info for user-specific storage
+      const user = JSON.parse(localStorage.getItem("user") || "null");
+      const userId = user?.email || user?.id || 'default';
+
+      // Save with user-specific key
+      localStorage.setItem(`bookedHotel_${userId}`, JSON.stringify(bookingData));
+      
+      // Also save generic key for backward compatibility
       localStorage.setItem("bookedHotel", JSON.stringify(bookingData));
       
       // Update itinerary dynamically
@@ -251,7 +298,12 @@ function BookingDetails() {
         onHotelBooked(bookingData);
       }
 
-      navigate("/hotel-confirmation", { state: { bookingData } });
+      navigate("/hotel-confirmation", { 
+        state: { 
+          bookingData,
+          flightDetails: passedFlightDetails 
+        } 
+      });
     } catch (error) {
       console.error("Error saving booking:", error);
       alert("Error saving booking. Please try again.");

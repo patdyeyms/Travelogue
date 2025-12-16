@@ -111,25 +111,19 @@
   position: absolute;
   top: 15px;
   right: 15px;
-  width: 44px;
-  height: 44px;
   cursor: pointer;
   transition: all 0.3s ease;
-  background: rgba(255, 255, 255, 0.9);
-  border: 2px solid #28a1a1;
-  border-radius: 50%;
+  background: transparent;
+  border: none;
   padding: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .print-btn:hover {
   transform: scale(1.1);
-  background: #e0f7f5;
-  border-color: #1f7f7f;
-  box-shadow: 0 4px 12px rgba(40, 161, 161, 0.3);
+  opacity: 0.7;
 }
 
 .print-btn:active {
@@ -138,8 +132,8 @@
 
 .print-btn img,
 .print-btn svg {
-  width: 22px;
-  height: 22px;
+  width: 24px;
+  height: 24px;
   object-fit: contain;
 }
 
@@ -694,16 +688,14 @@
   }
 
   .print-btn {
-    width: 38px;
-    height: 38px;
     top: 10px;
     right: 10px;
   }
 
   .print-btn img,
   .print-btn svg {
-    width: 18px;
-    height: 18px;
+    width: 22px;
+    height: 22px;
   }
 
   .airline-img {
@@ -775,10 +767,14 @@
   }
 
   .print-btn {
-    width: 34px;
-    height: 34px;
     top: 8px;
     right: 8px;
+  }
+
+  .print-btn img,
+  .print-btn svg {
+    width: 20px;
+    height: 20px;
   }
 
   .airline-img {

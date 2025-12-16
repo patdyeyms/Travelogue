@@ -22,7 +22,7 @@ function Profile() {
         const parsedUser = JSON.parse(storedUser);
         setUser(parsedUser);
         setIsLoggedIn(true);
-        loadUserData(parsedUser.email);
+        loadUserData(parsedUser);
       } else {
         setIsLoggedIn(false);
       }
@@ -34,31 +34,48 @@ function Profile() {
     }
   }, []);
 
-  // Load user's trip and hotel history
-  const loadUserData = (email) => {
+  // Load user's trip and hotel history with user-specific keys
+  const loadUserData = (userData) => {
     try {
-      // Load flight history
-      const flightDetails = localStorage.getItem("flightDetails");
+      const userId = userData.email || userData.id || 'default';
+
+      // Load flight history (user-specific)
+      const flightDetailsKey = `flightDetails_${userId}`;
+      const flightDetails = localStorage.getItem(flightDetailsKey);
+      
       if (flightDetails) {
         const flight = JSON.parse(flightDetails);
         setTripHistory([flight]); // Can expand to array of trips
+      } else {
+        setTripHistory([]);
       }
 
-      // Load hotel history
-      const hotelDetails = localStorage.getItem("bookedHotel");
+      // Load hotel history (user-specific)
+      const hotelDetailsKey = `bookedHotel_${userId}`;
+      const hotelDetails = localStorage.getItem(hotelDetailsKey);
+      
       if (hotelDetails) {
         const hotel = JSON.parse(hotelDetails);
         setHotelHistory([hotel]); // Can expand to array of hotels
+      } else {
+        setHotelHistory([]);
       }
 
-      // Load claimed offers
-      const offers = localStorage.getItem(`claimedOffers_${email}`);
+      // Load claimed offers (already user-specific)
+      const offersKey = `claimedOffers_${userId}`;
+      const offers = localStorage.getItem(offersKey);
+      
       if (offers) {
         const parsedOffers = JSON.parse(offers);
         setClaimedOffers(parsedOffers);
+      } else {
+        setClaimedOffers([]);
       }
     } catch (error) {
       console.error("Error loading user data:", error);
+      setTripHistory([]);
+      setHotelHistory([]);
+      setClaimedOffers([]);
     }
   };
 

@@ -39,37 +39,50 @@ function FlightConfirmation() {
     setOpenLegIndex(openLegIndex === index ? null : index);
 
   const handleGoToItinerary = () => {
+    // Get user info for user-specific storage
+    const user = JSON.parse(localStorage.getItem("user") || "null");
+    const userId = user?.email || user?.id || 'default';
+
     const itineraryData = {
       ...flight,
       ...flightDetails,
       ...formData,
       bookingId,
     };
+    
     const existing = JSON.parse(localStorage.getItem("itinerary") || "[]");
     localStorage.setItem("itinerary", JSON.stringify([...existing, itineraryData]));
 
-    localStorage.setItem("flightDetails", JSON.stringify(flightDetails));
+    // Save with user-specific key
+    localStorage.setItem(`flightDetails_${userId}`, JSON.stringify(flightDetails));
 
-    // Check if a hotel has been booked
-    const bookedHotel = JSON.parse(localStorage.getItem("bookedHotel") || "null");
+    // Check if a hotel has been booked (also check user-specific key)
+    let bookedHotel = JSON.parse(localStorage.getItem(`selectedHotel_${userId}`) || "null");
+    if (!bookedHotel) {
+      bookedHotel = JSON.parse(localStorage.getItem("selectedHotel") || "null");
+    }
 
     navigate("/itinerary", { state: { flightDetails, hotel: bookedHotel } });
   };
 
   const handleGoToHotels = () => {
-    localStorage.setItem("selectedDestination", flightDetails.to);
-    localStorage.setItem(
-      "bookedFlight",
-      JSON.stringify({
-        origin: flightDetails.from,
-        destination: flightDetails.to,
-        departureDate: flightDetails.departure,
-        returnDate: flightDetails.return,
-        airline: flight.airline || flight.airlineName || "Unknown Airline",
-        price: flight.price,
-        passenger: `${formData.firstName} ${formData.lastName}`,
-      })
-    );
+    // Get user info for user-specific storage
+    const user = JSON.parse(localStorage.getItem("user") || "null");
+    const userId = user?.email || user?.id || 'default';
+
+    localStorage.setItem(`selectedDestination_${userId}`, flightDetails.to);
+    
+    const bookedFlightData = {
+      origin: flightDetails.from,
+      destination: flightDetails.to,
+      departureDate: flightDetails.departure,
+      returnDate: flightDetails.return,
+      airline: flight.airline || flight.airlineName || "Unknown Airline",
+      price: flight.price,
+      passenger: `${formData.firstName} ${formData.lastName}`,
+    };
+    
+    localStorage.setItem(`bookedFlight_${userId}`, JSON.stringify(bookedFlightData));
 
     navigate("/hotels", { state: { flightDetails } });
   };

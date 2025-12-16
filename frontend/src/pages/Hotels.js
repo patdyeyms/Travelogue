@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import "../css/Hotels.css";
 
 // Constants
@@ -8,7 +8,11 @@ const FALLBACK_IMAGE = "/fallback-hotel.jpg";
 
 function Hotels() {
   const navigate = useNavigate();
+  const location = useLocation();
   const searchRef = useRef(null);
+  
+  // Get flightDetails from navigation state
+  const { flightDetails: passedFlightDetails } = location.state || {};
 
   const [search, setSearch] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -22,17 +26,33 @@ function Hotels() {
   useEffect(() => {
     const loadSavedDestination = () => {
       try {
-        const savedDestination = localStorage.getItem("selectedDestination");
+        // Get user info for user-specific storage
+        const user = JSON.parse(localStorage.getItem("user") || "null");
+        const userId = user?.email || user?.id || 'default';
+
+        // First check if passed through navigation state
+        let destination = passedFlightDetails?.to;
+
+        // If not in state, check user-specific localStorage
+        if (!destination) {
+          destination = localStorage.getItem(`selectedDestination_${userId}`);
+        }
+
+        // Fallback to generic key for backward compatibility
+        if (!destination) {
+          destination = localStorage.getItem("selectedDestination");
+        }
         
-        if (savedDestination && savedDestination.trim() !== "") {
-          const city = savedDestination.split(",")[0].trim();
-          const country = savedDestination.split(",")[1]?.trim() || "";
+        if (destination && destination.trim() !== "") {
+          const city = destination.split(",")[0].trim();
+          const country = destination.split(",")[1]?.trim() || "";
           
           setSearch(`${city}, ${country}`);
           setSelectedCity(city.toLowerCase());
           fetchHotels(city);
           
-          // Clean up
+          // Clean up both keys
+          localStorage.removeItem(`selectedDestination_${userId}`);
           localStorage.removeItem("selectedDestination");
         }
       } catch (error) {
@@ -41,7 +61,7 @@ function Hotels() {
     };
 
     loadSavedDestination();
-  }, []);
+  }, [passedFlightDetails]);
 
   // Close suggestions when clicking outside
   useEffect(() => {
@@ -168,11 +188,32 @@ function Hotels() {
     }
 
     try {
-      const flightDetails = JSON.parse(
-        localStorage.getItem("bookedFlight") || "{}"
-      );
+      // Get user info for user-specific storage
+      const user = JSON.parse(localStorage.getItem("user") || "null");
+      const userId = user?.email || user?.id || 'default';
 
-      if (!flightDetails.destination) {
+      // Check user-specific key first, then fallback to generic
+      let flightDetails = JSON.parse(
+        localStorage.getItem(`bookedFlight_${userId}`) || "null"
+      );
+      
+      if (!flightDetails) {
+        flightDetails = JSON.parse(
+          localStorage.getItem("bookedFlight") || "null"
+        );
+      }
+
+      // Also check for passedFlightDetails from navigation
+      if (!flightDetails && passedFlightDetails) {
+        flightDetails = {
+          origin: passedFlightDetails.from,
+          destination: passedFlightDetails.to,
+          departureDate: passedFlightDetails.departure,
+          returnDate: passedFlightDetails.return,
+        };
+      }
+
+      if (!flightDetails || !flightDetails.destination) {
         alert("Please select a flight first to associate this hotel with a trip.");
         return;
       }
@@ -183,13 +224,23 @@ function Hotels() {
         flightInfo: flightDetails,
       };
 
+      // Save with user-specific key
+      localStorage.setItem(`selectedHotel_${userId}`, JSON.stringify(hotelToSave));
+      
+      // Also save the generic key for backward compatibility
       localStorage.setItem("selectedHotel", JSON.stringify(hotelToSave));
-      navigate("/booking-details", { state: { hotel: hotelToSave } });
+
+      navigate("/booking-details", { 
+        state: { 
+          hotel: hotelToSave,
+          flightDetails: passedFlightDetails 
+        } 
+      });
     } catch (error) {
       console.error("Booking error:", error);
       alert("Failed to book hotel. Please try again.");
     }
-  }, [navigate]);
+  }, [navigate, passedFlightDetails]);
 
   // Handle image error
   const handleImageError = useCallback((e) => {
