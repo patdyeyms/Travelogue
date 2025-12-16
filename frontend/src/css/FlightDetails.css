@@ -913,3 +913,71 @@
   outline: 2px solid #28a1a1;
   outline-offset: 2px;
 }
+
+/* Additional CSS for improved FlightDetails form */
+
+/* Date inputs container */
+.date-inputs {
+  display: flex;
+  gap: 8px;
+}
+
+.date-inputs input {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Auto-filled field styling */
+input[readonly] {
+  background: #f0f0f0;
+  cursor: not-allowed;
+  color: #666;
+}
+
+input[readonly]:hover {
+  background: #e8e8e8;
+}
+
+/* Success indicator for auto-filled fields */
+.input-group small {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.85rem;
+}
+
+/* Number input styling */
+input[type="number"] {
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Select dropdown improvements */
+select optgroup {
+  font-weight: 600;
+  color: #0b3a3a;
+  font-size: 0.9rem;
+  padding: 8px 0;
+}
+
+select option {
+  padding: 8px 12px;
+  font-weight: 400;
+}
+
+/* Mobile responsiveness for date inputs */
+@media (max-width: 600px) {
+  .date-inputs {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .date-inputs input {
+    width: 100%;
+  }
+}

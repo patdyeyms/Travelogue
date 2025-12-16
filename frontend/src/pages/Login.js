@@ -7,8 +7,15 @@ function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   const handleRegister = async () => {
+    setError("");
+    setSuccess("");
+    setLoading(true);
+
     try {
       const res = await fetch("http://localhost/travelogue-api/register.php", {
         method: "POST",
@@ -16,18 +23,31 @@ function Login() {
         body: JSON.stringify({ email, password }),
       });
       const data = await res.json();
-      alert(data.message);
+
       if (data.success) {
-        navigate(-1); // Go back to previous page
+        setSuccess("Account created successfully! Logging you in...");
+        setTimeout(() => {
+          localStorage.setItem("user", JSON.stringify(data.user));
+          localStorage.setItem("isLoggedIn", "true");
+          window.dispatchEvent(new Event("storage"));
+          navigate(-1);
+        }, 1500);
+      } else {
+        setError(data.message || "Registration failed. Please try again.");
       }
     } catch (err) {
       console.error(err);
-      alert("Error connecting to server");
+      setError("Error connecting to server. Please try again later.");
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setError("");
+    setSuccess("");
+    setLoading(true);
 
     try {
       const res = await fetch("http://localhost/travelogue-api/login.php", {
@@ -39,8 +59,10 @@ function Login() {
 
       if (data.success) {
         localStorage.setItem("user", JSON.stringify(data.user));
-        alert("Login successful!");
-        navigate(-1); // Go back to previous page
+        localStorage.setItem("isLoggedIn", "true");
+        window.dispatchEvent(new Event("storage"));
+        setSuccess("Login successful! Redirecting...");
+        setTimeout(() => navigate(-1), 1000);
       } else {
         if (data.message === "Email not registered") {
           const confirmRegister = window.confirm(
@@ -48,15 +70,31 @@ function Login() {
           );
           if (confirmRegister) {
             handleRegister();
+          } else {
+            setLoading(false);
           }
         } else {
-          alert(data.message);
+          setError(data.message || "Login failed. Please check your credentials.");
+          setLoading(false);
         }
       }
     } catch (err) {
       console.error(err);
-      alert("Error connecting to server");
+      setError("Error connecting to server. Please try again later.");
+      setLoading(false);
     }
+  };
+
+  const handleGoogleLogin = () => {
+    setError("Google Sign-In coming soon!");
+  };
+
+  const handleFacebookLogin = () => {
+    setError("Facebook Login coming soon!");
+  };
+
+  const handleAppleLogin = () => {
+    setError("Apple Sign-In coming soon!");
   };
 
   return (
@@ -67,23 +105,50 @@ function Login() {
           Sign up for free or log in to access amazing deals and benefits!
         </p>
 
+        {/* Error Message */}
+        {error && <div className="error-message" role="alert">{error}</div>}
+
+        {/* Success Message */}
+        {success && <div className="success-message" role="alert">{success}</div>}
+
         {/* Social Login */}
         <div className="social-login">
-          <button className="social-btn google">
-            <FaGoogle className="social-icon" /> Sign in with Google
+          <button 
+            className="social-btn google" 
+            onClick={handleGoogleLogin}
+            disabled={loading}
+            type="button"
+            aria-label="Sign in with Google"
+          >
+            <FaGoogle className="social-icon" />
+            <span>Sign in with Google</span>
           </button>
-          <button className="social-btn facebook">
-            <FaFacebookF className="social-icon" /> Sign in with Facebook
+          <button 
+            className="social-btn facebook" 
+            onClick={handleFacebookLogin}
+            disabled={loading}
+            type="button"
+            aria-label="Sign in with Facebook"
+          >
+            <FaFacebookF className="social-icon" />
+            <span>Sign in with Facebook</span>
           </button>
-          <button className="social-btn apple">
-            <FaApple className="social-icon" /> Sign in with Apple
+          <button 
+            className="social-btn apple" 
+            onClick={handleAppleLogin}
+            disabled={loading}
+            type="button"
+            aria-label="Sign in with Apple"
+          >
+            <FaApple className="social-icon" />
+            <span>Sign in with Apple</span>
           </button>
         </div>
 
         <div className="divider">or</div>
 
         {/* Email Login */}
-        <form className="login-form" onSubmit={handleLogin}>
+        <form className="login-form" onSubmit={handleLogin} noValidate>
           <input
             type="email"
             placeholder="id@email.com"
@@ -91,6 +156,11 @@ function Login() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
+            disabled={loading}
+            autoComplete="email"
+            name="email"
+            id="login-email"
+            aria-label="Email address"
           />
           <input
             type="password"
@@ -99,9 +169,22 @@ function Login() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
+            disabled={loading}
+            autoComplete="current-password"
+            name="password"
+            id="login-password"
+            aria-label="Password"
           />
-          <button className="login-submit-btn" type="submit">
-            Continue
+          <div className="forgot-password">
+            <a href="/forgot-password">Forgot password?</a>
+          </div>
+          <button 
+            className={`login-submit-btn ${loading ? "loading" : ""}`}
+            type="submit"
+            disabled={loading}
+            aria-busy={loading}
+          >
+            {loading ? "" : "Continue"}
           </button>
         </form>
       </div>
@@ -109,4 +192,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default React.memo(Login);

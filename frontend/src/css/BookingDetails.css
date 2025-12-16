@@ -568,3 +568,280 @@
     animation: none !important;
   }
 }
+
+/* Additional CSS for improved BookingDetails */
+
+/* Back button */
+.back-btn {
+  background: #fff;
+  border: 2px solid #ddd;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  color: #333;
+  transition: all 0.3s ease;
+  margin-bottom: 1.5rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.back-btn:hover {
+  background: #28a1a1;
+  color: #fff;
+  border-color: #28a1a1;
+  transform: translateX(-4px);
+}
+
+/* Flight info box styling */
+.flight-info-box {
+  background: linear-gradient(135deg, #e6f7f7, #f0fafa);
+  border: 2px solid #c0e8e8;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.flight-info-box h3 {
+  color: #0b3a3a;
+  margin-bottom: 0.75rem;
+  font-size: 1.1rem;
+}
+
+.flight-info-box p {
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+/* Guest card styling */
+.guest-card {
+  background: #f8f8f8;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  border-left: 4px solid #28a1a1;
+}
+
+.guest-card h4 {
+  color: #0b3a3a;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+}
+
+/* Auto-filled field styling */
+input[readonly] {
+  background: #f0f0f0;
+  cursor: not-allowed;
+  color: #666;
+}
+
+input[readonly]:hover {
+  background: #e8e8e8;
+}
+
+/* Success indicator for auto-filled fields */
+.input-group small {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.85rem;
+}
+
+/* Select dropdown improvements */
+select optgroup {
+  font-weight: 600;
+  color: #0b3a3a;
+  font-size: 0.9rem;
+  padding: 8px 0;
+}
+
+select option {
+  padding: 8px 12px;
+  font-weight: 400;
+}
+
+/* Selected hotel card improvements */
+.selected-hotel {
+  display: flex;
+  gap: 1.5rem;
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border-left: 4px solid #28a1a1;
+}
+
+.selected-hotel img {
+  width: 200px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.selected-hotel h2 {
+  color: #0b3a3a;
+  margin-bottom: 0.5rem;
+  font-size: 1.5rem;
+}
+
+.selected-hotel p {
+  color: #666;
+  margin-bottom: 0.25rem;
+}
+
+/* Checkbox group styling */
+.checkbox-group.column {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 1.5rem;
+}
+
+.checkbox-group label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  padding: 12px;
+  border-radius: 8px;
+  transition: background 0.2s ease;
+}
+
+.checkbox-group label:hover {
+  background: rgba(40, 161, 161, 0.05);
+}
+
+.checkbox-group input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: #28a1a1;
+}
+
+/* Free badge styling */
+.free-badge {
+  background: linear-gradient(135deg, #28a1a1, #5cd6d6);
+  color: #fff;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  margin-left: 8px;
+}
+
+/* Phone row (if still using it) */
+.phone-row {
+  display: flex;
+  gap: 10px;
+}
+
+.phone-row input:first-child {
+  flex: 0 0 80px;
+}
+
+.phone-row input:last-child {
+  flex: 1;
+}
+
+/* Confirm button improvements */
+.confirm-btn {
+  background: linear-gradient(135deg, #28a1a1, #5cd6d6);
+  color: #fff;
+  border: none;
+  padding: 14px 32px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(40, 161, 161, 0.3);
+  width: 100%;
+  margin-top: 2rem;
+}
+
+.confirm-btn:hover {
+  background: linear-gradient(135deg, #1f7f7f, #44c0c0);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(40, 161, 161, 0.4);
+}
+
+.confirm-btn:active {
+  transform: translateY(0);
+}
+
+/* Section headers */
+.booking-form h3 {
+  color: #0b3a3a;
+  font-size: 1.3rem;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.booking-form h3:first-child {
+  margin-top: 0;
+}
+
+.booking-form h4 {
+  color: #0b3a3a;
+  font-size: 1.1rem;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+/* Input group labels */
+.input-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #333;
+  font-weight: 500;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .selected-hotel {
+    flex-direction: column;
+  }
+  
+  .selected-hotel img {
+    width: 100%;
+    height: 200px;
+  }
+  
+  .booking-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .guest-card {
+    padding: 1rem;
+  }
+  
+  .phone-row {
+    flex-direction: column;
+  }
+  
+  .phone-row input:first-child {
+    flex: 1;
+  }
+}
+
+@media (max-width: 480px) {
+  .booking-details-container {
+    padding: 1rem;
+  }
+  
+  .selected-hotel {
+    padding: 1rem;
+  }
+  
+  .flight-info-box {
+    padding: 1rem;
+  }
+  
+  .confirm-btn {
+    padding: 12px 24px;
+    font-size: 1rem;
+  }
+}

@@ -1,122 +1,191 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../css/Flights.css";
 
+// Constants
+const DESTINATIONS = {
+  "Manila, Philippines": "MNL",
+  "Dubai, UAE": "DXB",
+  "Zurich, Switzerland": "ZRH",
+  "Tokyo, Japan": "HND",
+  "Seoul, Korea": "ICN",
+  "Singapore": "SIN",
+};
+
+const AIRLINES = [
+  { name: "Any Airline", code: "" },
+  { name: "Philippine Airlines", code: "PR" },
+  { name: "Cebu Pacific", code: "5J" },
+  { name: "AirAsia", code: "Z2" },
+  { name: "ANA", code: "NH" },
+  { name: "Emirates", code: "EK" },
+  { name: "Singapore Airlines", code: "SQ" },
+];
+
+const TRAVEL_CLASSES = [
+  { value: "1", label: "Economy" },
+  { value: "2", label: "Premium Economy" },
+  { value: "3", label: "Business Class" },
+  { value: "4", label: "First Class" },
+];
+
+const INITIAL_FLIGHT_STATE = {
+  from: "",
+  to: "",
+  departure: "",
+  return: "",
+  isRoundTrip: true,
+  travelClass: "1",
+  adults: "1",
+  children: "0",
+  infants: "0",
+  airline: "",
+  nonstop: false,
+};
+
 function Flights() {
   const navigate = useNavigate();
+  const [flightDetails, setFlightDetails] = useState(INITIAL_FLIGHT_STATE);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  const destinations = {
-    "Manila, Philippines": "MNL",
-    "Dubai, UAE": "DXB",
-    "Zurich, Switzerland": "ZRH",
-    "Tokyo, Japan": "HND",
-    "Seoul, Korea": "ICN",
-    "Singapore": "SIN",
-  };
-
-  const airlines = [
-    { name: "Any Airline", code: "" },
-    { name: "Philippine Airlines", code: "PR" },
-    { name: "Cebu Pacific", code: "5J" },
-    { name: "AirAsia", code: "Z2" },
-    { name: "ANA", code: "NH" },
-    { name: "Emirates", code: "EK" },
-    { name: "Singapore Airlines", code: "SQ" },
-  ];
-
-  const [flightDetails, setFlightDetails] = useState({
-    from: "",
-    to: "",
-    departure: "",
-    return: "",
-    isRoundTrip: true,
-    travelClass: "1",
-    adults: "1",
-    children: "0",
-    infants: "0",
-    airline: "",
-    nonstop: false,
-  });
-
+  // Load saved flight details
   useEffect(() => {
-    const savedFlight = JSON.parse(localStorage.getItem("flightDetails"));
-    if (savedFlight) setFlightDetails(savedFlight);
+    try {
+      const savedFlight = localStorage.getItem("flightDetails");
+      if (savedFlight) {
+        const parsed = JSON.parse(savedFlight);
+        setFlightDetails((prev) => ({ ...prev, ...parsed }));
+      }
+    } catch (error) {
+      console.error("Error loading saved flight details:", error);
+    }
   }, []);
 
+  // Get today's date for min attribute
+  const today = new Date().toISOString().split("T")[0];
 
-  const handleChange = e => {
+  // Handle input change
+  const handleChange = useCallback((e) => {
     const { name, value } = e.target;
-    setFlightDetails(prev => ({ ...prev, [name]: value }));
-  };
+    setFlightDetails((prev) => ({ ...prev, [name]: value }));
+    setError(null);
+  }, []);
 
-  const handleSwitch = () => {
-    setFlightDetails(prev => ({
+  // Toggle round trip
+  const toggleRoundTrip = useCallback((isRoundTrip) => {
+    setFlightDetails((prev) => ({
       ...prev,
-      isRoundTrip: !prev.isRoundTrip,
-      return: "",
-    }));
-  };
-
-  const handleSearch = async () => {
-    const {
-      from,
-      to,
-      departure,
-      return: returnDate,
       isRoundTrip,
-      travelClass,
-      adults,
-      children,
-      infants,
-      airline,
-      nonstop,
-    } = flightDetails;
+      return: isRoundTrip ? prev.return : "",
+    }));
+  }, []);
 
-    if (!from || !to) return alert("Please select both From and To cities.");
-    if (!departure) return alert("Please select a departure date.");
+  // Toggle nonstop
+  const toggleNonstop = useCallback(() => {
+    setFlightDetails((prev) => ({
+      ...prev,
+      nonstop: !prev.nonstop,
+    }));
+  }, []);
 
-    const departure_id = destinations[from];
-    const arrival_id = destinations[to];
+  // Validate search
+  const validateSearch = useCallback(() => {
+    const errors = [];
+
+    if (!flightDetails.from) {
+      errors.push("Please select a departure city");
+    }
+
+    if (!flightDetails.to) {
+      errors.push("Please select a destination");
+    }
+
+    if (flightDetails.from === flightDetails.to) {
+      errors.push("Departure and destination cannot be the same");
+    }
+
+    if (!flightDetails.departure) {
+      errors.push("Please select a departure date");
+    }
+
+    if (flightDetails.isRoundTrip && !flightDetails.return) {
+      errors.push("Please select a return date for round trip");
+    }
+
+    if (flightDetails.isRoundTrip && flightDetails.return) {
+      const departureDate = new Date(flightDetails.departure);
+      const returnDate = new Date(flightDetails.return);
+      
+      if (returnDate <= departureDate) {
+        errors.push("Return date must be after departure date");
+      }
+    }
+
+    return errors;
+  }, [flightDetails]);
+
+  // Handle search
+  const handleSearch = useCallback(async () => {
+    // Validate
+    const errors = validateSearch();
+    if (errors.length > 0) {
+      setError(errors.join("\n"));
+      alert(errors.join("\n"));
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+
+    const departure_id = DESTINATIONS[flightDetails.from];
+    const arrival_id = DESTINATIONS[flightDetails.to];
 
     try {
       const response = await axios.get("http://localhost:5000/api/flights", {
         params: {
           departure_id,
           arrival_id,
-          outbound_date: departure,
-          return_date: isRoundTrip ? returnDate : "",
-          travel_class: travelClass,
-          adults,
-          children,
-          infants_in_seat: infants,
-          airlines: airline || undefined,
-          nonstop,
+          outbound_date: flightDetails.departure,
+          return_date: flightDetails.isRoundTrip ? flightDetails.return : "",
+          travel_class: flightDetails.travelClass,
+          adults: flightDetails.adults,
+          children: flightDetails.children,
+          infants_in_seat: flightDetails.infants,
+          airlines: flightDetails.airline || undefined,
+          nonstop: flightDetails.nonstop,
         },
       });
 
       const flightsData = response.data?.best_flights || [];
 
       if (!flightsData.length) {
-        alert("No flights found.");
+        setError("No flights found for your search criteria.");
+        alert("No flights found. Please try different dates or destinations.");
         return;
       }
 
+      // Save to localStorage
       localStorage.setItem("flightDetails", JSON.stringify(flightDetails));
 
+      // Navigate to results
       navigate("/flights/results", {
         state: { flightDetails, flights: flightsData },
       });
     } catch (err) {
       console.error("Error fetching flights:", err);
-      alert("Failed to fetch flights.");
+      const errorMessage = err.response?.data?.message || "Failed to fetch flights. Please try again.";
+      setError(errorMessage);
+      alert(errorMessage);
+    } finally {
+      setLoading(false);
     }
-  };
-
-  const today = new Date().toISOString().split("T")[0];
+  }, [flightDetails, validateSearch, navigate]);
 
   return (
     <div className="flights-page">
+      {/* HERO SECTION */}
       <section className="flights-hero">
         <div className="hero-overlay" />
         <div className="flights-hero-content">
@@ -127,24 +196,31 @@ function Flights() {
         </div>
       </section>
 
+      {/* SEARCH CONTAINER */}
       <div className="search-container">
         <div className="flight-search-box">
+          {/* ERROR MESSAGE */}
+          {error && (
+            <div className="error-message" role="alert">
+              {error}
+            </div>
+          )}
 
-          {/* TRIP TYPE SWITCH */}
-          <div className="trip-toggle">
+          {/* TRIP TYPE TOGGLE */}
+          <div className="trip-toggle" role="group" aria-label="Trip type">
             <button
+              type="button"
               className={flightDetails.isRoundTrip ? "active" : ""}
-              onClick={() =>
-                setFlightDetails(prev => ({ ...prev, isRoundTrip: true }))
-              }
+              onClick={() => toggleRoundTrip(true)}
+              aria-pressed={flightDetails.isRoundTrip}
             >
               Round Trip
             </button>
             <button
+              type="button"
               className={!flightDetails.isRoundTrip ? "active" : ""}
-              onClick={() =>
-                setFlightDetails(prev => ({ ...prev, isRoundTrip: false }))
-              }
+              onClick={() => toggleRoundTrip(false)}
+              aria-pressed={!flightDetails.isRoundTrip}
             >
               One Way
             </button>
@@ -152,10 +228,16 @@ function Flights() {
 
           {/* FROM */}
           <div className="input-group">
-            <label>From</label>
-            <select name="from" value={flightDetails.from} onChange={handleChange}>
+            <label htmlFor="from">From</label>
+            <select
+              id="from"
+              name="from"
+              value={flightDetails.from}
+              onChange={handleChange}
+              aria-required="true"
+            >
               <option value="">Select city</option>
-              {Object.keys(destinations).map((city, i) => (
+              {Object.keys(DESTINATIONS).map((city, i) => (
                 <option key={i} value={city}>
                   {city}
                 </option>
@@ -165,10 +247,16 @@ function Flights() {
 
           {/* TO */}
           <div className="input-group">
-            <label>To</label>
-            <select name="to" value={flightDetails.to} onChange={handleChange}>
+            <label htmlFor="to">To</label>
+            <select
+              id="to"
+              name="to"
+              value={flightDetails.to}
+              onChange={handleChange}
+              aria-required="true"
+            >
               <option value="">Select city</option>
-              {Object.keys(destinations).map((city, i) => (
+              {Object.keys(DESTINATIONS).map((city, i) => (
                 <option key={i} value={city}>
                   {city}
                 </option>
@@ -178,81 +266,112 @@ function Flights() {
 
           {/* DEPARTURE */}
           <div className="input-group">
-            <label>Departure</label>
+            <label htmlFor="departure">Departure</label>
             <input
+              id="departure"
               type="date"
               name="departure"
               value={flightDetails.departure}
               min={today}
               onChange={handleChange}
+              aria-required="true"
             />
           </div>
 
           {/* RETURN (only if round trip) */}
           {flightDetails.isRoundTrip && (
             <div className="input-group">
-              <label>Return</label>
+              <label htmlFor="return">Return</label>
               <input
+                id="return"
                 type="date"
                 name="return"
                 value={flightDetails.return}
                 min={flightDetails.departure || today}
                 onChange={handleChange}
+                aria-required="true"
               />
             </div>
           )}
 
           {/* CLASS */}
           <div className="input-group">
-            <label>Class</label>
+            <label htmlFor="travelClass">Class</label>
             <select
+              id="travelClass"
               name="travelClass"
               value={flightDetails.travelClass}
               onChange={handleChange}
             >
-              <option value="1">Economy</option>
-              <option value="2">Premium Economy</option>
-              <option value="3">Business Class</option>
-              <option value="4">First Class</option>
+              {TRAVEL_CLASSES.map((tc, i) => (
+                <option key={i} value={tc.value}>
+                  {tc.label}
+                </option>
+              ))}
             </select>
           </div>
 
           {/* PASSENGERS */}
           <div className="passengers-group">
             <div className="input-group">
-              <label>Adults</label>
-              <select name="adults" value={flightDetails.adults} onChange={handleChange}>
+              <label htmlFor="adults">Adults</label>
+              <select
+                id="adults"
+                name="adults"
+                value={flightDetails.adults}
+                onChange={handleChange}
+              >
                 {[...Array(6)].map((_, i) => (
-                  <option key={i}>{i + 1}</option>
+                  <option key={i} value={i + 1}>
+                    {i + 1}
+                  </option>
                 ))}
               </select>
             </div>
 
             <div className="input-group">
-              <label>Children</label>
-              <select name="children" value={flightDetails.children} onChange={handleChange}>
+              <label htmlFor="children">Children</label>
+              <select
+                id="children"
+                name="children"
+                value={flightDetails.children}
+                onChange={handleChange}
+              >
                 {[...Array(6)].map((_, i) => (
-                  <option key={i}>{i}</option>
+                  <option key={i} value={i}>
+                    {i}
+                  </option>
                 ))}
               </select>
             </div>
 
             <div className="input-group">
-              <label>Infants</label>
-              <select name="infants" value={flightDetails.infants} onChange={handleChange}>
+              <label htmlFor="infants">Infants</label>
+              <select
+                id="infants"
+                name="infants"
+                value={flightDetails.infants}
+                onChange={handleChange}
+              >
                 {[...Array(4)].map((_, i) => (
-                  <option key={i}>{i}</option>
+                  <option key={i} value={i}>
+                    {i}
+                  </option>
                 ))}
               </select>
             </div>
           </div>
 
-
           {/* AIRLINE FILTER */}
           <div className="input-group">
-            <label>Airline</label>
-            <select name="airline" value={flightDetails.airline} onChange={handleChange}>
-              {airlines.map((a, i) => (
+            <label htmlFor="airline">Airline</label>
+            <select
+              id="airline"
+              name="airline"
+              value={flightDetails.airline}
+              onChange={handleChange}
+            >
+              {AIRLINES.map((a, i) => (
                 <option key={i} value={a.code}>
                   {a.name}
                 </option>
@@ -267,20 +386,20 @@ function Flights() {
                 type="checkbox"
                 name="nonstop"
                 checked={flightDetails.nonstop}
-                onChange={() =>
-                  setFlightDetails(prev => ({
-                    ...prev,
-                    nonstop: !prev.nonstop,
-                  }))
-                }
+                onChange={toggleNonstop}
               />
               Non-stop only
             </label>
           </div>
 
           {/* SEARCH BUTTON */}
-          <button className="search-btn" onClick={handleSearch}>
-            Search Flights
+          <button
+            className={`search-btn ${loading ? "loading" : ""}`}
+            onClick={handleSearch}
+            disabled={loading}
+            aria-busy={loading}
+          >
+            {loading ? "Searching..." : "Search Flights"}
           </button>
         </div>
       </div>
@@ -288,4 +407,4 @@ function Flights() {
   );
 }
 
-export default Flights;
+export default React.memo(Flights);

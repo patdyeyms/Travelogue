@@ -1,28 +1,46 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import "../css/Hotels.css";
 
+// Constants
+const API_ENDPOINT = "http://localhost:5000/api/hotels";
+const FALLBACK_IMAGE = "/fallback-hotel.jpg";
+
 function Hotels() {
+  const navigate = useNavigate();
+  const searchRef = useRef(null);
+
   const [search, setSearch] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [activeIndex, setActiveIndex] = useState(-1);
   const [selectedCity, setSelectedCity] = useState("");
   const [apiHotels, setApiHotels] = useState([]);
   const [loading, setLoading] = useState(false);
-
-  const navigate = useNavigate();
-  const searchRef = useRef(null);
+  const [error, setError] = useState(null);
 
   // Load destination from flights page
   useEffect(() => {
-    const savedDestination = localStorage.getItem("selectedDestination");
-    if (savedDestination && savedDestination.trim() !== "") {
-      const city = savedDestination.split(",")[0].trim();
-      setSearch(`${city}, ${savedDestination.split(",")[1]?.trim() || ""}`);
-      setSelectedCity(city.toLowerCase());
-      fetchHotels(city);
-      localStorage.removeItem("selectedDestination");
-    }
+    const loadSavedDestination = () => {
+      try {
+        const savedDestination = localStorage.getItem("selectedDestination");
+        
+        if (savedDestination && savedDestination.trim() !== "") {
+          const city = savedDestination.split(",")[0].trim();
+          const country = savedDestination.split(",")[1]?.trim() || "";
+          
+          setSearch(`${city}, ${country}`);
+          setSelectedCity(city.toLowerCase());
+          fetchHotels(city);
+          
+          // Clean up
+          localStorage.removeItem("selectedDestination");
+        }
+      } catch (error) {
+        console.error("Error loading saved destination:", error);
+      }
+    };
+
+    loadSavedDestination();
   }, []);
 
   // Close suggestions when clicking outside
@@ -32,72 +50,91 @@ function Hotels() {
         setShowSuggestions(false);
       }
     };
+
     document.addEventListener("mousedown", handleClickOutside);
-    return () =>
-      document.removeEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  // Process hotels data
+  const processHotelsData = useCallback((json, city) => {
+    let hotelsData = [];
+
+    if (json.locations) {
+      hotelsData = json.locations.filter(
+        (loc) => loc.location_type === "ACCOMMODATION"
+      );
+    } else if (json.organic_results) {
+      hotelsData = json.organic_results.filter(
+        (item) => item.type === "hotel" || item.hotel_id
+      );
+    }
+
+    return hotelsData.map((h) => ({
+      id: h.location_id || h.hotel_id || h.position || `${Date.now()}-${Math.random()}`,
+      name: h.title || h.name || "Unknown Hotel",
+      city,
+      country: h.location?.split(", ").pop() || "",
+      stars: h.rating || 0,
+      reviewsCount: h.reviews || 0,
+      image: h.thumbnail || h.image || null,
+      reviews: h.highlighted_review
+        ? [{ user: "TripAdvisor User", comment: h.highlighted_review.text }]
+        : [],
+    }));
   }, []);
 
   // Fetch hotels from backend
-  const fetchHotels = async (city) => {
-    if (!city) return;
+  const fetchHotels = useCallback(async (city) => {
+    if (!city?.trim()) return;
 
     setLoading(true);
     setApiHotels([]);
+    setError(null);
 
     try {
       const response = await fetch(
-        `http://localhost:5000/api/hotels?q=${encodeURIComponent(city)}`
+        `${API_ENDPOINT}?q=${encodeURIComponent(city)}`
       );
-      const json = await response.json();
 
-      // Check both possible locations
-      let hotelsData = [];
-      if (json.locations) {
-        hotelsData = json.locations.filter(
-          (loc) => loc.location_type === "ACCOMMODATION"
-        );
-      } else if (json.organic_results) {
-        hotelsData = json.organic_results.filter(
-          (item) => item.type === "hotel" || item.hotel_id
-        );
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      const hotels = hotelsData.map((h) => ({
-        id: h.location_id || h.hotel_id || h.position || Math.random(),
-        name: h.title || h.name || "Unknown Hotel",
-        city,
-        country: h.location?.split(", ").pop() || "",
-        stars: h.rating || 0,
-        reviewsCount: h.reviews || 0,
-        image: h.thumbnail || h.image || null,
-        reviews: h.highlighted_review
-          ? [{ user: "TripAdvisor User", comment: h.highlighted_review.text }]
-          : [],
-      }));
+      const json = await response.json();
+      const hotels = processHotelsData(json, city);
 
       setApiHotels(hotels);
     } catch (err) {
-      console.error("TripAdvisor Fetch Error:", err.message);
+      console.error("TripAdvisor Fetch Error:", err);
+      setError("Failed to fetch hotels. Please try again later.");
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
-  };
+  }, [processHotelsData]);
 
   // Autocomplete suggestions (based on current search)
-  const suggestions = search.trim()
-    ? [`${search.split(",")[0].trim()}, ${search.split(",")[1] || ""}`]
-    : [];
+  const suggestions = useMemo(() => {
+    if (!search.trim()) return [];
+    
+    const parts = search.split(",");
+    const city = parts[0]?.trim() || "";
+    const country = parts[1]?.trim() || "";
+    
+    return [`${city}, ${country}`];
+  }, [search]);
 
-  const handleSelectSuggestion = (value) => {
+  // Handle suggestion selection
+  const handleSelectSuggestion = useCallback((value) => {
     const [city] = value.split(",").map((v) => v.trim());
     setSearch(value);
     setSelectedCity(city.toLowerCase());
     fetchHotels(city);
     setShowSuggestions(false);
     setActiveIndex(-1);
-  };
+  }, [fetchHotels]);
 
-  const handleKeyDown = (e) => {
+  // Handle keyboard navigation
+  const handleKeyDown = useCallback((e) => {
     if (!showSuggestions || suggestions.length === 0) return;
 
     if (e.key === "ArrowDown") {
@@ -110,27 +147,54 @@ function Hotels() {
       e.preventDefault();
       handleSelectSuggestion(suggestions[activeIndex]);
     }
-  };
+  }, [showSuggestions, suggestions, activeIndex, handleSelectSuggestion]);
+
+  // Handle search input change
+  const handleSearchChange = useCallback((e) => {
+    const value = e.target.value;
+    setSearch(value);
+    
+    const city = value.split(",")[0]?.trim().toLowerCase() || "";
+    setSelectedCity(city);
+    setShowSuggestions(true);
+    setActiveIndex(-1);
+  }, []);
 
   // Book hotel
-  const handleBook = (hotel) => {
-    const flightDetails = JSON.parse(localStorage.getItem("bookedFlight") || "{}");
-
-    if (!flightDetails.destination) {
-      alert("Please select a flight first to associate this hotel with a trip.");
+  const handleBook = useCallback((hotel) => {
+    if (!hotel?.id) {
+      console.error("Invalid hotel data");
       return;
     }
 
-    const hotelToSave = {
-      ...hotel,
-      bookedForTrip: flightDetails.destination,
-      flightInfo: flightDetails // pass full flight info
-    };
+    try {
+      const flightDetails = JSON.parse(
+        localStorage.getItem("bookedFlight") || "{}"
+      );
 
-    localStorage.setItem("selectedHotel", JSON.stringify(hotelToSave));
-    navigate("/booking-details", { state: { hotel: hotelToSave } });
-  };
+      if (!flightDetails.destination) {
+        alert("Please select a flight first to associate this hotel with a trip.");
+        return;
+      }
 
+      const hotelToSave = {
+        ...hotel,
+        bookedForTrip: flightDetails.destination,
+        flightInfo: flightDetails,
+      };
+
+      localStorage.setItem("selectedHotel", JSON.stringify(hotelToSave));
+      navigate("/booking-details", { state: { hotel: hotelToSave } });
+    } catch (error) {
+      console.error("Booking error:", error);
+      alert("Failed to book hotel. Please try again.");
+    }
+  }, [navigate]);
+
+  // Handle image error
+  const handleImageError = useCallback((e) => {
+    e.target.src = FALLBACK_IMAGE;
+  }, []);
 
   return (
     <div className="hotels-page">
@@ -145,24 +209,19 @@ function Hotels() {
             <input
               type="text"
               placeholder="Enter a country or city (e.g., Tokyo, Manila)"
-              value={search || ""}
-              onChange={(e) => {
-                setSearch(e.target.value);
-                setSelectedCity(
-                  e.target.value.split(",")[0]?.trim().toLowerCase() || ""
-                );
-                setShowSuggestions(true);
-                setActiveIndex(-1);
-              }}
+              value={search}
+              onChange={handleSearchChange}
               onFocus={() => setShowSuggestions(true)}
               onKeyDown={handleKeyDown}
+              aria-label="Search for hotels"
+              autoComplete="off"
             />
 
             {/* AUTOCOMPLETE */}
             {showSuggestions && search && (
               <>
                 {suggestions.length > 0 ? (
-                  <div className="suggestions">
+                  <div className="suggestions" role="listbox">
                     {suggestions.map((loc, idx) => (
                       <div
                         key={idx}
@@ -170,6 +229,8 @@ function Hotels() {
                           idx === activeIndex ? "active" : ""
                         }`}
                         onClick={() => handleSelectSuggestion(loc)}
+                        role="option"
+                        aria-selected={idx === activeIndex}
                       >
                         {loc}
                       </div>
@@ -184,11 +245,22 @@ function Hotels() {
         </div>
       </div>
 
+      {/* ERROR */}
+      {error && (
+        <div className="error-message" role="alert">
+          {error}
+        </div>
+      )}
+
       {/* LOADING */}
-      {loading && <p className="loading">Fetching hotels...</p>}
+      {loading && (
+        <p className="loading" role="status" aria-live="polite">
+          Fetching hotels...
+        </p>
+      )}
 
       {/* HOTELS */}
-      {!loading && apiHotels.length > 0 && (
+      {!loading && !error && apiHotels.length > 0 && (
         <div>
           <h2 className="country-title">
             Available Hotels in{" "}
@@ -199,9 +271,10 @@ function Hotels() {
             {apiHotels.map((hotel) => (
               <div className="hotel-card" key={hotel.id}>
                 <img
-                  src={hotel.image || "/fallback-hotel.jpg"}
+                  src={hotel.image || FALLBACK_IMAGE}
                   alt={hotel.name}
-                  onError={(e) => (e.target.src = "/fallback-hotel.jpg")}
+                  onError={handleImageError}
+                  loading="lazy"
                 />
                 <h3>{hotel.name}</h3>
                 <p>⭐ {hotel.stars} stars</p>
@@ -215,7 +288,11 @@ function Hotels() {
                   ))}
                 </div>
 
-                <button className="book-btn" onClick={() => handleBook(hotel)}>
+                <button 
+                  className="book-btn" 
+                  onClick={() => handleBook(hotel)}
+                  aria-label={`Book ${hotel.name}`}
+                >
                   Book
                 </button>
               </div>
@@ -225,11 +302,11 @@ function Hotels() {
       )}
 
       {/* NO RESULTS */}
-      {!loading && apiHotels.length === 0 && selectedCity && (
+      {!loading && !error && apiHotels.length === 0 && selectedCity && (
         <p className="no-results">No hotels found for this location.</p>
       )}
     </div>
   );
 }
 
-export default Hotels;
+export default React.memo(Hotels);

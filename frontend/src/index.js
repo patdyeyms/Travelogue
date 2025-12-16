@@ -4,6 +4,17 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+const originalWarn = console.warn;
+console.warn = (...args) => {
+  const message = args.join(' ');
+  if (message.includes('React DevTools') || 
+      message.includes('autocomplete') || 
+      message.includes('[DOM] Input')) {
+    return;
+  }
+  originalWarn.apply(console, args);
+};
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
