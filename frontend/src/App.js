@@ -15,6 +15,8 @@ import Landing from "./pages/Landing";
 import FlightResults from "./pages/FlightsResults";
 import FlightDetails from "./pages/FlightDetails";
 import FlightConfirmation from "./pages/FlightConfirmation";
+import Profile from './pages/Profile';
+import ItineraryPlanner from './pages/ItineraryPlanner';
 import "./css/Pages.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import 'leaflet/dist/leaflet.css';
@@ -39,6 +41,8 @@ function App() {
           <Route path="/booking-details" element={<BookingDetails />} />
           <Route path="/hotel-confirmation" element={<HotelConfirmation />} />
           <Route path="/Itinerary" element={<Itinerary />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/planner" element={<ItineraryPlanner />} />
         </Routes>
       </div>
     </Router>
